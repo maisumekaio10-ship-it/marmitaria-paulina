@@ -10,13 +10,15 @@ body{margin:0;font-family:Arial;background:#f4f4f4}
 header{background:#8B0000;color:#fff;padding:15px;text-align:center;font-weight:bold}
 .container{padding:15px;padding-bottom:90px}
 h3{margin-top:0}
-.card{background:#fff;padding:12px;margin:10px 0;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,.1)}
+.card{background:#fff;padding:12px;margin:10px 0;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,.1);cursor:pointer}
 button{padding:10px;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
 .primary{background:#8B0000;color:#fff;width:100%}
 .small{padding:5px 10px;font-size:14px}
 input,select{width:100%;padding:8px;margin:6px 0;border-radius:6px;border:1px solid #ccc}
 .hidden{display:none}
 .flex{display:flex;justify-content:space-between;align-items:center}
+img{width:100%;border-radius:10px;margin-bottom:8px}
+
 #cartBtn{
 position:fixed;bottom:20px;right:20px;
 background:#8B0000;color:white;
@@ -29,6 +31,7 @@ position:absolute;top:-5px;right:-5px;
 background:#fff;color:#8B0000;
 width:22px;height:22px;border-radius:50%;
 font-size:13px;display:flex;justify-content:center;align-items:center}
+
 .toast{
 position:fixed;bottom:90px;left:50%;
 transform:translateX(-50%);
@@ -58,53 +61,40 @@ Paulina Marmitex<br>
 
 const TAXA = 7;
 let cart=[];
-let currentView="home";
 
 const produtos={
 Marmitas:[
 {name:"Marmita Frango Grelhado",price:18},
 {name:"Marmita Carne Acebolada",price:20},
-{name:"Marmita Feijoada",price:22},
-{name:"Marmita Strogonoff",price:21},
-{name:"Marmita Fitness",price:23},
-{name:"Marmita Vegetariana",price:19},
-{name:"Marmita Costela",price:24}
+{name:"Marmita Feijoada",price:22}
 ],
 Bebidas:[
 {name:"Coca-Cola 2L",price:12},
-{name:"Guaraná 2L",price:10},
-{name:"Suco Natural",price:7},
-{name:"Água Mineral",price:3},
-{name:"Fanta Laranja",price:9},
-{name:"Refrigerante Lata",price:5},
-{name:"Suco Detox",price:8}
+{name:"Guaraná 2L",price:10}
 ],
 Doces:[
 {name:"Pudim",price:6},
-{name:"Mousse Chocolate",price:6},
-{name:"Brigadeiro",price:3},
-{name:"Beijinho",price:3},
-{name:"Torta Limão",price:7},
-{name:"Bolo Caseiro",price:5},
-{name:"Geladinho Gourmet",price:4}
+{name:"Mousse Chocolate",price:6}
 ],
 Acompanhamentos:[
 {name:"Farofa",price:4},
-{name:"Vinagrete",price:4},
-{name:"Arroz Extra",price:5},
-{name:"Feijão Extra",price:5},
-{name:"Batata Frita",price:8},
-{name:"Salada",price:6},
-{name:"Torresmo",price:9}
+{name:"Batata Frita",price:8}
 ]
 };
 
+const imagensCategorias={
+Marmitas:"https://source.unsplash.com/600x400/?brazilian-food",
+Bebidas:"https://source.unsplash.com/600x400/?guarana",
+Doces:"https://source.unsplash.com/600x400/?dessert",
+Acompanhamentos:"https://source.unsplash.com/600x400/?fries"
+};
+
 function renderHome(){
-currentView="home";
-history.pushState({page:"home"},"");
 let html="<h3>Categorias</h3>";
 for(let cat in produtos){
-html+=`<div class="card" onclick="openCat('${cat}')">
+html+=`
+<div class="card" onclick="openCat('${cat}')">
+<img src="${imagensCategorias[cat]}">
 <b>${cat}</b>
 </div>`;
 }
@@ -112,11 +102,10 @@ document.getElementById("app").innerHTML=html;
 }
 
 function openCat(cat){
-currentView="cat";
-history.pushState({page:"cat"},"");
 let html=`<button onclick="renderHome()">⬅ Voltar</button><h3>${cat}</h3>`;
 produtos[cat].forEach((p,i)=>{
-html+=`<div class="card">
+html+=`
+<div class="card">
 <div class="flex">
 <div>
 <b>${p.name}</b><br>
@@ -149,12 +138,10 @@ setTimeout(()=>t.style.display="none",1500);
 }
 
 function goCart(){
-currentView="cart";
-history.pushState({page:"cart"},"");
 let html="<button onclick='renderHome()'>⬅ Voltar</button><h3>Carrinho</h3>";
 let subtotal=0;
 
-cart.forEach((i,index)=>{
+cart.forEach(i=>{
 subtotal+=i.price*i.qty;
 html+=`
 <div class="card flex">
@@ -169,21 +156,16 @@ document.getElementById("app").innerHTML=html;
 }
 
 function checkout(){
-currentView="checkout";
-history.pushState({page:"checkout"},"");
-
 let html=`
 <h3>Dados do Pedido</h3>
 <input id="nome" placeholder="Seu nome">
 <input id="fone" placeholder="Telefone">
 
-<label>Tipo:</label>
 <select id="tipo">
 <option value="Entrega">Entrega (+7)</option>
 <option value="Retirada">Retirada</option>
 </select>
 
-<label>Quando?</label>
 <select id="quando" onchange="toggleData()">
 <option value="Agora">Agora</option>
 <option value="Agendar">Agendar</option>
@@ -193,7 +175,6 @@ let html=`
 <input type="datetime-local" id="data">
 </div>
 
-<label>Pagamento:</label>
 <select id="pag" onchange="toggleTroco()">
 <option>Pix</option>
 <option>Dinheiro</option>
@@ -204,7 +185,7 @@ let html=`
 <input id="troco" placeholder="Troco para quanto?">
 </div>
 
-<button class="primary" onclick="revisao()">Revisar Pedido</button>
+<button class="primary" onclick="finalizar()">Confirmar Pedido</button>
 `;
 
 document.getElementById("app").innerHTML=html;
@@ -220,79 +201,61 @@ document.getElementById("trocoBox").classList.toggle("hidden",
 document.getElementById("pag").value!="Dinheiro");
 }
 
-function revisao(){
-currentView="rev";
-history.pushState({page:"rev"},"");
-
-let tipo=document.getElementById("tipo").value;
-let pag=document.getElementById("pag").value;
-let quando=document.getElementById("quando").value;
-let data=document.getElementById("data")?.value||"";
-let troco=document.getElementById("troco")?.value||"";
-let subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
-let total=tipo=="Entrega"?subtotal+TAXA:subtotal;
-
-let html="<h3>Confirmar Pedido</h3>";
-
-cart.forEach(i=>{
-html+=`<div>${i.qty}x ${i.name}</div>`;
-});
-
-html+=`
-<hr>
-Subtotal: R$ ${subtotal.toFixed(2)}<br>
-Total: R$ ${total.toFixed(2)}<br>
-Pagamento: ${pag}<br>
-<button class="primary" onclick="finalizar()">Confirmar e Enviar</button>
-`;
-
-document.getElementById("app").innerHTML=html;
-}
-
 function finalizar(){
 
+if(cart.length===0){
+alert("Seu carrinho está vazio.");
+return;
+}
+
 let tipo=document.getElementById("tipo").value;
 let pag=document.getElementById("pag").value;
 let quando=document.getElementById("quando").value;
 let data=document.getElementById("data")?.value||"";
 let troco=document.getElementById("troco")?.value||"";
+
 let subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
 let total=tipo=="Entrega"?subtotal+TAXA:subtotal;
 
-let msg="*Pedido - Paulina Marmitex*%0A%0A";
+let msg="*Pedido - Paulina Marmitex*\n\n";
 
 cart.forEach(i=>{
-msg+=`${i.qty}x ${i.name} - R$${(i.price*i.qty).toFixed(2)}%0A`;
+msg+=`${i.qty}x ${i.name} - R$${(i.price*i.qty).toFixed(2)}\n`;
 });
 
-msg+=`%0ASubtotal: R$${subtotal.toFixed(2)}%0A`;
-if(tipo=="Entrega") msg+=`Taxa: R$7,00%0A`;
-msg+=`Total: R$${total.toFixed(2)}%0A%0A`;
+msg+=`\nSubtotal: R$${subtotal.toFixed(2)}\n`;
+if(tipo=="Entrega") msg+=`Taxa: R$7,00\n`;
+msg+=`Total: R$${total.toFixed(2)}\n\n`;
 
-msg+=`Tipo: ${tipo}%0A`;
+msg+=`Tipo: ${tipo}\n`;
 
 if(quando=="Agendar" && data){
-msg+=`Agendado para: ${data}%0A`;
+msg+=`Agendado para: ${data}\n`;
 }else{
-msg+=`Pedido para: Agora%0A`;
+msg+=`Pedido para: Agora\n`;
 }
 
-msg+=`Pagamento: ${pag}%0A`;
+msg+=`Pagamento: ${pag}\n`;
 
 if(pag=="Dinheiro" && troco){
-msg+=`Troco para: R$${troco}%0A`;
+msg+=`Troco para: R$${troco}\n`;
 }
 
 if(pag=="Pix"){
-msg+="Aguardando envio do comprovante.%0A";
+msg+="Aguardando envio do comprovante.\n";
 }
 
-window.open(`https://wa.me/5512988721307?text=${msg}`);
+let url="https://wa.me/5512988721307?text="+encodeURIComponent(msg);
+
+window.location.href=url;
 }
 
-window.onpopstate=function(){
-renderHome();
-};
+window.addEventListener("beforeunload", function (e) {
+if(cart.length>0){
+e.preventDefault();
+e.returnValue="";
+}
+});
 
 renderHome();
 
