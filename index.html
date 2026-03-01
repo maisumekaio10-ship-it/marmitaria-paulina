@@ -6,259 +6,186 @@
 <title>Paulina Marmitex</title>
 
 <style>
-body{margin:0;font-family:Arial;background:#f4f4f4}
-header{background:#8B0000;color:#fff;padding:15px;text-align:center;font-weight:bold}
-.container{padding:15px;padding-bottom:90px}
-h3{margin-top:0}
-.card{background:#fff;padding:12px;margin:10px 0;border-radius:12px;box-shadow:0 2px 6px rgba(0,0,0,.1);cursor:pointer}
-button{padding:10px;border:none;border-radius:8px;font-weight:bold;cursor:pointer}
-.primary{background:#8B0000;color:#fff;width:100%}
-.small{padding:5px 10px;font-size:14px}
-input,select{width:100%;padding:8px;margin:6px 0;border-radius:6px;border:1px solid #ccc}
-.hidden{display:none}
-.flex{display:flex;justify-content:space-between;align-items:center}
-img{width:100%;border-radius:10px;margin-bottom:8px}
-
-#cartBtn{
-position:fixed;bottom:20px;right:20px;
-background:#8B0000;color:white;
-width:60px;height:60px;border-radius:50%;
-display:flex;justify-content:center;align-items:center;
-font-size:20px;box-shadow:0 4px 10px rgba(0,0,0,.3);
-cursor:pointer}
-#cartCount{
-position:absolute;top:-5px;right:-5px;
-background:#fff;color:#8B0000;
-width:22px;height:22px;border-radius:50%;
-font-size:13px;display:flex;justify-content:center;align-items:center}
-
-.toast{
-position:fixed;bottom:90px;left:50%;
-transform:translateX(-50%);
-background:#4CAF50;color:white;
-padding:10px 20px;border-radius:20px;
-display:none}
+body{font-family:Arial;margin:0;background:#f2f2f2}
+header{background:#d62828;color:white;padding:15px;text-align:center;font-size:20px}
+.container{padding:15px}
+.categoria{background:white;padding:10px;margin-bottom:15px;border-radius:8px}
+.produto{display:flex;align-items:center;justify-content:space-between;margin:8px 0}
+.produto img{width:55px;height:55px;border-radius:8px;object-fit:cover;margin-right:10px}
+button{background:#d62828;color:white;border:none;padding:7px 10px;border-radius:5px}
+#carrinho{background:white;padding:10px;border-radius:8px}
+.finalizar{background:green;width:100%;margin-top:10px}
+input,select{width:100%;padding:7px;margin-top:5px;margin-bottom:10px}
 </style>
 </head>
 
 <body>
 
-<header>
-Paulina Marmitex<br>
-<small>Tradição e Sabor Caseiro</small>
-</header>
+<header>Paulina Marmitex</header>
 
-<div class="container" id="app"></div>
+<div class="container">
+<div id="produtos"></div>
 
-<div id="cartBtn" onclick="goCart()">
-🛒
-<div id="cartCount">0</div>
+<div id="carrinho">
+<h3>Seu Pedido</h3>
+<div id="lista"></div>
+<p><strong>Total: R$ <span id="total">0</span></strong></p>
+
+<label>Agendar Pedido</label>
+<input type="datetime-local" id="agendamento">
+
+<label>Forma de Pagamento</label>
+<select id="pagamento">
+<option value="Pix">Pix</option>
+<option value="Dinheiro">Dinheiro</option>
+</select>
+
+<div id="trocoDiv" style="display:none;">
+Troco para quanto?
+<input type="number" id="troco">
 </div>
 
-<div class="toast" id="toast">Item adicionado</div>
+<button class="finalizar" onclick="finalizarPedido()">Finalizar Pedido</button>
+</div>
+</div>
 
 <script>
 
-const TAXA = 7;
-let cart=[];
+// BLOQUEIO REAL DO BOTÃO VOLTAR
+function bloquearVoltar(){
+history.pushState({page:1},"","");
+history.pushState({page:2},"","");
 
-const produtos={
-Marmitas:[
-{name:"Marmita Frango Grelhado",price:18},
-{name:"Marmita Carne Acebolada",price:20},
-{name:"Marmita Feijoada",price:22}
+window.addEventListener("popstate",function(){
+if(confirm("Seu pedido pode ser perdido. Deseja realmente sair?")){
+history.go(-2);
+}else{
+history.pushState({page:2},"","");
+}
+});
+}
+bloquearVoltar();
+
+const numero="5512988721307";
+let carrinho=[];
+
+const categorias={
+"Marmitas":[
+{name:"Frango",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/6/60/Chicken_and_rice.jpg"},
+{name:"Carne",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/0/0b/Beef_rice.jpg"},
+{name:"Linguiça",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/3/39/Sausage_with_rice.jpg"},
+{name:"Strogonoff",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/4/4f/Stroganoff.jpg"},
+{name:"Feijoada",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/6/63/Feijoada.jpg"},
+{name:"Vegetariana",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/1/15/Vegetarian_plate.jpg"},
+{name:"Especial",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/2/2e/Rice_and_beans.jpg"}
 ],
-Bebidas:[
-{name:"Coca-Cola 2L",price:12},
-{name:"Guaraná 2L",price:10}
+"Bebidas":[
+{name:"Guaraná",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/5/57/Guarana_antarctica.jpg"},
+{name:"Coca-Cola",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/7/70/Coca-Cola_Classic_glass_bottle.jpg"},
+{name:"Suco Laranja",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/c/c4/Orange_juice_1.jpg"},
+{name:"Suco Uva",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/3/36/Grape_juice.jpg"},
+{name:"Água",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/1/14/Bottled_water.jpg"},
+{name:"Refrigerante Lata",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/3/3e/Soda_can.jpg"},
+{name:"Chá Gelado",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/6/62/Iced_tea.jpg"}
 ],
-Doces:[
-{name:"Pudim",price:6},
-{name:"Mousse Chocolate",price:6}
+"Doces":[
+{name:"Brigadeiro",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/9/9a/Brigadeiro.jpg"},
+{name:"Pudim",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/2/2d/Pudim.jpg"},
+{name:"Mousse",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/4/49/Chocolate_mousse.jpg"},
+{name:"Bolo Chocolate",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/7/7b/Chocolate_cake.jpg"},
+{name:"Bolo Cenoura",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/0/05/Carrot_cake.jpg"},
+{name:"Gelatina",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/2/24/Gelatin_dessert.jpg"},
+{name:"Doce de Leite",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/6/6b/Dulce_de_leche.jpg"}
 ],
-Acompanhamentos:[
-{name:"Farofa",price:4},
-{name:"Batata Frita",price:8}
+"Acompanhamentos":[
+{name:"Farofa",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/4/45/Farofa.jpg"},
+{name:"Vinagrete",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/1/19/Vinaigrette.jpg"},
+{name:"Arroz Extra",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/6/60/White_rice.jpg"},
+{name:"Feijão Extra",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/6/63/Black_beans.jpg"},
+{name:"Batata Frita",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/6/66/French_fries.jpg"},
+{name:"Purê",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/4/4f/Mashed_potatoes.jpg"},
+{name:"Salada",preco:7,img:"https://upload.wikimedia.org/wikipedia/commons/a/ac/Salad.jpg"}
 ]
 };
 
-const imagensCategorias={
-Marmitas:"https://source.unsplash.com/600x400/?brazilian-food",
-Bebidas:"https://source.unsplash.com/600x400/?guarana",
-Doces:"https://source.unsplash.com/600x400/?dessert",
-Acompanhamentos:"https://source.unsplash.com/600x400/?fries"
-};
+const produtosDiv=document.getElementById("produtos");
 
-function renderHome(){
-let html="<h3>Categorias</h3>";
-for(let cat in produtos){
-html+=`
-<div class="card" onclick="openCat('${cat}')">
-<img src="${imagensCategorias[cat]}">
-<b>${cat}</b>
-</div>`;
-}
-document.getElementById("app").innerHTML=html;
-}
-
-function openCat(cat){
-let html=`<button onclick="renderHome()">⬅ Voltar</button><h3>${cat}</h3>`;
-produtos[cat].forEach((p,i)=>{
-html+=`
-<div class="card">
-<div class="flex">
-<div>
-<b>${p.name}</b><br>
-R$ ${p.price.toFixed(2)}
+for(let cat in categorias){
+let div=document.createElement("div");
+div.className="categoria";
+div.innerHTML="<h3>"+cat+"</h3>";
+categorias[cat].forEach(p=>{
+div.innerHTML+=`
+<div class="produto">
+<div style="display:flex;align-items:center">
+<img src="${p.img}">
+<span>${p.name} - R$ ${p.preco}</span>
 </div>
-<button class="primary small" onclick="add('${cat}',${i})">Adicionar</button>
-</div>
+<button onclick="adicionar('${p.name}',${p.preco})">Adicionar</button>
 </div>`;
 });
-document.getElementById("app").innerHTML=html;
+produtosDiv.appendChild(div);
 }
 
-function add(cat,i){
-let item=produtos[cat][i];
-let f=cart.find(x=>x.name==item.name);
-if(f){f.qty++}else{cart.push({...item,qty:1})}
-updateCart();
-toast();
+function adicionar(nome,preco){
+carrinho.push({nome,preco});
+atualizar();
 }
 
-function updateCart(){
-document.getElementById("cartCount").innerText=
-cart.reduce((s,i)=>s+i.qty,0);
+function atualizar(){
+let lista=document.getElementById("lista");
+lista.innerHTML="";
+let total=0;
+carrinho.forEach(p=>{
+lista.innerHTML+=`<p>${p.nome} - R$ ${p.preco}</p>`;
+total+=p.preco;
+});
+document.getElementById("total").innerText=total;
 }
 
-function toast(){
-let t=document.getElementById("toast");
-t.style.display="block";
-setTimeout(()=>t.style.display="none",1500);
-}
-
-function goCart(){
-let html="<button onclick='renderHome()'>⬅ Voltar</button><h3>Carrinho</h3>";
-let subtotal=0;
-
-cart.forEach(i=>{
-subtotal+=i.price*i.qty;
-html+=`
-<div class="card flex">
-<div>${i.qty}x ${i.name}</div>
-<div>R$ ${(i.price*i.qty).toFixed(2)}</div>
-</div>`;
+document.getElementById("pagamento").addEventListener("change",function(){
+document.getElementById("trocoDiv").style.display=this.value==="Dinheiro"?"block":"none";
 });
 
-html+=`<h4>Subtotal: R$ ${subtotal.toFixed(2)}</h4>
-<button class="primary" onclick="checkout()">Continuar</button>`;
-document.getElementById("app").innerHTML=html;
-}
-
-function checkout(){
-let html=`
-<h3>Dados do Pedido</h3>
-<input id="nome" placeholder="Seu nome">
-<input id="fone" placeholder="Telefone">
-
-<select id="tipo">
-<option value="Entrega">Entrega (+7)</option>
-<option value="Retirada">Retirada</option>
-</select>
-
-<select id="quando" onchange="toggleData()">
-<option value="Agora">Agora</option>
-<option value="Agendar">Agendar</option>
-</select>
-
-<div id="dataBox" class="hidden">
-<input type="datetime-local" id="data">
-</div>
-
-<select id="pag" onchange="toggleTroco()">
-<option>Pix</option>
-<option>Dinheiro</option>
-<option>Cartão</option>
-</select>
-
-<div id="trocoBox" class="hidden">
-<input id="troco" placeholder="Troco para quanto?">
-</div>
-
-<button class="primary" onclick="finalizar()">Confirmar Pedido</button>
-`;
-
-document.getElementById("app").innerHTML=html;
-}
-
-function toggleData(){
-document.getElementById("dataBox").classList.toggle("hidden",
-document.getElementById("quando").value!="Agendar");
-}
-
-function toggleTroco(){
-document.getElementById("trocoBox").classList.toggle("hidden",
-document.getElementById("pag").value!="Dinheiro");
-}
-
-function finalizar(){
-
-if(cart.length===0){
-alert("Seu carrinho está vazio.");
+function finalizarPedido(){
+if(carrinho.length===0){
+alert("Adicione itens ao carrinho.");
 return;
 }
 
-let tipo=document.getElementById("tipo").value;
-let pag=document.getElementById("pag").value;
-let quando=document.getElementById("quando").value;
-let data=document.getElementById("data")?.value||"";
-let troco=document.getElementById("troco")?.value||"";
+let total=document.getElementById("total").innerText;
+let pagamento=document.getElementById("pagamento").value;
+let agendamento=document.getElementById("agendamento").value;
+let troco=document.getElementById("troco").value;
 
-let subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
-let total=tipo=="Entrega"?subtotal+TAXA:subtotal;
+let mensagem="NOVO PEDIDO - Paulina Marmitex\n\n";
 
-let msg="*Pedido - Paulina Marmitex*\n\n";
-
-cart.forEach(i=>{
-msg+=`${i.qty}x ${i.name} - R$${(i.price*i.qty).toFixed(2)}\n`;
+carrinho.forEach(p=>{
+mensagem+=p.nome+" - R$ "+p.preco+"\n";
 });
 
-msg+=`\nSubtotal: R$${subtotal.toFixed(2)}\n`;
-if(tipo=="Entrega") msg+=`Taxa: R$7,00\n`;
-msg+=`Total: R$${total.toFixed(2)}\n\n`;
+mensagem+="\nTotal: R$ "+total+"\n";
+mensagem+="Pagamento: "+pagamento+"\n";
 
-msg+=`Tipo: ${tipo}\n`;
+if(pagamento==="Dinheiro" && troco){
+mensagem+="Troco para: R$ "+troco+"\n";
+}
 
-if(quando=="Agendar" && data){
-msg+=`Agendado para: ${data}\n`;
+if(agendamento){
+mensagem+="Agendado para: "+agendamento+"\n";
 }else{
-msg+=`Pedido para: Agora\n`;
+mensagem+="Entrega: Imediata\n";
 }
 
-msg+=`Pagamento: ${pag}\n`;
-
-if(pag=="Dinheiro" && troco){
-msg+=`Troco para: R$${troco}\n`;
+if(pagamento==="Pix"){
+mensagem+="\nAguardando envio do comprovante.";
 }
 
-if(pag=="Pix"){
-msg+="Aguardando envio do comprovante.\n";
-}
-
-let url="https://wa.me/5512988721307?text="+encodeURIComponent(msg);
-
+let url="https://wa.me/"+numero+"?text="+encodeURIComponent(mensagem);
 window.location.href=url;
 }
 
-window.addEventListener("beforeunload", function (e) {
-if(cart.length>0){
-e.preventDefault();
-e.returnValue="";
-}
-});
-
-renderHome();
-
 </script>
+
 </body>
 </html>
