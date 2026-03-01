@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Paulina Marmitex</title>
+<style>
+body{margin:0;font-family:Arial;background:#f5f5f5}
+header{background:#8B0000;color:white;padding:15px;text-align:center;font-size:20px;font-weight:bold}
+.container{padding:15px}
+button{padding:10px;border:none;border-radius:8px;margin:5px 0;font-weight:bold;cursor:pointer}
+.primary{background:#8B0000;color:white;width:100%}
+.card{background:white;padding:10px;margin:10px 0;border-radius:10px;box-shadow:0 2px 6px rgba(0,0,0,0.1)}
+img{width:100%;border-radius:8px}
+.hidden{display:none}
+input,select{width:100%;padding:8px;margin:5px 0;border-radius:6px;border:1px solid #ccc}
+.flex{display:flex;justify-content:space-between;align-items:center}
+.qty button{width:30px;height:30px}
+</style>
+</head>
+<body>
+
+<header>Paulina Marmitex<br><small>Tradição e Sabor Caseiro</small></header>
+
+<div class="container">
+
+<!-- HOME -->
+<div id="home">
+<button class="primary" onclick="show('categorias')">Ver Cardápio</button>
+</div>
+
+<!-- CATEGORIAS -->
+<div id="categorias" class="hidden">
+<h3>Categorias</h3>
+<button onclick="openCategory('Marmitas')">🍛 Marmitas</button>
+<button onclick="openCategory('Bebidas')">🥤 Bebidas</button>
+<button onclick="openCategory('Doces')">🍰 Doces</button>
+<button onclick="openCategory('Acompanhamentos')">🍟 Acompanhamentos</button>
+<button class="primary" onclick="showCart()">🛒 Ver Carrinho</button>
+</div>
+
+<!-- PRODUTOS -->
+<div id="produtos" class="hidden"></div>
+
+<!-- CARRINHO -->
+<div id="carrinho" class="hidden"></div>
+
+<!-- CHECKOUT -->
+<div id="checkout" class="hidden"></div>
+
+</div>
+
+<script>
+
+const TAXA = 7;
+let cart = [];
+let currentCategory = "";
+
+const produtos = {
+Marmitas:[
+{name:"Marmita Frango Grelhado",price:18,img:"https://source.unsplash.com/400x300/?chicken,meal"},
+{name:"Marmita Carne Acebolada",price:20,img:"https://source.unsplash.com/400x300/?beef,meal"},
+{name:"Marmita Feijoada",price:22,img:"https://source.unsplash.com/400x300/?feijoada"},
+{name:"Marmita Strogonoff",price:21,img:"https://source.unsplash.com/400x300/?stroganoff"},
+{name:"Marmita Fitness",price:23,img:"https://source.unsplash.com/400x300/?healthy,meal"},
+{name:"Marmita Vegetariana",price:19,img:"https://source.unsplash.com/400x300/?vegetarian,meal"},
+{name:"Marmita Costela",price:24,img:"https://source.unsplash.com/400x300/?ribs,meal"}
+],
+Bebidas:[
+{name:"Coca-Cola 2L",price:12,img:"https://source.unsplash.com/400x300/?coke"},
+{name:"Guaraná 2L",price:10,img:"https://source.unsplash.com/400x300/?guarana"},
+{name:"Suco Natural",price:7,img:"https://source.unsplash.com/400x300/?juice"},
+{name:"Água Mineral",price:3,img:"https://source.unsplash.com/400x300/?water,bottle"},
+{name:"Fanta Laranja",price:9,img:"https://source.unsplash.com/400x300/?fanta"},
+{name:"Refrigerante Lata",price:5,img:"https://source.unsplash.com/400x300/?soda,can"},
+{name:"Suco Detox",price:8,img:"https://source.unsplash.com/400x300/?detox,juice"}
+],
+Doces:[
+{name:"Pudim",price:6,img:"https://source.unsplash.com/400x300/?pudding"},
+{name:"Mousse Chocolate",price:6,img:"https://source.unsplash.com/400x300/?chocolate,mousse"},
+{name:"Brigadeiro",price:3,img:"https://source.unsplash.com/400x300/?brigadeiro"},
+{name:"Beijinho",price:3,img:"https://source.unsplash.com/400x300/?brazilian,sweets"},
+{name:"Torta Limão",price:7,img:"https://source.unsplash.com/400x300/?lemon,pie"},
+{name:"Bolo Caseiro",price:5,img:"https://source.unsplash.com/400x300/?cake"},
+{name:"Geladinho Gourmet",price:4,img:"https://source.unsplash.com/400x300/?popsicle"}
+],
+Acompanhamentos:[
+{name:"Farofa",price:4,img:"https://source.unsplash.com/400x300/?farofa"},
+{name:"Vinagrete",price:4,img:"https://source.unsplash.com/400x300/?vinaigrette"},
+{name:"Arroz Extra",price:5,img:"https://source.unsplash.com/400x300/?rice"},
+{name:"Feijão Extra",price:5,img:"https://source.unsplash.com/400x300/?beans"},
+{name:"Batata Frita",price:8,img:"https://source.unsplash.com/400x300/?fries"},
+{name:"Salada",price:6,img:"https://source.unsplash.com/400x300/?salad"},
+{name:"Torresmo",price:9,img:"https://source.unsplash.com/400x300/?pork,crackling"}
+]
+};
+
+function show(id){
+document.querySelectorAll(".container > div").forEach(d=>d.classList.add("hidden"));
+document.getElementById(id).classList.remove("hidden");
+}
+
+function openCategory(cat){
+currentCategory = cat;
+let html = `<h3>${cat}</h3><button onclick="show('categorias')">⬅ Voltar</button>`;
+produtos[cat].forEach((p,i)=>{
+html += `
+<div class="card">
+<img src="${p.img}">
+<h4>${p.name}</h4>
+<p>R$ ${p.price.toFixed(2)}</p>
+<button class="primary" onclick="addToCart('${cat}',${i})">Adicionar</button>
+</div>`;
+});
+document.getElementById("produtos").innerHTML = html;
+show("produtos");
+}
+
+function addToCart(cat,i){
+let item = produtos[cat][i];
+let found = cart.find(p=>p.name===item.name);
+if(found){found.qty++}
+else{cart.push({...item,qty:1})}
+alert("Adicionado ao carrinho");
+}
+
+function showCart(){
+let html="<h3>Carrinho</h3><button onclick=\"show('categorias')\">⬅ Voltar</button>";
+let subtotal=0;
+
+cart.forEach((item,index)=>{
+subtotal += item.price*item.qty;
+html += `
+<div class="card flex">
+<div>
+<b>${item.name}</b><br>
+R$ ${item.price.toFixed(2)}
+</div>
+<div class="qty">
+<button onclick="changeQty(${index},-1)">-</button>
+${item.qty}
+<button onclick="changeQty(${index},1)">+</button>
+</div>
+</div>`;
+});
+
+html += `<h4>Subtotal: R$ ${subtotal.toFixed(2)}</h4>`;
+html += `<button class="primary" onclick="goCheckout()">Continuar</button>`;
+
+document.getElementById("carrinho").innerHTML=html;
+show("carrinho");
+}
+
+function changeQty(i,val){
+cart[i].qty += val;
+if(cart[i].qty<=0) cart.splice(i,1);
+showCart();
+}
+
+function goCheckout(){
+let html=`<h3>Finalizar Pedido</h3>
+<input placeholder="Seu nome" id="nome">
+<input placeholder="Telefone" id="fone">
+<select id="tipo" onchange="toggleEndereco()">
+<option value="Entrega">Entrega (+7)</option>
+<option value="Retirada">Retirada</option>
+</select>
+<div id="enderecoBox">
+<input placeholder="Endereço">
+</div>
+<input type="datetime-local" id="agendamento">
+<select id="pagamento" onchange="toggleTroco()">
+<option>Pix</option>
+<option>Dinheiro</option>
+<option>Cartão</option>
+</select>
+<div id="trocoBox" class="hidden">
+<input placeholder="Troco para quanto?">
+</div>
+<button class="primary" onclick="finalizar()">Confirmar Pedido</button>`;
+
+document.getElementById("checkout").innerHTML=html;
+show("checkout");
+}
+
+function toggleEndereco(){
+let tipo=document.getElementById("tipo").value;
+document.getElementById("enderecoBox").style.display = tipo==="Entrega"?"block":"none";
+}
+
+function toggleTroco(){
+let pag=document.getElementById("pagamento").value;
+document.getElementById("trocoBox").classList.toggle("hidden",pag!=="Dinheiro");
+}
+
+function finalizar(){
+let tipo=document.getElementById("tipo").value;
+let total=cart.reduce((s,i)=>s+i.price*i.qty,0);
+if(tipo==="Entrega") total+=TAXA;
+
+let texto="*Pedido Paulina Marmitex*%0A";
+cart.forEach(i=>{
+texto+=`${i.qty}x ${i.name} - R$${(i.price*i.qty).toFixed(2)}%0A`;
+});
+texto+=`Total: R$${total.toFixed(2)}%0A`;
+texto+=`Tipo: ${tipo}`;
+
+window.open(`https://wa.me/5512988721307?text=${texto}`);
+}
+
+</script>
+</body>
+</html>
