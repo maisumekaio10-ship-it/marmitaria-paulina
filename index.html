@@ -236,7 +236,7 @@ let html=`
 <input id="nome" placeholder="Seu nome">
 <input id="fone" placeholder="Telefone">
 <div style="margin-top:10px;">
-  <label>📍 Endereço de Entrega</label>
+  <label> Endereço de Entrega</label>
   <input type="text" id="endereco" placeholder="Rua, número, bairro"
   style="width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;">
 </div>
@@ -284,6 +284,18 @@ document.getElementById("pag").value!="Dinheiro");
 }
 
 function revisao(){
+
+window.dadosCliente = {
+nome: document.getElementById("nome")?.value || "",
+fone: document.getElementById("fone")?.value || "",
+endereco: document.getElementById("endereco")?.value || "",
+tipo: document.getElementById("tipo")?.value || "Entrega",
+quando: document.getElementById("quando")?.value || "Agora",
+data: document.getElementById("data")?.value || "",
+pag: document.getElementById("pag")?.value || "Pix",
+troco: document.getElementById("troco")?.value || ""
+};
+
 navigate(renderRevisao);
 }
 
@@ -386,6 +398,7 @@ navigate(renderHome);
 </script>
 </body>
 </html>
+
 
 
 
