@@ -283,18 +283,11 @@ document.getElementById("trocoBox").classList.toggle("hidden",
 document.getElementById("pag").value!="Dinheiro");
 }
 
-function revisao(){
-
-window.dadosCliente = {
-nome: document.getElementById("nome")?.value || "",
-fone: document.getElementById("fone")?.value || "",
-endereco: document.getElementById("endereco")?.value || "",
-tipo: document.getElementById("tipo")?.value || "Entrega",
-quando: document.getElementById("quando")?.value || "Agora",
-data: document.getElementById("data")?.value || "",
-pag: document.getElementById("pag")?.value || "Pix",
-troco: document.getElementById("troco")?.value || ""
-};
+let tipo=window.dadosCliente?.tipo || "Entrega";
+let pag=window.dadosCliente?.pag || "Pix";
+let quando=window.dadosCliente?.quando || "Agora";
+let data=window.dadosCliente?.data || "";
+let troco=window.dadosCliente?.troco || "";
 
 navigate(renderRevisao);
 }
@@ -328,9 +321,14 @@ document.getElementById("app").innerHTML=html;
 
 function finalizar(){
 
-let nome=document.getElementById("nome")?.value||"Não informado";
-let fone=document.getElementById("fone")?.value||"Não informado";
-let endereco=document.getElementById("endereco")?.value||"Não informado";
+let nome=window.dadosCliente?.nome || "Não informado";
+let fone=window.dadosCliente?.fone || "Não informado";
+let endereco=window.dadosCliente?.endereco || "Não informado";
+let tipo=window.dadosCliente?.tipo || "Entrega";
+let pag=window.dadosCliente?.pag || "Pix";
+let quando=window.dadosCliente?.quando || "Agora";
+let data=window.dadosCliente?.data || "";
+let troco=window.dadosCliente?.troco || "";
 let tipo=document.getElementById("tipo")?.value||"Entrega";
 let pag=document.getElementById("pag")?.value||"Pix";
 let quando=document.getElementById("quando")?.value||"Agora";
@@ -398,6 +396,7 @@ navigate(renderHome);
 </script>
 </body>
 </html>
+
 
 
 
