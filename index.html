@@ -16,27 +16,21 @@ button{padding:10px;border:none;border-radius:8px;font-weight:bold;cursor:pointe
 .small{padding:5px 10px;font-size:14px}
 input,select{width:100%;padding:8px;margin:6px 0;border-radius:6px;border:1px solid #ccc}
 .hidden{display:none}
-.flex{display:flex;justify-content:space-between;align-items:center}
+.flex{display:flex;align-items:center;justify-content:space-between}
 
 .circle{
-width:40px;
-height:40px;
+width:40px;height:40px;
 border-radius:50%;
 border:2px solid orange;
-display:flex;
-align-items:center;
-justify-content:center;
+display:flex;align-items:center;justify-content:center;
 margin-right:10px;
 overflow:hidden;
-font-size:20px;
 background:#fff;
+font-size:18px;
 }
 
 .circle img{
-width:100%;
-height:100%;
-object-fit:cover;
-border-radius:50%;
+width:100%;height:100%;object-fit:cover;border-radius:50%;
 }
 
 #cartBtn{
@@ -81,7 +75,23 @@ Paulina Marmitex<br>
 
 const TAXA = 7;
 let cart=[];
-let currentView="home";
+let viewStack=[];
+
+function navigate(viewFunction){
+viewStack.push(viewFunction);
+history.pushState({},"");
+viewFunction();
+}
+
+window.addEventListener("popstate",function(){
+if(viewStack.length>1){
+viewStack.pop();
+let last=viewStack[viewStack.length-1];
+last();
+}else{
+history.pushState({},"");
+}
+});
 
 const produtos={
 Marmitas:[
@@ -123,7 +133,6 @@ Acompanhamentos:[
 };
 
 function renderHome(){
-currentView="home";
 let html="<h3>Categorias</h3>";
 
 for(let cat in produtos){
@@ -135,10 +144,12 @@ if(cat=="Doces") emoji="🍰";
 if(cat=="Acompanhamentos") emoji="🍟";
 
 html+=`
-<div class="card" onclick="openCat('${cat}')">
+<div class="card" onclick="navigate(()=>openCat('${cat}'))">
+<div class="flex">
 <div class="flex">
 <div class="circle">${emoji}</div>
 <b>${cat}</b>
+</div>
 </div>
 </div>`;
 }
@@ -147,8 +158,7 @@ document.getElementById("app").innerHTML=html;
 }
 
 function openCat(cat){
-currentView="cat";
-let html=`<button onclick="renderHome()">⬅ Voltar</button><h3>${cat}</h3>`;
+let html=`<button onclick="history.back()">⬅ Voltar</button><h3>${cat}</h3>`;
 
 produtos[cat].forEach((p,i)=>{
 html+=`
@@ -156,7 +166,7 @@ html+=`
 <div class="flex">
 <div class="flex">
 <div class="circle">
-<img src="https://source.unsplash.com/100x100/?food" />
+<img src="https://source.unsplash.com/100x100/?food">
 </div>
 <div>
 <b>${p.name}</b><br>
@@ -191,31 +201,31 @@ setTimeout(()=>t.style.display="none",1500);
 }
 
 function goCart(){
-currentView="cart";
-let html="<button onclick='renderHome()'>⬅ Voltar</button><h3>Carrinho</h3>";
+navigate(renderCart);
+}
+
+function renderCart(){
+let html="<button onclick='history.back()'>⬅ Voltar</button><h3>Carrinho</h3>";
 let subtotal=0;
 
-cart.forEach((i,index)=>{
+cart.forEach(i=>{
 subtotal+=i.price*i.qty;
-html+=`
-<div class="card flex">
+html+=`<div class="card flex">
 <div>${i.qty}x ${i.name}</div>
 <div>R$ ${(i.price*i.qty).toFixed(2)}</div>
 </div>`;
 });
 
 html+=`<h4>Subtotal: R$ ${subtotal.toFixed(2)}</h4>
-<button class="primary" onclick="checkout()">Continuar</button>`;
+<button class="primary" onclick="navigate(checkout)">Continuar</button>`;
 
 document.getElementById("app").innerHTML=html;
 }
 
-/* O RESTO DO SEU CÓDIGO (checkout, revisao, finalizar)
-PERMANECE IGUAL AO QUE VOCÊ JÁ TEM SALVO.
-NÃO ALTEREI NADA NELES.
-*/
+/* checkout, revisao e finalizar permanecem exatamente como no seu código original */
 
 renderHome();
+navigate(renderHome);
 
 </script>
 </body>
