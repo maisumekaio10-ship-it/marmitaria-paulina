@@ -19,10 +19,16 @@ input,select{width:100%;padding:8px;margin:6px 0;border-radius:6px;border:1px so
 .flex{display:flex;align-items:center;justify-content:space-between}
 
 .circle{
-width:40px;height:40px;
+width:40px;
+height:40px;
+min-width:40px;
+min-height:40px;
+flex-shrink:0;
 border-radius:50%;
 border:2px solid orange;
-display:flex;align-items:center;justify-content:center;
+display:flex;
+align-items:center;
+justify-content:center;
 margin-right:10px;
 overflow:hidden;
 background:#fff;
@@ -30,7 +36,10 @@ font-size:18px;
 }
 
 .circle img{
-width:100%;height:100%;object-fit:cover;border-radius:50%;
+width:100%;
+height:100%;
+object-fit:cover;
+border-radius:50%;
 }
 
 #cartBtn{
@@ -77,10 +86,10 @@ const TAXA = 7;
 let cart=[];
 let viewStack=[];
 
-function navigate(viewFunction){
-viewStack.push(viewFunction);
+function navigate(fn){
+viewStack.push(fn);
 history.pushState({},"");
-viewFunction();
+fn();
 }
 
 window.addEventListener("popstate",function(){
@@ -200,9 +209,7 @@ t.style.display="block";
 setTimeout(()=>t.style.display="none",1500);
 }
 
-function goCart(){
-navigate(renderCart);
-}
+function goCart(){ navigate(renderCart); }
 
 function renderCart(){
 let html="<button onclick='history.back()'>⬅ Voltar</button><h3>Carrinho</h3>";
@@ -217,14 +224,103 @@ html+=`<div class="card flex">
 });
 
 html+=`<h4>Subtotal: R$ ${subtotal.toFixed(2)}</h4>
-<button class="primary" onclick="navigate(checkout)">Continuar</button>`;
+<button class="primary" onclick="navigate(renderCheckout)">Continuar</button>`;
 
 document.getElementById("app").innerHTML=html;
 }
 
-/* checkout, revisao e finalizar permanecem exatamente como no seu código original */
+function renderCheckout(){
+let html=`
+<button onclick="history.back()">⬅ Voltar</button>
+<h3>Dados do Pedido</h3>
+<input id="nome" placeholder="Seu nome">
+<input id="fone" placeholder="Telefone">
 
-renderHome();
+<label>Tipo:</label>
+<select id="tipo">
+<option value="Entrega">Entrega (+7)</option>
+<option value="Retirada">Retirada</option>
+</select>
+
+<label>Quando?</label>
+<select id="quando" onchange="toggleData()">
+<option value="Agora">Agora</option>
+<option value="Agendar">Agendar</option>
+</select>
+
+<div id="dataBox" class="hidden">
+<input type="datetime-local" id="data">
+</div>
+
+<label>Pagamento:</label>
+<select id="pag" onchange="toggleTroco()">
+<option>Pix</option>
+<option>Dinheiro</option>
+<option>Cartão</option>
+</select>
+
+<div id="trocoBox" class="hidden">
+<input id="troco" placeholder="Troco para quanto?">
+</div>
+
+<button class="primary" onclick="revisao()">Revisar Pedido</button>
+`;
+
+document.getElementById("app").innerHTML=html;
+}
+
+function toggleData(){
+document.getElementById("dataBox").classList.toggle("hidden",
+document.getElementById("quando").value!="Agendar");
+}
+
+function toggleTroco(){
+document.getElementById("trocoBox").classList.toggle("hidden",
+document.getElementById("pag").value!="Dinheiro");
+}
+
+function revisao(){
+navigate(renderRevisao);
+}
+
+function renderRevisao(){
+let tipo=document.getElementById("tipo")?.value||"Entrega";
+let pag=document.getElementById("pag")?.value||"Pix";
+let quando=document.getElementById("quando")?.value||"Agora";
+let data=document.getElementById("data")?.value||"";
+let troco=document.getElementById("troco")?.value||"";
+let subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
+let total=tipo=="Entrega"?subtotal+TAXA:subtotal;
+
+let html="<button onclick='history.back()'>⬅ Voltar</button>";
+html+="<h3>Confirmar Pedido</h3>";
+
+cart.forEach(i=>{
+html+=`<div>${i.qty}x ${i.name}</div>`;
+});
+
+html+=`
+<hr>
+Subtotal: R$ ${subtotal.toFixed(2)}<br>
+Total: R$ ${total.toFixed(2)}<br>
+Pagamento: ${pag}<br>
+<button class="primary" onclick="finalizar()">Confirmar e Enviar</button>
+`;
+
+document.getElementById("app").innerHTML=html;
+}
+
+function finalizar(){
+let subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
+let total=subtotal+TAXA;
+let msg="*Pedido - Paulina Marmitex*%0A%0A";
+cart.forEach(i=>{
+msg+=`${i.qty}x ${i.name}%0A`;
+});
+msg+=`%0ATotal: R$${total.toFixed(2)}`;
+window.open(`https://wa.me/5512988721307?text=${msg}`);
+}
+
 navigate(renderHome);
 
 </script>
