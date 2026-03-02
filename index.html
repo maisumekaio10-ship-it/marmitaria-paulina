@@ -17,6 +17,24 @@ button{padding:10px;border:none;border-radius:8px;font-weight:bold;cursor:pointe
 input,select{width:100%;padding:8px;margin:6px 0;border-radius:6px;border:1px solid #ccc}
 .hidden{display:none}
 .flex{display:flex;justify-content:space-between;align-items:center}
+
+.logoCircle{
+width:60px;
+height:60px;
+border-radius:50%;
+background:#8B0000;
+display:flex;
+align-items:center;
+justify-content:center;
+box-shadow:0 2px 6px rgba(0,0,0,.2);
+}
+
+.logoCircle img{
+width:35px;
+height:35px;
+object-fit:contain;
+}
+
 #cartBtn{
 position:fixed;bottom:20px;right:20px;
 background:#8B0000;color:white;
@@ -24,11 +42,13 @@ width:60px;height:60px;border-radius:50%;
 display:flex;justify-content:center;align-items:center;
 font-size:20px;box-shadow:0 4px 10px rgba(0,0,0,.3);
 cursor:pointer}
+
 #cartCount{
 position:absolute;top:-5px;right:-5px;
 background:#fff;color:#8B0000;
 width:22px;height:22px;border-radius:50%;
 font-size:13px;display:flex;justify-content:center;align-items:center}
+
 .toast{
 position:fixed;bottom:90px;left:50%;
 transform:translateX(-50%);
@@ -64,57 +84,49 @@ const produtos={
 Marmitas:[
 {name:"Marmita Frango Grelhado",price:18},
 {name:"Marmita Carne Acebolada",price:20},
-{name:"Marmita Feijoada",price:22},
-{name:"Marmita Strogonoff",price:21},
-{name:"Marmita Fitness",price:23},
-{name:"Marmita Vegetariana",price:19},
-{name:"Marmita Costela",price:24}
+{name:"Marmita Feijoada",price:22}
 ],
 Bebidas:[
 {name:"Coca-Cola 2L",price:12},
-{name:"Guaraná 2L",price:10},
-{name:"Suco Natural",price:7},
-{name:"Água Mineral",price:3},
-{name:"Fanta Laranja",price:9},
-{name:"Refrigerante Lata",price:5},
-{name:"Suco Detox",price:8}
+{name:"Guaraná 2L",price:10}
 ],
 Doces:[
 {name:"Pudim",price:6},
-{name:"Mousse Chocolate",price:6},
-{name:"Brigadeiro",price:3},
-{name:"Beijinho",price:3},
-{name:"Torta Limão",price:7},
-{name:"Bolo Caseiro",price:5},
-{name:"Geladinho Gourmet",price:4}
+{name:"Mousse Chocolate",price:6}
 ],
 Acompanhamentos:[
 {name:"Farofa",price:4},
-{name:"Vinagrete",price:4},
-{name:"Arroz Extra",price:5},
-{name:"Feijão Extra",price:5},
-{name:"Batata Frita",price:8},
-{name:"Salada",price:6},
-{name:"Torresmo",price:9}
+{name:"Vinagrete",price:4}
 ]
 };
 
 function renderHome(){
 currentView="home";
 history.pushState({page:"home"},"");
+
 let html="<h3>Categorias</h3>";
+
 for(let cat in produtos){
-html+=`<div class="card" onclick="openCat('${cat}')">
+html+=`
+<div class="card" onclick="openCat('${cat}')">
+<div style="display:flex;align-items:center;gap:15px;">
+<div class="logoCircle">
+<img src="logo.png">
+</div>
 <b>${cat}</b>
+</div>
 </div>`;
 }
+
 document.getElementById("app").innerHTML=html;
 }
 
 function openCat(cat){
 currentView="cat";
 history.pushState({page:"cat"},"");
+
 let html=`<button onclick="renderHome()">⬅ Voltar</button><h3>${cat}</h3>`;
+
 produtos[cat].forEach((p,i)=>{
 html+=`<div class="card">
 <div class="flex">
@@ -126,6 +138,7 @@ R$ ${p.price.toFixed(2)}
 </div>
 </div>`;
 });
+
 document.getElementById("app").innerHTML=html;
 }
 
@@ -151,13 +164,13 @@ setTimeout(()=>t.style.display="none",1500);
 function goCart(){
 currentView="cart";
 history.pushState({page:"cart"},"");
+
 let html="<button onclick='renderHome()'>⬅ Voltar</button><h3>Carrinho</h3>";
 let subtotal=0;
 
-cart.forEach((i,index)=>{
+cart.forEach((i)=>{
 subtotal+=i.price*i.qty;
-html+=`
-<div class="card flex">
+html+=`<div class="card flex">
 <div>${i.qty}x ${i.name}</div>
 <div>R$ ${(i.price*i.qty).toFixed(2)}</div>
 </div>`;
@@ -165,6 +178,7 @@ html+=`
 
 html+=`<h4>Subtotal: R$ ${subtotal.toFixed(2)}</h4>
 <button class="primary" onclick="checkout()">Continuar</button>`;
+
 document.getElementById("app").innerHTML=html;
 }
 
@@ -172,65 +186,29 @@ function checkout(){
 currentView="checkout";
 history.pushState({page:"checkout"},"");
 
-let html=`
-<h3>Dados do Pedido</h3>
+let html=`<h3>Dados do Pedido</h3>
 <input id="nome" placeholder="Seu nome">
 <input id="fone" placeholder="Telefone">
-
-<label>Tipo:</label>
 <select id="tipo">
 <option value="Entrega">Entrega (+7)</option>
 <option value="Retirada">Retirada</option>
 </select>
-
-<label>Quando?</label>
-<select id="quando" onchange="toggleData()">
-<option value="Agora">Agora</option>
-<option value="Agendar">Agendar</option>
-</select>
-
-<div id="dataBox" class="hidden">
-<input type="datetime-local" id="data">
-</div>
-
-<label>Pagamento:</label>
-<select id="pag" onchange="toggleTroco()">
+<select id="pag">
 <option>Pix</option>
 <option>Dinheiro</option>
 <option>Cartão</option>
 </select>
-
-<div id="trocoBox" class="hidden">
-<input id="troco" placeholder="Troco para quanto?">
-</div>
-
-<button class="primary" onclick="revisao()">Revisar Pedido</button>
-`;
+<button class="primary" onclick="revisao()">Revisar Pedido</button>`;
 
 document.getElementById("app").innerHTML=html;
-}
-
-function toggleData(){
-document.getElementById("dataBox").classList.toggle("hidden",
-document.getElementById("quando").value!="Agendar");
-}
-
-function toggleTroco(){
-document.getElementById("trocoBox").classList.toggle("hidden",
-document.getElementById("pag").value!="Dinheiro");
 }
 
 function revisao(){
 currentView="rev";
 history.pushState({page:"rev"},"");
 
-let tipo=document.getElementById("tipo").value;
-let pag=document.getElementById("pag").value;
-let quando=document.getElementById("quando").value;
-let data=document.getElementById("data")?.value||"";
-let troco=document.getElementById("troco")?.value||"";
 let subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
-let total=tipo=="Entrega"?subtotal+TAXA:subtotal;
+let total=document.getElementById("tipo").value=="Entrega"?subtotal+TAXA:subtotal;
 
 let html="<h3>Confirmar Pedido</h3>";
 
@@ -238,13 +216,8 @@ cart.forEach(i=>{
 html+=`<div>${i.qty}x ${i.name}</div>`;
 });
 
-html+=`
-<hr>
-Subtotal: R$ ${subtotal.toFixed(2)}<br>
-Total: R$ ${total.toFixed(2)}<br>
-Pagamento: ${pag}<br>
-<button class="primary" onclick="finalizar()">Confirmar e Enviar</button>
-`;
+html+=`<hr>Total: R$ ${total.toFixed(2)}<br>
+<button class="primary" onclick="finalizar()">Confirmar e Enviar</button>`;
 
 document.getElementById("app").innerHTML=html;
 }
@@ -253,9 +226,6 @@ function finalizar(){
 
 let tipo=document.getElementById("tipo").value;
 let pag=document.getElementById("pag").value;
-let quando=document.getElementById("quando").value;
-let data=document.getElementById("data")?.value||"";
-let troco=document.getElementById("troco")?.value||"";
 let subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
 let total=tipo=="Entrega"?subtotal+TAXA:subtotal;
 
@@ -265,33 +235,24 @@ cart.forEach(i=>{
 msg+=`${i.qty}x ${i.name} - R$${(i.price*i.qty).toFixed(2)}%0A`;
 });
 
-msg+=`%0ASubtotal: R$${subtotal.toFixed(2)}%0A`;
-if(tipo=="Entrega") msg+=`Taxa: R$7,00%0A`;
-msg+=`Total: R$${total.toFixed(2)}%0A%0A`;
-
+msg+=`%0ATotal: R$${total.toFixed(2)}%0A`;
 msg+=`Tipo: ${tipo}%0A`;
-
-if(quando=="Agendar" && data){
-msg+=`Agendado para: ${data}%0A`;
-}else{
-msg+=`Pedido para: Agora%0A`;
-}
-
 msg+=`Pagamento: ${pag}%0A`;
 
-if(pag=="Dinheiro" && troco){
-msg+=`Troco para: R$${troco}%0A`;
-}
-
-if(pag=="Pix"){
-msg+="Aguardando envio do comprovante.%0A";
-}
-
-window.open(`https://wa.me/5512988721307?text=${msg}`);
+window.location.href = `https://wa.me/5512988721307?text=${msg}`;
 }
 
 window.onpopstate=function(){
+
+if(currentView==="home"){
+let sair=confirm("Deseja realmente sair do cardápio da Paulina Marmitex?");
+if(!sair){
+history.pushState({page:"home"},"");
+}
+}else{
 renderHome();
+}
+
 };
 
 renderHome();
