@@ -85,6 +85,7 @@ Paulina Marmitex<br>
 const TAXA = 7;
 let cart=[];
 let viewStack=[];
+let dadosPedido={};
 
 function navigate(fn){
 viewStack.push(fn);
@@ -143,9 +144,7 @@ Acompanhamentos:[
 
 function renderHome(){
 let html="<h3>Categorias</h3>";
-
 for(let cat in produtos){
-
 let emoji="🍽️";
 if(cat=="Marmitas") emoji="🍛";
 if(cat=="Bebidas") emoji="🥤";
@@ -162,13 +161,11 @@ html+=`
 </div>
 </div>`;
 }
-
 document.getElementById("app").innerHTML=html;
 }
 
 function openCat(cat){
 let html=`<button onclick="history.back()">⬅ Voltar</button><h3>${cat}</h3>`;
-
 produtos[cat].forEach((p,i)=>{
 html+=`
 <div class="card">
@@ -186,7 +183,6 @@ R$ ${p.price.toFixed(2)}
 </div>
 </div>`;
 });
-
 document.getElementById("app").innerHTML=html;
 }
 
@@ -225,7 +221,6 @@ html+=`<div class="card flex">
 
 html+=`<h4>Subtotal: R$ ${subtotal.toFixed(2)}</h4>
 <button class="primary" onclick="navigate(renderCheckout)">Continuar</button>`;
-
 document.getElementById("app").innerHTML=html;
 }
 
@@ -278,7 +273,8 @@ function toggleData(){
 document.getElementById("dataBox").classList.toggle("hidden",
 document.getElementById("quando").value!="Agendar");
 }
-  function toggleEndereco(){
+
+function toggleEndereco(){
 document.getElementById("enderecoBox").classList.toggle("hidden",
 document.getElementById("tipo").value!="Entrega");
 }
@@ -289,29 +285,33 @@ document.getElementById("pag").value!="Dinheiro");
 }
 
 function revisao(){
+
+dadosPedido={
+nome:document.getElementById("nome")?.value||"",
+fone:document.getElementById("fone")?.value||"",
+tipo:document.getElementById("tipo")?.value||"Entrega",
+endereco:document.getElementById("endereco")?.value||"",
+pag:document.getElementById("pag")?.value||"Pix",
+troco:document.getElementById("troco")?.value||""
+};
+
+navigate(renderRevisao);
+}
+
 function renderRevisao(){
 
-let nome=document.getElementById("nome")?.value||"";
-let fone=document.getElementById("fone")?.value||"";
-let tipo=document.getElementById("tipo")?.value||"Entrega";
-let endereco=document.getElementById("endereco")?.value||"";
-let pag=document.getElementById("pag")?.value||"Pix";
-let quando=document.getElementById("quando")?.value||"Agora";
-let data=document.getElementById("data")?.value||"";
-let troco=document.getElementById("troco")?.value||"";
-
 let subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
-let total=tipo=="Entrega"?subtotal+TAXA:subtotal;
+let total=dadosPedido.tipo=="Entrega"?subtotal+TAXA:subtotal;
 
 let html="<button onclick='history.back()'>⬅ Voltar</button>";
 html+="<h3>Confirmar Pedido</h3>";
 
-html+=`<b>Cliente:</b> ${nome}<br>`;
-html+=`<b>Telefone:</b> ${fone}<br>`;
-html+=`<b>Tipo:</b> ${tipo}<br>`;
+html+=`<b>Cliente:</b> ${dadosPedido.nome}<br>`;
+html+=`<b>Telefone:</b> ${dadosPedido.fone}<br>`;
+html+=`<b>Tipo:</b> ${dadosPedido.tipo}<br>`;
 
-if(tipo=="Entrega"){
-html+=`<b>Endereço:</b> ${endereco}<br>`;
+if(dadosPedido.tipo=="Entrega"){
+html+=`<b>Endereço:</b> ${dadosPedido.endereco}<br>`;
 }
 
 html+="<hr>";
@@ -324,33 +324,26 @@ html+=`
 <hr>
 Subtotal: R$ ${subtotal.toFixed(2)}<br>
 Total: R$ ${total.toFixed(2)}<br>
-Pagamento: ${pag}<br>
+Pagamento: ${dadosPedido.pag}<br>
 <button class="primary" onclick="finalizar()">Confirmar e Enviar</button>
 `;
 
 document.getElementById("app").innerHTML=html;
 }
-  
+
 function finalizar(){
 
-let nome=document.getElementById("nome")?.value||"";
-let fone=document.getElementById("fone")?.value||"";
-let tipo=document.getElementById("tipo")?.value||"Entrega";
-let endereco=document.getElementById("endereco")?.value||"";
-let pag=document.getElementById("pag")?.value||"Pix";
-let troco=document.getElementById("troco")?.value||"";
-
 let subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
-let total=tipo=="Entrega"?subtotal+TAXA:subtotal;
+let total=dadosPedido.tipo=="Entrega"?subtotal+TAXA:subtotal;
 
 let msg="*Pedido - Paulina Marmitex*%0A%0A";
 
-msg+=`👤 Nome: ${nome}%0A`;
-msg+=`📞 Telefone: ${fone}%0A`;
-msg+=`📦 Tipo: ${tipo}%0A`;
+msg+=`👤 Nome: ${dadosPedido.nome}%0A`;
+msg+=`📞 Telefone: ${dadosPedido.fone}%0A`;
+msg+=`📦 Tipo: ${dadosPedido.tipo}%0A`;
 
-if(tipo=="Entrega"){
-msg+=`🏠 Endereço: ${endereco}%0A`;
+if(dadosPedido.tipo=="Entrega"){
+msg+=`🏠 Endereço: ${dadosPedido.endereco}%0A`;
 }
 
 msg+="%0A🛒 Itens:%0A";
@@ -360,14 +353,15 @@ msg+=`${i.qty}x ${i.name}%0A`;
 });
 
 msg+=`%0A💰 Total: R$${total.toFixed(2)}%0A`;
-msg+=`💳 Pagamento: ${pag}%0A`;
+msg+=`💳 Pagamento: ${dadosPedido.pag}%0A`;
 
-if(pag=="Dinheiro" && troco){
-msg+=`💵 Troco para: ${troco}%0A`;
+if(dadosPedido.pag=="Dinheiro" && dadosPedido.troco){
+msg+=`💵 Troco para: ${dadosPedido.troco}%0A`;
 }
 
 window.open(`https://wa.me/5512988721307?text=${msg}`);
 }
+
 navigate(renderHome);
 
 </script>
