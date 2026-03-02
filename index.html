@@ -311,13 +311,66 @@ document.getElementById("app").innerHTML=html;
 }
 
 function finalizar(){
+
+let nome=document.getElementById("nome")?.value||"Não informado";
+let fone=document.getElementById("fone")?.value||"Não informado";
+let tipo=document.getElementById("tipo")?.value||"Entrega";
+let pag=document.getElementById("pag")?.value||"Pix";
+let quando=document.getElementById("quando")?.value||"Agora";
+let data=document.getElementById("data")?.value||"";
+let troco=document.getElementById("troco")?.value||"";
+
 let subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
-let total=subtotal+TAXA;
-let msg="*Pedido - Paulina Marmitex*%0A%0A";
+let total=tipo=="Entrega"?subtotal+TAXA:subtotal;
+
+let msg="*🍽️ PEDIDO - PAULINA MARMITEX 🍽️*%0A%0A";
+
+msg+=`👤 *Cliente:* ${nome}%0A`;
+msg+=`📞 *Telefone:* ${fone}%0A%0A`;
+
+msg+="🛒 *ITENS DO PEDIDO:*%0A";
+
 cart.forEach(i=>{
-msg+=`${i.qty}x ${i.name}%0A`;
+msg+=`• ${i.qty}x ${i.name} - R$ ${(i.price*i.qty).toFixed(2)}%0A`;
 });
-msg+=`%0ATotal: R$${total.toFixed(2)}`;
+
+msg+=`%0A💰 *Resumo:*%0A`;
+msg+=`Subtotal: R$ ${subtotal.toFixed(2)}%0A`;
+
+if(tipo=="Entrega"){
+msg+=`🚚 Taxa de Entrega: R$ ${TAXA.toFixed(2)}%0A`;
+}
+
+msg+=`💵 *Total: R$ ${total.toFixed(2)}*%0A%0A`;
+
+msg+=`📦 *Tipo:* ${tipo}%0A`;
+
+if(quando=="Agendar" && data){
+msg+=`⏰ *Agendado para:* ${data}%0A`;
+}else{
+msg+=`⚡ *Pedido para:* Agora%0A`;
+}
+
+msg+=`%0A💳 *Pagamento:* ${pag}%0A`;
+
+if(pag=="Dinheiro"){
+if(troco){
+msg+=`💵 Troco para: R$ ${troco}%0A`;
+}else{
+msg+=`💵 Pagamento em dinheiro (sem troco informado)%0A`;
+}
+}
+
+if(pag=="Pix"){
+msg+=`📲 Pix - Enviar comprovante após pagamento.%0A`;
+}
+
+if(pag=="Cartão"){
+msg+=`💳 Cartão na entrega (levar maquininha).%0A`;
+}
+
+msg+="%0A🙏 Obrigado pela preferência!";
+
 window.open(`https://wa.me/5512988721307?text=${msg}`);
 }
 
@@ -326,3 +379,4 @@ navigate(renderHome);
 </script>
 </body>
 </html>
+
