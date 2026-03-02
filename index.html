@@ -52,25 +52,40 @@ window.addEventListener("popstate",function(){
 
 const produtos={
   Marmitas:[
-    {name:"Marmita Frango Grelhado",price:18, detalhes:"Frango grelhado, arroz, feijão, salada"},
-    {name:"Marmita Carne Acebolada",price:20, detalhes:"Carne acebolada, arroz, feijão, farofa"},
-    {name:"Marmita Feijoada",price:22, detalhes:"Feijoada completa, arroz, couve, laranja"},
-    {name:"Marmita Strogonoff",price:21, detalhes:"Strogonoff de frango, arroz, batata palha"},
-    {name:"Marmita Fitness",price:23, detalhes:"Frango grelhado, legumes, arroz integral"},
-    {name:"Marmita Vegetariana",price:19, detalhes:"Legumes, arroz integral, salada verde"},
-    {name:"Marmita Costela",price:24, detalhes:"Costela assada, arroz, feijão, farofa"}
+    {name:"Marmita Frango Grelhado",price:18,detalhes:"Frango grelhado, arroz, feijão, salada", img:"https://source.unsplash.com/100x100/?chicken"},
+    {name:"Marmita Carne Acebolada",price:20,detalhes:"Carne acebolada, arroz, feijão, farofa", img:"https://source.unsplash.com/100x100/?beef"},
+    {name:"Marmita Feijoada",price:22,detalhes:"Feijoada completa, arroz, couve, laranja", img:"https://source.unsplash.com/100x100/?feijoada"},
+    {name:"Marmita Strogonoff",price:21,detalhes:"Strogonoff de frango, arroz, batata palha", img:"https://source.unsplash.com/100x100/?strogonoff"},
+    {name:"Marmita Fitness",price:23,detalhes:"Frango grelhado, legumes, arroz integral", img:"https://source.unsplash.com/100x100/?fitness-food"},
+    {name:"Marmita Vegetariana",price:19,detalhes:"Legumes, arroz integral, salada verde", img:"https://source.unsplash.com/100x100/?vegetarian-food"},
+    {name:"Marmita Costela",price:24,detalhes:"Costela assada, arroz, feijão, farofa", img:"https://source.unsplash.com/100x100/?ribs"}
   ],
   Bebidas:[
-    {name:"Coca-Cola 2L",price:12}, {name:"Guaraná 2L",price:10}, {name:"Suco Natural",price:7}, 
-    {name:"Água Mineral",price:3}, {name:"Fanta Laranja",price:9}, {name:"Refrigerante Lata",price:5}, {name:"Suco Detox",price:8}
+    {name:"Coca-Cola 2L",price:12,img:"https://source.unsplash.com/100x100/?coca-cola"}, 
+    {name:"Guaraná 2L",price:10,img:"https://source.unsplash.com/100x100/?guarana"}, 
+    {name:"Suco Natural",price:7,img:"https://source.unsplash.com/100x100/?juice"}, 
+    {name:"Água Mineral",price:3,img:"https://source.unsplash.com/100x100/?water"}, 
+    {name:"Fanta Laranja",price:9,img:"https://source.unsplash.com/100x100/?fanta"}, 
+    {name:"Refrigerante Lata",price:5,img:"https://source.unsplash.com/100x100/?soda"}, 
+    {name:"Suco Detox",price:8,img:"https://source.unsplash.com/100x100/?detox-juice"}
   ],
   Doces:[
-    {name:"Pudim",price:6}, {name:"Mousse Chocolate",price:6}, {name:"Brigadeiro",price:3},
-    {name:"Beijinho",price:3}, {name:"Torta Limão",price:7}, {name:"Bolo Caseiro",price:5}, {name:"Geladinho Gourmet",price:4}
+    {name:"Pudim",price:6,img:"https://source.unsplash.com/100x100/?pudding"}, 
+    {name:"Mousse Chocolate",price:6,img:"https://source.unsplash.com/100x100/?chocolate-mousse"}, 
+    {name:"Brigadeiro",price:3,img:"https://source.unsplash.com/100x100/?brigadeiro"}, 
+    {name:"Beijinho",price:3,img:"https://source.unsplash.com/100x100/?beijinho"}, 
+    {name:"Torta Limão",price:7,img:"https://source.unsplash.com/100x100/?lemon-pie"}, 
+    {name:"Bolo Caseiro",price:5,img:"https://source.unsplash.com/100x100/?cake"}, 
+    {name:"Geladinho Gourmet",price:4,img:"https://source.unsplash.com/100x100/?popsicle"}
   ],
   Acompanhamentos:[
-    {name:"Farofa",price:4}, {name:"Vinagrete",price:4}, {name:"Arroz Extra",price:5},
-    {name:"Feijão Extra",price:5}, {name:"Batata Frita",price:8}, {name:"Salada",price:6}, {name:"Torresmo",price:9}
+    {name:"Farofa",price:4,img:"https://source.unsplash.com/100x100/?farofa"}, 
+    {name:"Vinagrete",price:4,img:"https://source.unsplash.com/100x100/?vinagrete"}, 
+    {name:"Arroz Extra",price:5,img:"https://source.unsplash.com/100x100/?rice"}, 
+    {name:"Feijão Extra",price:5,img:"https://source.unsplash.com/100x100/?beans"}, 
+    {name:"Batata Frita",price:8,img:"https://source.unsplash.com/100x100/?fries"}, 
+    {name:"Salada",price:6,img:"https://source.unsplash.com/100x100/?salad"}, 
+    {name:"Torresmo",price:9,img:"https://source.unsplash.com/100x100/?pork-crackling"}
   ]
 };
 
@@ -82,15 +97,7 @@ function renderHome(){
     if(cat=="Bebidas") emoji="🥤";
     if(cat=="Doces") emoji="🍰";
     if(cat=="Acompanhamentos") emoji="🍟";
-    html+=`
-    <div class="card" onclick="navigate(()=>openCat('${cat}'))">
-      <div class="flex">
-        <div class="flex">
-          <div class="circle">${emoji}</div>
-          <b>${cat}</b>
-        </div>
-      </div>
-    </div>`;
+    html+=`<div class="card" onclick="navigate(()=>openCat('${cat}'))"><div class="flex"><div class="flex"><div class="circle">${emoji}</div><b>${cat}</b></div></div></div>`;
   }
   document.getElementById("app").innerHTML=html;
 }
@@ -98,22 +105,7 @@ function renderHome(){
 function openCat(cat){
   let html=`<button onclick="history.back()">⬅ Voltar</button><h3>${cat}</h3>`;
   produtos[cat].forEach((p,i)=>{
-    html+=`
-    <div class="card">
-      <div class="flex">
-        <div class="flex">
-          <div class="circle">
-            <img src="https://source.unsplash.com/100x100/?${encodeURIComponent(p.name)}">
-          </div>
-          <div>
-            <b>${p.name}</b><br>
-            <small>${p.detalhes || ""}</small><br>
-            R$ ${p.price.toFixed(2)}
-          </div>
-        </div>
-        <button class="primary small" onclick="add('${cat}',${i})">Adicionar</button>
-      </div>
-    </div>`;
+    html+=`<div class="card"><div class="flex"><div class="flex"><div class="circle"><img src="${p.img}"></div><div><b>${p.name}</b><br>${p.detalhes || ''}<br>R$ ${p.price.toFixed(2)}</div></div><button class="primary small" onclick="add('${cat}',${i})">Adicionar</button></div></div>`;
   });
   document.getElementById("app").innerHTML=html;
 }
@@ -121,38 +113,38 @@ function openCat(cat){
 function add(cat,i){
   let item=produtos[cat][i];
   let f=cart.find(x=>x.name==item.name);
-  if(f){f.qty++} else {cart.push({...item,qty:1})}
-  updateCart();
+  if(f){f.qty++}else{cart.push({...item,qty:1})}
+  updateCart(); 
   toast();
 }
 
-function updateCart(){
-  document.getElementById("cartCount").innerText=cart.reduce((s,i)=>s+i.qty,0);
+function removeItem(index){
+  cart.splice(index,1);
+  updateCart();
+  renderCart();
 }
 
-function toast(){
-  let t=document.getElementById("toast");
-  t.style.display="block";
-  setTimeout(()=>t.style.display="none",1500);
+function updateCart(){
+  document.getElementById("cartCount").innerText= cart.reduce((s,i)=>s+i.qty,0);
 }
+
+function toast(){ let t=document.getElementById("toast"); t.style.display="block"; setTimeout(()=>t.style.display="none",1500); }
 
 function goCart(){ navigate(renderCart); }
 
 function renderCart(){
   let html="<button onclick='history.back()'>⬅ Voltar</button><h3>Carrinho</h3>";
   let subtotal=0;
-  cart.forEach(i=>{
-    subtotal+=i.price*i.qty;
-    html+=`<div class="card flex"><div>${i.qty}x ${i.name}</div><div>R$ ${(i.price*i.qty).toFixed(2)}</div></div>`;
+  cart.forEach((i,index)=>{ 
+    subtotal+=i.price*i.qty; 
+    html+=`<div class="card flex"><div>${i.qty}x ${i.name}</div><div>R$ ${(i.price*i.qty).toFixed(2)}</div><button onclick="removeItem(${index})">Remover</button></div>`; 
   });
   html+=`<h4>Subtotal: R$ ${subtotal.toFixed(2)}</h4><button class="primary" onclick="navigate(renderCheckout)">Continuar</button>`;
   document.getElementById("app").innerHTML=html;
 }
 
-function renderCheckout(){
-  let html=`
-  <button onclick="history.back()">⬅ Voltar</button>
-  <h3>Dados do Pedido</h3>
+function renderCheckout(){ 
+  let html=`<button onclick="history.back()">⬅ Voltar</button><h3>Dados do Pedido</h3>
   <input id="nome" placeholder="Seu nome" required>
   <input id="fone" placeholder="Telefone" required>
   <label>Tipo:</label>
@@ -180,20 +172,13 @@ function renderCheckout(){
   <div id="trocoBox" class="hidden">
     <input id="troco" placeholder="Troco para quanto?">
   </div>
-  <button class="primary" onclick="revisao()">Revisar Pedido</button>
-  `;
+  <button class="primary" onclick="revisao()">Revisar Pedido</button>`;
   document.getElementById("app").innerHTML=html;
 }
 
-function toggleData(){
-  document.getElementById("dataBox").classList.toggle("hidden", document.getElementById("quando").value!="Agendar");
-}
-function toggleEndereco(){
-  document.getElementById("enderecoBox").classList.toggle("hidden", document.getElementById("tipo").value!="Entrega");
-}
-function toggleTroco(){
-  document.getElementById("trocoBox").classList.toggle("hidden", document.getElementById("pag").value!="Dinheiro");
-}
+function toggleData(){ document.getElementById("dataBox").classList.toggle("hidden", document.getElementById("quando").value!="Agendar"); }
+function toggleEndereco(){ document.getElementById("enderecoBox").classList.toggle("hidden", document.getElementById("tipo").value!="Entrega"); }
+function toggleTroco(){ document.getElementById("trocoBox").classList.toggle("hidden", document.getElementById("pag").value!="Dinheiro"); }
 
 function revisao(){
   dadosPedido={
@@ -203,7 +188,8 @@ function revisao(){
     endereco:document.getElementById("endereco")?.value||"",
     pag:document.getElementById("pag")?.value||"Pix",
     troco:document.getElementById("troco")?.value||"",
-    agendamento:document.getElementById("quando")?.value=="Agendar"?document.getElementById("data")?.value:"Agora"
+    quando:document.getElementById("quando")?.value||"Agora",
+    data:document.getElementById("data")?.value||""
   };
   navigate(renderRevisao);
 }
@@ -211,13 +197,12 @@ function revisao(){
 function renderRevisao(){
   let subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
   let total=dadosPedido.tipo=="Entrega"?subtotal+TAXA:subtotal;
-  let html="<button onclick='history.back()'>⬅ Voltar</button>";
-  html+="<h3>Confirmar Pedido</h3>";
+  let html="<button onclick='history.back()'>⬅ Voltar</button><h3>Confirmar Pedido</h3>";
   html+=`<b>Cliente:</b> ${dadosPedido.nome}<br>`;
   html+=`<b>Telefone:</b> ${dadosPedido.fone}<br>`;
   html+=`<b>Tipo:</b> ${dadosPedido.tipo}<br>`;
   if(dadosPedido.tipo=="Entrega"){ html+=`<b>Endereço:</b> ${dadosPedido.endereco}<br>`; }
-  html+=`<b>Agendamento:</b> ${dadosPedido.agendamento}<br>`;
+  html+=`<b>Agendamento:</b> ${dadosPedido.quando}${dadosPedido.quando=="Agendar"?" - "+dadosPedido.data:""}<br>`;
   html+="<hr>";
   cart.forEach(i=>{ html+=`<div>${i.qty}x ${i.name}</div>`; });
   html+=`<hr> Subtotal: R$ ${subtotal.toFixed(2)}<br> Total: R$ ${total.toFixed(2)}<br> Pagamento: ${dadosPedido.pag}<br> <button class="primary" onclick="finalizar()">Confirmar e Enviar</button>`;
@@ -232,7 +217,7 @@ function finalizar(){
   msg+=`📞 Telefone: ${dadosPedido.fone}%0A`;
   msg+=`📦 Tipo: ${dadosPedido.tipo}%0A`;
   if(dadosPedido.tipo=="Entrega"){ msg+=`🏠 Endereço: ${dadosPedido.endereco}%0A`; }
-  msg+=`⏰ Agendamento: ${dadosPedido.agendamento}%0A`;
+  msg+=`⏰ Agendamento: ${dadosPedido.quando}${dadosPedido.quando=="Agendar"?" - "+dadosPedido.data:""}%0A`;
   msg+="%0A🛒 Itens:%0A";
   cart.forEach(i=>{ msg+=`${i.qty}x ${i.name}%0A`; });
   msg+=`%0A💰 Total: R$${total.toFixed(2)}%0A`;
@@ -243,5 +228,6 @@ function finalizar(){
 
 navigate(renderHome);
 </script>
+
 </body>
 </html>
