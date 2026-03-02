@@ -235,7 +235,11 @@ let html=`
 <h3>Dados do Pedido</h3>
 <input id="nome" placeholder="Seu nome">
 <input id="fone" placeholder="Telefone">
-
+<div style="margin-top:10px;">
+  <label>📍 Endereço de Entrega</label>
+  <input type="text" id="endereco" placeholder="Rua, número, bairro"
+  style="width:100%;padding:10px;border-radius:8px;border:1px solid #ccc;">
+</div>
 <label>Tipo:</label>
 <select id="tipo">
 <option value="Entrega">Entrega (+7)</option>
@@ -382,5 +386,6 @@ navigate(renderHome);
 </script>
 </body>
 </html>
+
 
 
