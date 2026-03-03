@@ -4,164 +4,196 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Paulina Marmitex</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
 <style>
+
+/* ================= CORES ================= */
+:root{
+    --primary:#FFD700;
+    --primary-dark:#e6c200;
+    --black:#1a1a1a;
+    --white:#ffffff;
+    --background:#f5f5f5;
+    --gray-soft:#eeeeee;
+}
+
+/* ================= BASE ================= */
+*{box-sizing:border-box;}
+
 body{
     margin:0;
-    font-family:Arial;
-    background:#b0b0b0;
-}
-
-/* ===== HEADER ULTRA COMPACTO ESTILO IFOOD ===== */
-header{
-    background:#FFD700;
-    padding:0;
-    text-align:center;
-    line-height:1;
-}
-
-/* LOGO */
-.logo{
-    width:70px;
-    max-width:60%;
-    display:block;
-    margin:0 auto;
-    animation:fadeInLogo 1.2s ease-out;
-}
-
-/* TEXTO */
-.header-text{
-    margin:2px 0 4px 0;
-    font-size:12px;
-    font-weight:bold;
-    color:#ffffff;
-    line-height:1;
-    text-shadow:
-        -1px -1px 0 #000,
-         1px -1px 0 #000,
-        -1px  1px 0 #000,
-         1px  1px 0 #000;
-}
-
-@keyframes fadeInLogo{
-    from{
-        opacity:0;
-        transform:translateY(-20px);
-    }
-    to{
-        opacity:1;
-        transform:translateY(0);
-    }
+    font-family:'Poppins',sans-serif;
+    background:var(--background);
+    color:var(--black);
 }
 
 .container{
-    padding:15px;
-    padding-bottom:90px;
+    padding:20px 16px 100px;
+    max-width:600px;
+    margin:0 auto;
 }
+
+/* ================= HEADER ================= */
+header{
+    position:sticky;
+    top:0;
+    z-index:1000;
+    background:var(--primary);
+    text-align:center;
+    padding:10px 0 6px;
+    box-shadow:0 4px 12px rgba(0,0,0,.08);
+}
+
+.logo{
+    width:60px;
+    display:block;
+    margin:0 auto 4px;
+}
+
+.header-text{
+    font-size:13px;
+    font-weight:600;
+    letter-spacing:.5px;
+}
+
+/* ================= TITULOS ================= */
 h3{
-    margin-top:0;
-    color:#FFD700;
+    margin:10px 0 20px;
+    font-size:20px;
+    font-weight:600;
 }
+
+/* ================= CARDS ================= */
 .card{
-    background:#ffffff;
-    padding:12px;
-    margin:10px 0;
-    border-radius:12px;
-    box-shadow:0 2px 6px rgba(0,0,0,.1);
+    background:var(--white);
+    padding:16px;
+    margin-bottom:14px;
+    border-radius:16px;
+    box-shadow:0 6px 18px rgba(0,0,0,.05);
+    transition:.25s;
 }
-button{
-    padding:10px;
-    border:none;
-    border-radius:8px;
-    font-weight:bold;
-    cursor:pointer;
+
+.card:hover{
+    transform:translateY(-3px);
+    box-shadow:0 8px 22px rgba(0,0,0,.08);
 }
-.primary{
-    background:#FFD700;
-    color:#000000;
-    width:100%;
-}
-.small{
-    padding:5px 10px;
-    font-size:14px;
-}
-input,select{
-    width:100%;
-    padding:8px;
-    margin:6px 0;
-    border-radius:6px;
-    border:1px solid #ccc;
-}
-.hidden{
-    display:none;
-}
+
 .flex{
     display:flex;
     align-items:center;
     justify-content:space-between;
+    gap:12px;
 }
+
 .circle{
-    width:40px;
-    height:40px;
-    min-width:40px;
-    min-height:40px;
-    flex-shrink:0;
+    width:48px;
+    height:48px;
     border-radius:50%;
-    border:2px solid #FFD700;
+    background:var(--gray-soft);
     display:flex;
     align-items:center;
     justify-content:center;
-    margin-right:10px;
-    overflow:hidden;
-    background:#fff;
-    font-size:18px;
+    font-size:20px;
+    flex-shrink:0;
 }
+
 .circle img{
     width:100%;
     height:100%;
     object-fit:cover;
     border-radius:50%;
 }
+
+/* ================= BOTÕES ================= */
+button{
+    border:none;
+    border-radius:12px;
+    font-family:'Poppins',sans-serif;
+    font-weight:600;
+    cursor:pointer;
+    transition:.2s;
+}
+
+.primary{
+    background:var(--primary);
+    color:var(--black);
+    height:44px;
+    padding:0 16px;
+    width:100%;
+}
+
+.primary:hover{background:var(--primary-dark);}
+.primary:active{transform:scale(.98);}
+
+.small{
+    width:auto;
+    height:36px;
+    padding:0 14px;
+}
+
+/* ================= INPUTS ================= */
+input,select{
+    width:100%;
+    padding:12px;
+    margin:8px 0 14px;
+    border-radius:12px;
+    border:1px solid #ddd;
+    font-family:'Poppins',sans-serif;
+}
+
+.hidden{display:none;}
+
+/* ================= CARRINHO ================= */
 #cartBtn{
     position:fixed;
-    bottom:20px;
+    bottom:24px;
     right:20px;
-    background:#FFD700;
-    color:#000000;
-    width:60px;
-    height:60px;
+    width:64px;
+    height:64px;
     border-radius:50%;
+    background:var(--primary);
     display:flex;
     justify-content:center;
     align-items:center;
-    font-size:20px;
-    box-shadow:0 4px 10px rgba(0,0,0,.3);
+    font-size:22px;
+    box-shadow:0 10px 25px rgba(0,0,0,.15);
     cursor:pointer;
+    transition:.2s;
 }
+
+#cartBtn:active{transform:scale(.95);}
+
 #cartCount{
     position:absolute;
-    top:-5px;
-    right:-5px;
-    background:#ffffff;
-    color:#FFD700;
-    width:22px;
-    height:22px;
+    top:-6px;
+    right:-6px;
+    background:var(--black);
+    color:var(--white);
+    width:24px;
+    height:24px;
     border-radius:50%;
-    font-size:13px;
+    font-size:12px;
     display:flex;
     justify-content:center;
     align-items:center;
 }
+
+/* ================= TOAST ================= */
 .toast{
     position:fixed;
-    bottom:90px;
+    bottom:110px;
     left:50%;
     transform:translateX(-50%);
-    background:#FFD700;
-    color:#000000;
-    padding:10px 20px;
-    border-radius:20px;
+    background:var(--black);
+    color:var(--white);
+    padding:12px 22px;
+    border-radius:30px;
+    font-size:14px;
     display:none;
 }
+
 </style>
 </head>
 <body>
@@ -280,9 +312,7 @@ t.style.display="block";
 setTimeout(()=>t.style.display="none",1500);
 }
 
-function goCart(){
-navigate(renderCart);
-}
+function goCart(){navigate(renderCart);}
 
 function renderCart(){
 let html="<button onclick='history.back()'>⬅ Voltar</button><h3>Carrinho</h3>";
@@ -322,15 +352,9 @@ let html=`<button onclick="history.back()">⬅ Voltar</button><h3>Dados do Pedid
 document.getElementById("app").innerHTML=html;
 }
 
-function toggleData(){
-document.getElementById("dataBox").classList.toggle("hidden",document.getElementById("quando").value!="Agendar");
-}
-function toggleEndereco(){
-document.getElementById("enderecoBox").classList.toggle("hidden",document.getElementById("tipo").value!="Entrega");
-}
-function toggleTroco(){
-document.getElementById("trocoBox").classList.toggle("hidden",document.getElementById("pag").value!="Dinheiro");
-}
+function toggleData(){document.getElementById("dataBox").classList.toggle("hidden",document.getElementById("quando").value!="Agendar");}
+function toggleEndereco(){document.getElementById("enderecoBox").classList.toggle("hidden",document.getElementById("tipo").value!="Entrega");}
+function toggleTroco(){document.getElementById("trocoBox").classList.toggle("hidden",document.getElementById("pag").value!="Dinheiro");}
 
 function revisao(){
 dadosPedido={
