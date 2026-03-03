@@ -10,21 +10,37 @@ body{
     font-family:Arial;
     background:#b0b0b0;
 }
+
+/* ===== HEADER AJUSTADO ===== */
 header{
     background:#FFD700;
-    color:#000000;
-    padding:15px;
+    padding:10px 10px 8px 10px;
     text-align:center;
-    font-weight:bold;
     border-bottom:3px solid #000000;
 }
+
+/* LOGO MENOR */
 .logo{
-    width:180px;
-    max-width:90%;
+    width:120px;
+    max-width:80%;
     display:block;
-    margin:10px auto;
+    margin:5px auto 5px auto;
     animation:fadeInLogo 1.2s ease-out;
 }
+
+/* TEXTO DENTRO DO HEADER */
+.header-text{
+    margin:0;
+    font-size:18px;
+    font-weight:bold;
+    color:#ffffff;
+    text-shadow:
+        -1px -1px 0 #000,
+         1px -1px 0 #000,
+        -1px  1px 0 #000,
+         1px  1px 0 #000;
+}
+
 @keyframes fadeInLogo{
     from{
         opacity:0;
@@ -35,6 +51,7 @@ header{
         transform:translateY(0);
     }
 }
+
 .container{
     padding:15px;
     padding-bottom:90px;
@@ -147,8 +164,10 @@ input,select{
 </style>
 </head>
 <body>
+
 <header>
 <img src="logo.png" class="logo">
+<div class="header-text">FAÇA SEU PEDIDO AQUI</div>
 </header>
 
 <div class="container" id="app"></div>
