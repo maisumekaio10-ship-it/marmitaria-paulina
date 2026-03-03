@@ -8,8 +8,6 @@
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
-
-/* ================= CORES ================= */
 :root{
     --primary:#FFD700;
     --primary-dark:#e6c200;
@@ -19,7 +17,6 @@
     --gray-soft:#eeeeee;
 }
 
-/* ================= BASE ================= */
 *{box-sizing:border-box;}
 
 body{
@@ -35,7 +32,6 @@ body{
     margin:0 auto;
 }
 
-/* ================= HEADER ================= */
 header{
     position:sticky;
     top:0;
@@ -58,14 +54,12 @@ header{
     letter-spacing:.5px;
 }
 
-/* ================= TITULOS ================= */
 h3{
     margin:10px 0 20px;
     font-size:20px;
     font-weight:600;
 }
 
-/* ================= CARDS ================= */
 .card{
     background:var(--white);
     padding:16px;
@@ -88,14 +82,10 @@ h3{
 }
 
 .circle{
-    width:48px;
-    height:48px;
-    border-radius:50%;
-    background:var(--gray-soft);
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:20px;
+    width:60px;
+    height:60px;
+    border-radius:12px;
+    overflow:hidden;
     flex-shrink:0;
 }
 
@@ -103,10 +93,8 @@ h3{
     width:100%;
     height:100%;
     object-fit:cover;
-    border-radius:50%;
 }
 
-/* ================= BOTÕES ================= */
 button{
     border:none;
     border-radius:12px;
@@ -133,7 +121,6 @@ button{
     padding:0 14px;
 }
 
-/* ================= INPUTS ================= */
 input,select{
     width:100%;
     padding:12px;
@@ -145,7 +132,6 @@ input,select{
 
 .hidden{display:none;}
 
-/* ================= CARRINHO ================= */
 #cartBtn{
     position:fixed;
     bottom:24px;
@@ -180,7 +166,6 @@ input,select{
     align-items:center;
 }
 
-/* ================= TOAST ================= */
 .toast{
     position:fixed;
     bottom:110px;
@@ -193,13 +178,12 @@ input,select{
     font-size:14px;
     display:none;
 }
-
 </style>
 </head>
 <body>
 
 <header>
-<img src="logo.png" class="logo">
+<img src="https://cdn-icons-png.flaticon.com/512/1046/1046784.png" class="logo">
 <div class="header-text">FAÇA SEU PEDIDO AQUI</div>
 </header>
 
@@ -223,52 +207,47 @@ window.addEventListener("popstate",function(){if(viewStack.length>1){viewStack.p
 
 const produtos={
 Marmitas:[
-{name:"Marmita Frango Grelhado",price:18,descricao:"Frango grelhado, arroz, feijão, salada"},
-{name:"Marmita Carne Acebolada",price:20,descricao:"Carne acebolada, arroz, feijão, farofa"},
-{name:"Marmita Feijoada",price:22,descricao:"Feijoada, arroz, couve, laranja"},
-{name:"Marmita Strogonoff",price:21,descricao:"Strogonoff, arroz, batata palha"},
-{name:"Marmita Fitness",price:23,descricao:"Frango grelhado, legumes, arroz integral"},
-{name:"Marmita Vegetariana",price:19,descricao:"Legumes, arroz, feijão, salada"},
-{name:"Marmita Costela",price:24,descricao:"Costela assada, arroz, feijão, farofa"}
+{name:"Marmita Frango Grelhado",price:18,descricao:"Frango grelhado, arroz, feijão, salada",img:"https://source.unsplash.com/300x300/?grilled-chicken,food"},
+{name:"Marmita Carne Acebolada",price:20,descricao:"Carne acebolada, arroz, feijão, farofa",img:"https://source.unsplash.com/300x300/?beef,rice"},
+{name:"Marmita Feijoada",price:22,descricao:"Feijoada, arroz, couve, laranja",img:"https://source.unsplash.com/300x300/?feijoada"},
+{name:"Marmita Strogonoff",price:21,descricao:"Strogonoff, arroz, batata palha",img:"https://source.unsplash.com/300x300/?stroganoff"},
+{name:"Marmita Fitness",price:23,descricao:"Frango grelhado, legumes, arroz integral",img:"https://source.unsplash.com/300x300/?healthy-meal"},
+{name:"Marmita Vegetariana",price:19,descricao:"Legumes, arroz, feijão, salada",img:"https://source.unsplash.com/300x300/?vegetarian-food"},
+{name:"Marmita Costela",price:24,descricao:"Costela assada, arroz, feijão, farofa",img:"https://source.unsplash.com/300x300/?bbq-ribs"}
 ],
 Bebidas:[
-{name:"Coca-Cola 2L",price:12,descricao:"Refrigerante 2L"},
-{name:"Guaraná 2L",price:10,descricao:"Refrigerante 2L"},
-{name:"Suco Natural",price:7,descricao:"Suco natural 500ml"},
-{name:"Água Mineral",price:3,descricao:"Água mineral 500ml"},
-{name:"Fanta Laranja",price:9,descricao:"Refrigerante 2L"},
-{name:"Refrigerante Lata",price:5,descricao:"Refrigerante 350ml"},
-{name:"Suco Detox",price:8,descricao:"Suco detox 500ml"}
+{name:"Coca-Cola 2L",price:12,descricao:"Refrigerante 2L",img:"https://source.unsplash.com/300x300/?coca-cola"},
+{name:"Guaraná 2L",price:10,descricao:"Refrigerante 2L",img:"https://source.unsplash.com/300x300/?guarana-soda"},
+{name:"Suco Natural",price:7,descricao:"Suco natural 500ml",img:"https://source.unsplash.com/300x300/?orange-juice"},
+{name:"Água Mineral",price:3,descricao:"Água mineral 500ml",img:"https://source.unsplash.com/300x300/?water-bottle"},
+{name:"Fanta Laranja",price:9,descricao:"Refrigerante 2L",img:"https://source.unsplash.com/300x300/?orange-soda"},
+{name:"Refrigerante Lata",price:5,descricao:"Refrigerante 350ml",img:"https://source.unsplash.com/300x300/?soda-can"},
+{name:"Suco Detox",price:8,descricao:"Suco detox 500ml",img:"https://source.unsplash.com/300x300/?green-juice"}
 ],
 Doces:[
-{name:"Pudim",price:6,descricao:"Pudim tradicional"},
-{name:"Mousse Chocolate",price:6,descricao:"Mousse de chocolate"},
-{name:"Brigadeiro",price:3,descricao:"Brigadeiro tradicional"},
-{name:"Beijinho",price:3,descricao:"Beijinho tradicional"},
-{name:"Torta Limão",price:7,descricao:"Torta de limão"},
-{name:"Bolo Caseiro",price:5,descricao:"Bolo caseiro"},
-{name:"Geladinho Gourmet",price:4,descricao:"Geladinho sabor gourmet"}
+{name:"Pudim",price:6,descricao:"Pudim tradicional",img:"https://source.unsplash.com/300x300/?pudding"},
+{name:"Mousse Chocolate",price:6,descricao:"Mousse de chocolate",img:"https://source.unsplash.com/300x300/?chocolate-mousse"},
+{name:"Brigadeiro",price:3,descricao:"Brigadeiro tradicional",img:"https://source.unsplash.com/300x300/?brigadeiro"},
+{name:"Beijinho",price:3,descricao:"Beijinho tradicional",img:"https://source.unsplash.com/300x300/?coconut-candy"},
+{name:"Torta Limão",price:7,descricao:"Torta de limão",img:"https://source.unsplash.com/300x300/?lemon-pie"},
+{name:"Bolo Caseiro",price:5,descricao:"Bolo caseiro",img:"https://source.unsplash.com/300x300/?homemade-cake"},
+{name:"Geladinho Gourmet",price:4,descricao:"Geladinho sabor gourmet",img:"https://source.unsplash.com/300x300/?popsicle"}
 ],
 Acompanhamentos:[
-{name:"Farofa",price:4,descricao:"Farofa crocante"},
-{name:"Vinagrete",price:4,descricao:"Vinagrete caseiro"},
-{name:"Arroz Extra",price:5,descricao:"Arroz branco adicional"},
-{name:"Feijão Extra",price:5,descricao:"Feijão adicional"},
-{name:"Batata Frita",price:8,descricao:"Batata frita crocante"},
-{name:"Salada",price:6,descricao:"Salada fresca"},
-{name:"Torresmo",price:9,descricao:"Torresmo crocante"}
+{name:"Farofa",price:4,descricao:"Farofa crocante",img:"https://source.unsplash.com/300x300/?farofa"},
+{name:"Vinagrete",price:4,descricao:"Vinagrete caseiro",img:"https://source.unsplash.com/300x300/?vinaigrette"},
+{name:"Arroz Extra",price:5,descricao:"Arroz branco adicional",img:"https://source.unsplash.com/300x300/?white-rice"},
+{name:"Feijão Extra",price:5,descricao:"Feijão adicional",img:"https://source.unsplash.com/300x300/?beans"},
+{name:"Batata Frita",price:8,descricao:"Batata frita crocante",img:"https://source.unsplash.com/300x300/?french-fries"},
+{name:"Salada",price:6,descricao:"Salada fresca",img:"https://source.unsplash.com/300x300/?salad"},
+{name:"Torresmo",price:9,descricao:"Torresmo crocante",img:"https://source.unsplash.com/300x300/?pork-crackling"}
 ]
 };
 
 function renderHome(){
 let html="<h3>Categorias</h3>";
 for(let cat in produtos){
-let emoji="🍽️";
-if(cat=="Marmitas") emoji="🍛";
-if(cat=="Bebidas") emoji="🥤";
-if(cat=="Doces") emoji="🍰";
-if(cat=="Acompanhamentos") emoji="🍟";
-html+=`<div class="card" onclick="navigate(()=>openCat('${cat}'))"><div class="flex"><div class="flex"><div class="circle">${emoji}</div><b>${cat}</b></div></div></div>`;
+html+=`<div class="card" onclick="navigate(()=>openCat('${cat}'))"><b>${cat}</b></div>`;
 }
 document.getElementById("app").innerHTML=html;
 }
@@ -279,7 +258,7 @@ produtos[cat].forEach((p,i)=>{
 html+=`<div class="card">
 <div class="flex">
 <div class="flex">
-<div class="circle"><img src="https://source.unsplash.com/100x100/?food"></div>
+<div class="circle"><img src="${p.img}"></div>
 <div><b>${p.name}</b><br>${p.descricao}<br>R$ ${p.price.toFixed(2)}</div>
 </div>
 <button class="primary small" onclick="add('${cat}',${i})">Adicionar</button>
@@ -358,14 +337,14 @@ function toggleTroco(){document.getElementById("trocoBox").classList.toggle("hid
 
 function revisao(){
 dadosPedido={
-nome:document.getElementById("nome")?.value||"",
-fone:document.getElementById("fone")?.value||"",
-tipo:document.getElementById("tipo")?.value||"Entrega",
-endereco:document.getElementById("endereco")?.value||"",
-pag:document.getElementById("pag")?.value||"Pix",
-troco:document.getElementById("troco")?.value||"",
-quando:document.getElementById("quando")?.value||"Agora",
-data:document.getElementById("data")?.value||""
+nome:document.getElementById("nome").value,
+fone:document.getElementById("fone").value,
+tipo:document.getElementById("tipo").value,
+endereco:document.getElementById("endereco").value,
+pag:document.getElementById("pag").value,
+troco:document.getElementById("troco").value,
+quando:document.getElementById("quando").value,
+data:document.getElementById("data").value
 };
 navigate(renderRevisao);
 }
@@ -399,8 +378,6 @@ cart.forEach(i=>{msg+=`${i.qty}x ${i.name}%0A`;});
 msg+=`%0A💰 Total: R$${total.toFixed(2)}%0A`;
 msg+=`💳 Pagamento: ${dadosPedido.pag}%0A`;
 if(dadosPedido.pag=="Dinheiro" && dadosPedido.troco){msg+=`💵 Troco para: ${dadosPedido.troco}%0A`;}
-if(dadosPedido.pag=="Pix"){msg+="💡 Pagamento via Pix - prazo estimado: 30 a 45 minutos%0A";}
-if(dadosPedido.pag=="Cartão"){msg+="💡 Pagamento via cartão - prazo estimado: 30 a 45 minutos%0A";}
 window.open(`https://wa.me/5512988721307?text=${msg}`);
 }
 
