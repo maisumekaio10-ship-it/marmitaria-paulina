@@ -210,7 +210,6 @@ const produtos={
 ]
 };
 
-/* HOME ORIGINAL RESTAURADO */
 function renderHome(){
 let html="<h3>Categorias</h3>";
 for(let cat in produtos){
@@ -243,18 +242,17 @@ document.getElementById("app").innerHTML=html;
 updateCartButton();
 }
 
-/* ALTERAÇÃO SEGURA: apenas clique usa navigate */
 function openCat(cat){
 let html=`<button onclick="history.back()">⬅ Voltar</button><h3>${cat}</h3>`;
 if(cat==="Kit Marmitas Congeladas"){
 html+=`<div class="grid-kits">`;
 produtos[cat].forEach((p,i)=>{
 html+=`
-<div class="card" onclick="navigate(()=>openKitDetail('${cat}',${i}))">
+<div class="card" onclick="openKitDetail('${cat}',${i})">
 <img src="${p.img}">
 <b>${p.name}</b><br>
 R$ <s>${p.oldPrice}</s><br>
-<span style="color:#FFD700;">R$ ${p.price}</span>
+<span style="color:#FFD700;font-weight:700;">R$ ${p.price}</span>
 </div>`;
 });
 html+=`</div>`;
@@ -271,18 +269,16 @@ function openKitDetail(cat,i){
 let kit=produtos[cat][i];
 let html=`<button onclick="history.back()">⬅ Voltar</button>`;
 html+=`<div class="card" style="text-align:center;">
-<img src="${kit.img}" style="width:95%;">
+<img src="${kit.img}" style="width:95%;margin-bottom:10px;">
 <b>${kit.name}</b><br>
-<s>${kit.oldPrice}</s><br>
-<span style="color:#FFD700;">R$ ${kit.price}</span>
+<s>R$ ${kit.oldPrice}</s><br>
+<span style="color:#FFD700;font-size:20px;font-weight:700;">R$ ${kit.price}</span>
 <p>${kit.descricao}</p>
 <button class="primary" onclick="add('${cat}',${i})">Adicionar ao carrinho</button>
 </div>`;
 document.getElementById("app").innerHTML=html;
 updateCartButton();
 }
-
-/* RESTO DO CÓDIGO 100% ORIGINAL */
 
 function add(cat,i){
 let item=produtos[cat][i];
@@ -300,7 +296,9 @@ setTimeout(()=>t.style.display="none",1500);
 
 function updateCartButton(){
 let btn=document.getElementById("cart-btn");
-if(cart.length>0){btn.classList.remove("hidden");}
+if(cart.length>0){
+btn.classList.remove("hidden");
+}
 document.getElementById("cart-count").innerText=cart.reduce((s,i)=>s+i.qty,0);
 }
 
@@ -312,11 +310,117 @@ subtotal+=i.price*i.qty;
 html+=`<div class="card flex"><div>${i.qty}x ${i.name}</div><div>R$ ${(i.price*i.qty).toFixed(2)}</div></div>`;
 });
 html+=`<h4>Subtotal: R$ ${subtotal.toFixed(2)}</h4>`;
-
-/* ADIÇÃO PERMITIDA */
-html+=`<button class="primary" onclick="navigate(renderCheckout)">Avançar para Checkout</button>`;
-
+html+=`<button class="primary" onclick="renderCheckout()">Avançar para Checkout</button>`;
 document.getElementById("app").innerHTML=html;
+}
+
+function renderCheckout(){
+let html=`<button onclick="history.back()">⬅ Voltar</button><h3>Dados do Pedido</h3>
+<input id="nome" placeholder="Seu nome">
+<input id="fone" placeholder="Telefone">
+<select id="tipo" onchange="toggleEndereco()">
+<option value="Entrega">Entrega</option>
+<option value="Retirada">Retirada</option>
+</select>
+<div id="enderecoBox">
+<input id="cep" placeholder="CEP" onblur="buscarCEP()">
+<input id="endereco" placeholder="Rua, número, bairro">
+</div>
+<label>Pagamento:</label>
+<select id="pag">
+<option>Pix</option>
+<option>Cartão</option>
+<option>Voucher</option>
+</select>
+<div id="freteBox"></div>
+<button class="primary" onclick="revisao()">Revisar Pedido</button>`;
+document.getElementById("app").innerHTML=html;
+}
+
+function toggleEndereco(){
+document.getElementById("enderecoBox").classList.toggle("hidden",document.getElementById("tipo").value!="Entrega");
+}
+
+async function buscarCEP(){
+let cep=document.getElementById("cep").value;
+if(cep.length<8) return;
+let res=await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+let data=await res.json();
+if(!data.erro){
+document.getElementById("endereco").value =
+`${data.logradouro}, ${data.bairro}, ${data.localidade}`;
+calcularFrete();
+}
+}
+
+async function getCoords(end){
+let url=`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(end)}`;
+let res=await fetch(url);
+let data=await res.json();
+return {lat:data[0].lat,lon:data[0].lon};
+}
+
+function distancia(lat1,lon1,lat2,lon2){
+let R=6371;
+let dLat=(lat2-lat1)*Math.PI/180;
+let dLon=(lon2-lon1)*Math.PI/180;
+let a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
+let c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+return R*c;
+}
+
+async function calcularFrete(){
+let cliente=document.getElementById("endereco").value;
+if(!cliente) return;
+let c1=await getCoords(RESTAURANTE_END);
+let c2=await getCoords(cliente);
+let km=distancia(c1.lat,c1.lon,c2.lat,c2.lon);
+frete=(km*2.5)+5;
+document.getElementById("freteBox").innerHTML=`Frete: R$ ${frete.toFixed(2)}`;
+}
+
+function revisao(){
+dadosPedido={
+nome:document.getElementById("nome").value,
+fone:document.getElementById("fone").value,
+tipo:document.getElementById("tipo").value,
+endereco:document.getElementById("endereco").value,
+pag:document.getElementById("pag").value
+};
+navigate(renderRevisao);
+}
+
+function renderRevisao(){
+let subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
+let total=dadosPedido.tipo=="Entrega"?subtotal+frete:subtotal;
+let html="<h3>Confirmar Pedido</h3>";
+html+=`Cliente: ${dadosPedido.nome}<br>`;
+html+=`Telefone: ${dadosPedido.fone}<br>`;
+if(dadosPedido.tipo=="Entrega"){html+=`Endereço: ${dadosPedido.endereco}<br>`;}
+cart.forEach(i=>{html+=`${i.qty}x ${i.name}<br>`;});
+html+=`<hr>Subtotal: R$ ${subtotal.toFixed(2)}<br>`;
+if(dadosPedido.tipo=="Entrega"){html+=`Frete: R$ ${frete.toFixed(2)}<br>`;}
+html+=`Total: R$ ${total.toFixed(2)}<br>`;
+html+=`Pagamento: ${dadosPedido.pag}<br>`;
+html+=`<button class="primary" onclick="finalizar()">Enviar Pedido</button>`;
+document.getElementById("app").innerHTML=html;
+updateCartButton();
+}
+
+function finalizar(){
+let subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
+let total=dadosPedido.tipo=="Entrega"?subtotal+frete:subtotal;
+let msg="*Pedido - Laencasa Ultracongelados*%0A%0A";
+msg+=`Nome: ${dadosPedido.nome}%0A`;
+msg+=`Telefone: ${dadosPedido.fone}%0A`;
+if(dadosPedido.tipo=="Entrega"){msg+=`Endereço: ${dadosPedido.endereco}%0A`;}
+msg+="%0AItens:%0A";
+cart.forEach(i=>{msg+=`${i.qty}x ${i.name}%0A`;});
+msg+=`%0ASubtotal: R$ ${subtotal.toFixed(2)}%0A`;
+if(dadosPedido.tipo=="Entrega"){msg+=`Frete: R$ ${frete.toFixed(2)}%0A`;}
+msg+=`Total: R$ ${total.toFixed(2)}%0A`;
+msg+=`Pagamento: ${dadosPedido.pag}%0A`;
+window.open(`https://wa.me/5511952282056?text=${msg}`);
 }
 
 navigate(renderHome);
