@@ -105,6 +105,24 @@ padding:12px 22px;
 border-radius:30px;
 display:none;
 }
+
+/* 🔥 GRID SOMENTE PARA KITS */
+.grid-kits{
+display:grid;
+grid-template-columns:1fr 1fr;
+gap:10px;
+}
+
+.grid-kits .card{
+margin:0;
+padding:10px;
+}
+
+.grid-kits img{
+width:100%;
+border-radius:12px;
+margin-bottom:8px;
+}
 </style>
 </head>
 
@@ -149,8 +167,19 @@ const produtos={
 ],
 
 "Kit Marmitas Congeladas":[
-{name:"Kit 5 Marmitas",price:70,descricao:"5 unidades",img:"kit.jpg"},
-{name:"Kit 10 Marmitas",price:130,descricao:"10 unidades",img:"kit.jpg"}
+{name:"Kit 1",price:50,descricao:"Kit completo",img:"kit1.jpg"},
+{name:"Kit 2",price:50,descricao:"Kit completo",img:"kit2.jpg"},
+{name:"Kit 3",price:50,descricao:"Kit completo",img:"kit3.jpg"},
+{name:"Kit 4",price:50,descricao:"Kit completo",img:"kit4.jpg"},
+{name:"Kit 5",price:50,descricao:"Kit completo",img:"kit5.jpg"},
+{name:"Kit 6",price:50,descricao:"Kit completo",img:"kit6.jpg"},
+{name:"Kit 7",price:50,descricao:"Kit completo",img:"kit7.jpg"},
+{name:"Kit 8",price:50,descricao:"Kit completo",img:"kit8.jpg"},
+{name:"Kit 9",price:50,descricao:"Kit completo",img:"kit9.jpg"},
+{name:"Kit 10",price:50,descricao:"Kit completo",img:"kit10.jpg"},
+{name:"Kit 11",price:50,descricao:"Kit completo",img:"kit11.jpg"},
+{name:"Kit 12",price:50,descricao:"Kit completo",img:"kit12.jpg"},
+{name:"Kit 13",price:50,descricao:"Kit completo",img:"kit13.jpg"}
 ]
 };
 
@@ -193,9 +222,29 @@ document.getElementById("app").innerHTML=html;
 
 function openCat(cat){
 let html=`<button onclick="history.back()">⬅ Voltar</button><h3>${cat}</h3>`;
+
+if(cat==="Kit Marmitas Congeladas"){
+html+=`<div class="grid-kits">`;
+
+produtos[cat].forEach((p,i)=>{
+html+=`
+<div class="card">
+<img src="${p.img}">
+<b>${p.name}</b><br>
+R$ ${p.price}
+<button class="primary small" onclick="add('${cat}',${i})">Adicionar</button>
+</div>`;
+});
+
+html+=`</div>`;
+}else{
+
 produtos[cat].forEach((p,i)=>{
 html+=`<div class="card"><div class="flex"><div><b>${p.name}</b><br>R$ ${p.price}</div><button class="primary small" onclick="add('${cat}',${i})">Adicionar</button></div></div>`;
 });
+
+}
+
 document.getElementById("app").innerHTML=html;
 }
 
