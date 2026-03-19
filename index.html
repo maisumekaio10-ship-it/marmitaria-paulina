@@ -201,10 +201,15 @@ let cart=[];
 let viewStack=[];
 let dadosPedido={};
 let frete=0;
+let modalAberto=false;
 
 function navigate(fn){viewStack.push(fn);history.pushState({},"");fn();}
 
 window.addEventListener("popstate",function(){
+if(modalAberto){
+fecharModal();
+return;
+}
 if(viewStack.length>1){viewStack.pop();let last=viewStack[viewStack.length-1];last();}
 });
 
@@ -271,9 +276,13 @@ html+=`
 <div class="card">
 <img src="${p.img}" onclick="openModal('${p.img}','${p.descricao}')">
 <b>${p.name}</b><br>
+<div class="flex">
+<div>
 R$ <s>${p.oldPrice}</s><br>
-<span style="color:#FFD700;font-weight:700;">R$ ${p.price}</span><br><br>
+<span style="color:#FFD700;font-weight:700;">R$ ${p.price}</span>
+</div>
 <button class="primary small" onclick="add('${cat}',${i})">+</button>
+</div>
 </div>`;
 });
 html+=`</div>`;
@@ -287,11 +296,20 @@ updateCartButton();
 }
 
 function openModal(img,desc){
+modalAberto=true;
+history.pushState({modal:true},"");
 let modal=document.createElement("div");
 modal.className="modal";
-modal.onclick=()=>modal.remove();
-modal.innerHTML=`<div><img src="${img}"><p style="text-align:center;margin-top:10px;">${desc}</p></div>`;
+modal.id="modalView";
+modal.innerHTML=`<div onclick="event.stopPropagation()"><img src="${img}"><p style="text-align:center;margin-top:10px;">${desc}</p></div>`;
+modal.onclick=fecharModal;
 document.body.appendChild(modal);
+}
+
+function fecharModal(){
+let m=document.getElementById("modalView");
+if(m){m.remove();}
+modalAberto=false;
 }
 
 function openKitDetail(cat,i){
