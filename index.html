@@ -7,12 +7,12 @@
 
 <style>
 :root{
---primary:#b22222;
+--primary:#8B0000;
 --primary-dark:#8b1a1a;
---secondary:#f4d03f;
+--secondary:#FFD700;
 --black:#000;
 --white:#fff;
---background:#000;
+--background:#8B0000;
 }
 
 *{box-sizing:border-box;}
@@ -30,59 +30,101 @@ background-image:url('https://www.transparenttextures.com/patterns/food.png');
 header{
 position:sticky;top:0;z-index:1000;
 background:var(--primary);
-padding:10px 12px;
+padding:10px;
 }
 
-.header-content{display:flex;align-items:center;gap:10px;}
-
 .logo-box{
-width:60px;height:60px;border-radius:12px;overflow:hidden;background:#fff;
+width:70px;height:70px;border-radius:12px;overflow:hidden;background:#fff;
+margin:10px auto;
 display:flex;align-items:center;justify-content:center;
 }
 
 .logo-box img{width:100%;height:100%;object-fit:cover;}
 
-.header-title{font-size:16px;font-weight:700;}
-.header-sub{font-size:12px;}
+.header-title{text-align:center;font-size:18px;font-weight:700;}
+.header-sub{text-align:center;font-size:12px;}
 
 .card{background:#111;padding:16px;margin-bottom:14px;border-radius:16px;}
 .flex{display:flex;align-items:center;justify-content:space-between;gap:12px;}
-.circle{width:60px;height:60px;border-radius:12px;overflow:hidden;}
-.circle img{width:100%;height:100%;object-fit:cover;}
 
 button{border:none;border-radius:12px;font-family:'Poppins';font-weight:600;cursor:pointer;}
-.primary{background:var(--primary);color:#fff;height:44px;width:100%;}
+.primary{background:var(--secondary);color:#000;height:44px;width:100%;}
 .small{width:auto;height:36px;padding:0 14px;}
 
 input,select{width:100%;padding:12px;margin:8px 0 14px;border-radius:12px;border:none;}
 .hidden{display:none;}
 
-#cartBtn{position:fixed;bottom:24px;right:20px;width:64px;height:64px;border-radius:50%;background:var(--secondary);display:flex;justify-content:center;align-items:center;font-size:22px;}
-#cartCount{position:absolute;top:-6px;right:-6px;background:red;color:white;width:24px;height:24px;border-radius:50%;display:flex;justify-content:center;align-items:center;font-size:12px;}
+#cartBtn{
+position:fixed;bottom:24px;right:20px;width:64px;height:64px;
+border-radius:50%;background:var(--secondary);
+display:flex;justify-content:center;align-items:center;font-size:24px;
+}
 
-.toast{position:fixed;bottom:110px;left:50%;transform:translateX(-50%);background:var(--secondary);color:black;padding:12px 22px;border-radius:30px;display:none;}
+#cartCount{
+position:absolute;top:-6px;right:-6px;background:red;color:white;
+width:24px;height:24px;border-radius:50%;
+display:flex;justify-content:center;align-items:center;font-size:12px;
+}
 
-.aviso{background:#222;padding:10px;border-radius:10px;margin-bottom:15px;font-size:12px;border-left:4px solid var(--primary);}
+#pixBtn{
+position:fixed;
+bottom:24px;
+left:20px;
+width:64px;
+height:64px;
+border-radius:50%;
+background:#25D366;
+display:flex;
+align-items:center;
+justify-content:center;
+font-size:24px;
+}
+
+.pix-popup{
+position:fixed;
+bottom:100px;
+left:20px;
+background:#fff;
+color:#000;
+padding:14px;
+border-radius:12px;
+width:220px;
+}
+
+.toast{
+position:fixed;bottom:110px;left:50%;
+transform:translateX(-50%);
+background:var(--secondary);color:black;
+padding:12px 22px;border-radius:30px;display:none;
+}
 </style>
 </head>
 
 <body>
 
 <header>
-<div class="header-content">
+<div class="header-title">Laencasa Ultracongelados</div>
+
 <div class="logo-box">
 <img src="logo.png">
 </div>
-<div class="header-texts">
-<div class="header-title">Laencasa Ultracongelados</div>
-<div class="header-sub">Ultracongelados • Praticidade • Qualidade</div>
-</div>
+
+<div class="header-sub">
+Ultracongelados • Praticidade • Qualidade
 </div>
 </header>
 
 <div class="container" id="app"></div>
 
-<div id="cartBtn" onclick="goCart()">🛒<div id="cartCount">0</div></div>
+<div id="cartBtn" onclick="goCart()">🛍️<div id="cartCount">0</div></div>
+
+<div id="pixBtn" onclick="togglePix()">💰</div>
+<div id="pixBox" class="hidden pix-popup">
+Aceitamos Pix 💸<br><br>
+Também aceitamos VA/VR 💳<br><br>
+Envie o comprovante após o pagamento.
+</div>
+
 <div class="toast" id="toast">Item adicionado</div>
 
 <script>
@@ -95,51 +137,106 @@ let viewStack=[];
 let dadosPedido={};
 let frete=0;
 
-function avisoPix(){
-return `<div class="aviso">Pedidos via <b>Pix</b> precisam de comprovante.</div>`;
-}
-
 function navigate(fn){viewStack.push(fn);history.pushState({},"");fn();}
 
 window.addEventListener("popstate",function(){
 if(viewStack.length>1){viewStack.pop();let last=viewStack[viewStack.length-1];last();}
 });
 
-const produtos=/* MANTIDO IGUAL */{
-Marmitas:[
+function togglePix(){
+document.getElementById("pixBox").classList.toggle("hidden");
+}
+
+const produtos={
+"Marmitas Congeladas":[
 {name:"Marmita Frango",price:15,descricao:"Frango grelhado",img:"frango.jpg"},
 {name:"Marmita Carne",price:17,descricao:"Carne assada",img:"carne.jpg"}
-]};
+],
+
+"Kit Marmitas Congeladas":[
+{name:"Kit 5 Marmitas",price:70,descricao:"5 unidades",img:"kit.jpg"},
+{name:"Kit 10 Marmitas",price:130,descricao:"10 unidades",img:"kit.jpg"}
+]
+};
 
 function renderHome(){
-let html=avisoPix()+"<h3>Categorias</h3>";
-for(let cat in produtos){html+=`<div class="card" onclick="navigate(()=>openCat('${cat}'))"><b>${cat}</b></div>`;}
+let html="<h3>Categorias</h3>";
+
+for(let cat in produtos){
+html+=`<div class="card" onclick="navigate(()=>openCat('${cat}'))"><b>${cat}</b></div>`;
+}
+
+html+=`
+<div style="overflow-x:auto;display:flex;gap:10px;margin-top:20px">
+<img src="carrosel1.jpg" style="width:80%;border-radius:12px;">
+<img src="carrosel2.jpg" style="width:80%;border-radius:12px;">
+<img src="carrosel3.jpg" style="width:80%;border-radius:12px;">
+<img src="carrosel4.jpg" style="width:80%;border-radius:12px;">
+</div>
+`;
+
+html+=`
+<button class="primary" style="position:fixed;bottom:100px;left:50%;transform:translateX(-50%);width:80%;max-width:300px;">
+Avançar ➡
+</button>
+`;
+
+html+=`
+<div style="margin-top:30px;font-size:12px;text-align:center">
+💳 Visa • Master • Elo • VR • VA<br><br>
+📍 Rua Evangelina 404 - Vila Carrão<br><br>
+Quem somos:<br>
+Comida prática e congelada de qualidade.
+</div>
+`;
+
 document.getElementById("app").innerHTML=html;
 }
 
 function openCat(cat){
-let html=avisoPix()+`<button onclick="history.back()">⬅ Voltar</button><h3>${cat}</h3>`;
+let html=`<button onclick="history.back()">⬅ Voltar</button><h3>${cat}</h3>`;
 produtos[cat].forEach((p,i)=>{
 html+=`<div class="card"><div class="flex"><div><b>${p.name}</b><br>R$ ${p.price}</div><button class="primary small" onclick="add('${cat}',${i})">Adicionar</button></div></div>`;
 });
 document.getElementById("app").innerHTML=html;
 }
 
-function add(cat,i){let item=produtos[cat][i];let f=cart.find(x=>x.name==item.name);if(f){f.qty++}else{cart.push({...item,qty:1})}updateCart();toast();}
-function updateCart(){document.getElementById("cartCount").innerText=cart.reduce((s,i)=>s+i.qty,0);}
-function toast(){let t=document.getElementById("toast");t.style.display="block";setTimeout(()=>t.style.display="none",1500);}
+function add(cat,i){
+let item=produtos[cat][i];
+let f=cart.find(x=>x.name==item.name);
+if(f){f.qty++}else{cart.push({...item,qty:1})}
+updateCart();toast();
+}
+
+function updateCart(){
+document.getElementById("cartCount").innerText=cart.reduce((s,i)=>s+i.qty,0);
+}
+
+function toast(){
+let t=document.getElementById("toast");
+t.style.display="block";
+setTimeout(()=>t.style.display="none",1500);
+}
+
 function goCart(){navigate(renderCart);}
 
 function renderCart(){
-let html=avisoPix()+"<button onclick='history.back()'>⬅ Voltar</button><h3>Carrinho</h3>";
+let html="<button onclick='history.back()'>⬅ Voltar</button><h3>Carrinho</h3>";
 let subtotal=0;
-cart.forEach((i)=>{subtotal+=i.price*i.qty;html+=`<div class="card flex"><div>${i.qty}x ${i.name}</div><div>R$ ${(i.price*i.qty).toFixed(2)}</div></div>`;});
-html+=`<h4>Subtotal: R$ ${subtotal.toFixed(2)}</h4><button class="primary" onclick="navigate(renderCheckout)">Continuar</button>`;
+
+cart.forEach((i)=>{
+subtotal+=i.price*i.qty;
+html+=`<div class="card flex"><div>${i.qty}x ${i.name}</div><div>R$ ${(i.price*i.qty).toFixed(2)}</div></div>`;
+});
+
+html+=`<h4>Subtotal: R$ ${subtotal.toFixed(2)}</h4>
+<button class="primary" onclick="navigate(renderCheckout)">Continuar</button>`;
+
 document.getElementById("app").innerHTML=html;
 }
 
 function renderCheckout(){
-let html=avisoPix()+`<button onclick="history.back()">⬅ Voltar</button><h3>Dados do Pedido</h3>
+let html=`<button onclick="history.back()">⬅ Voltar</button><h3>Dados do Pedido</h3>
 
 <input id="nome" placeholder="Seu nome">
 <input id="fone" placeholder="Telefone">
@@ -168,7 +265,9 @@ let html=avisoPix()+`<button onclick="history.back()">⬅ Voltar</button><h3>Dad
 document.getElementById("app").innerHTML=html;
 }
 
-function toggleEndereco(){document.getElementById("enderecoBox").classList.toggle("hidden",document.getElementById("tipo").value!="Entrega");}
+function toggleEndereco(){
+document.getElementById("enderecoBox").classList.toggle("hidden",document.getElementById("tipo").value!="Entrega");
+}
 
 async function buscarCEP(){
 let cep=document.getElementById("cep").value;
