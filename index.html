@@ -1,270 +1,109 @@
-<!DOCTYPE html>
-<html lang="pt-br">
+<!DOCTYPE html><html lang="pt-br">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Paulina Marmitex</title>
+<title>Laencasa Ultracongelados</title>
 
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
 :root{
-    --primary:#FFD700;
-    --primary-dark:#e6c200;
-    --black:#1a1a1a;
-    --white:#ffffff;
-    --background:#f5f5f5;
-    --gray-soft:#eeeeee;
+--primary:#b22222;
+--primary-dark:#8b1a1a;
+--secondary:#f4d03f;
+--black:#000;
+--white:#fff;
+--background:#000;
 }
 
 *{box-sizing:border-box;}
 
 body{
-    margin:0;
-    font-family:'Poppins',sans-serif;
-    background:var(--background);
-    color:var(--black);
+margin:0;
+font-family:'Poppins',sans-serif;
+background:var(--background);
+color:var(--white);
 }
 
-.container{
-    padding:20px 16px 100px;
-    max-width:600px;
-    margin:0 auto;
-}
+.container{padding:20px 16px 100px;max-width:600px;margin:0 auto;}
 
 header{
-    position:sticky;
-    top:0;
-    z-index:1000;
-    background:var(--primary);
-    text-align:center;
-    padding:10px 0 6px;
-    box-shadow:0 4px 12px rgba(0,0,0,.08);
+position:sticky;top:0;z-index:1000;
+background:linear-gradient(135deg,var(--primary),var(--secondary));
+padding:10px 12px;
 }
 
-.logo{
-    height:90px;
-    width:auto;
-    max-width:100%;
-    display:block;
-    margin:0 auto 8px;
+.header-content{display:flex;align-items:center;gap:10px;}
+
+.logo-box{
+width:60px;height:60px;border-radius:12px;overflow:hidden;background:#fff;
+display:flex;align-items:center;justify-content:center;
 }
 
-.header-text{
-    font-size:13px;
-    font-weight:600;
-    letter-spacing:.5px;
-}
+.logo-box img{width:100%;height:100%;object-fit:cover;}
 
-h3{
-    margin:10px 0 20px;
-    font-size:20px;
-    font-weight:600;
-}
+.header-title{font-size:16px;font-weight:700;}
+.card{background:#111;padding:16px;margin-bottom:14px;border-radius:16px;}
+.flex{display:flex;align-items:center;justify-content:space-between;gap:12px;}
+.circle{width:60px;height:60px;border-radius:12px;overflow:hidden;}
+.circle img{width:100%;height:100%;object-fit:cover;}
 
-.card{
-    background:var(--white);
-    padding:16px;
-    margin-bottom:14px;
-    border-radius:16px;
-    box-shadow:0 6px 18px rgba(0,0,0,.05);
-    transition:.25s;
-}
+button{border:none;border-radius:12px;font-family:'Poppins';font-weight:600;cursor:pointer;}
+.primary{background:var(--primary);color:#fff;height:44px;width:100%;}
+.small{height:36px;padding:0 14px;}
 
-.card:hover{
-    transform:translateY(-3px);
-    box-shadow:0 8px 22px rgba(0,0,0,.08);
-}
-
-.flex{
-    display:flex;
-    align-items:center;
-    justify-content:space-between;
-    gap:12px;
-}
-
-.circle{
-    width:60px;
-    height:60px;
-    border-radius:12px;
-    overflow:hidden;
-    flex-shrink:0;
-}
-
-.circle img{
-    width:100%;
-    height:100%;
-    object-fit:cover;
-}
-
-button{
-    border:none;
-    border-radius:12px;
-    font-family:'Poppins',sans-serif;
-    font-weight:600;
-    cursor:pointer;
-    transition:.2s;
-}
-
-.primary{
-    background:var(--primary);
-    color:var(--black);
-    height:44px;
-    padding:0 16px;
-    width:100%;
-}
-
-.primary:hover{background:var(--primary-dark);}
-.primary:active{transform:scale(.98);}
-
-.small{
-    width:auto;
-    height:36px;
-    padding:0 14px;
-}
-
-input,select{
-    width:100%;
-    padding:12px;
-    margin:8px 0 14px;
-    border-radius:12px;
-    border:1px solid #ddd;
-    font-family:'Poppins',sans-serif;
-}
-
+input,select{width:100%;padding:12px;margin:8px 0 14px;border-radius:12px;border:none;}
 .hidden{display:none;}
 
-#cartBtn{
-    position:fixed;
-    bottom:24px;
-    right:20px;
-    width:64px;
-    height:64px;
-    border-radius:50%;
-    background:var(--primary);
-    display:flex;
-    justify-content:center;
-    align-items:center;
-    font-size:22px;
-    box-shadow:0 10px 25px rgba(0,0,0,.15);
-    cursor:pointer;
-    transition:.2s;
-}
+#cartBtn{position:fixed;bottom:24px;right:20px;width:64px;height:64px;border-radius:50%;background:var(--secondary);display:flex;justify-content:center;align-items:center;font-size:22px;}
+#cartCount{position:absolute;top:-6px;right:-6px;background:red;color:white;width:24px;height:24px;border-radius:50%;display:flex;justify-content:center;align-items:center;font-size:12px;}
 
-#cartBtn:active{transform:scale(.95);}
-
-#cartCount{
-    position:absolute;
-    top:-6px;
-    right:-6px;
-    background:var(--black);
-    color:var(--white);
-    width:24px;
-    height:24px;
-    border-radius:50%;
-    font-size:12px;
-    display:flex;
-    justify-content:center;
-    align-items:center;
-}
-
-.toast{
-    position:fixed;
-    bottom:110px;
-    left:50%;
-    transform:translateX(-50%);
-    background:var(--black);
-    color:var(--white);
-    padding:12px 22px;
-    border-radius:30px;
-    font-size:14px;
-    display:none;
-}
+.aviso{background:#222;padding:10px;border-radius:10px;margin-bottom:15px;font-size:12px;border-left:4px solid var(--primary);}
 </style>
 </head>
+
 <body>
 
 <header>
-<img src="logo.png" class="logo">
-<div class="header-text">FAÇA SEU PEDIDO AQUI</div>
+<div class="header-content">
+<div class="logo-box">
+<img src="logo.png">
+</div>
+<div>
+<div class="header-title">Laencasa Ultracongelados</div>
+</div>
+</div>
 </header>
 
 <div class="container" id="app"></div>
 
-<div id="cartBtn" onclick="goCart()">
-🛒
-<div id="cartCount">0</div>
-</div>
-
-<div class="toast" id="toast">Item adicionado</div>
+<div id="cartBtn" onclick="goCart()">🛒<div id="cartCount">0</div></div>
 
 <script>
-const TAXA=7;
+
+const RESTAURANTE_END="Rua Evangelina 404 , Vila Carrao Sao Paulo 03421000";
 let cart=[];
 let viewStack=[];
 let dadosPedido={};
+let frete=0;
 
-function navigate(fn){viewStack.push(fn);history.pushState({}, "");fn();}
-window.addEventListener("popstate",function(){if(viewStack.length>1){viewStack.pop();let last=viewStack[viewStack.length-1];last();}else{history.pushState({}, "");}});
+function navigate(fn){viewStack.push(fn);history.pushState({},"");fn();}
 
-const produtos={
-Marmitas:[
-{name:"Marmita Parmegiana Frango",price:22,descricao:"Frango Grelhado a Parmegiana, Arroz, Feijão",img:"marmita-parmegiana-frango.jpg"},
-{name:"Marmita Strogonoff De Carne",price:22,descricao:"Carne, Batata Palha, Arroz, Feijão, Farofa",img:"https://source.unsplash.com/300x300/?beef,rice"},
-{name:"Marmita Lombo Suino Acebolado",price:22,descricao:"Lombo Acebolado, Arroz, Feijão",img:"https://source.unsplash.com/300x300/?feijoada"},
-{name:"Marmita Bife Acebolado",price:22,descricao:"Bife Acebolado, Arroz, Feijão, Batata",img:"https://source.unsplash.com/300x300/?stroganoff"},
-{name:"Marmita Sobrecoxa Assada",price:22,descricao:"Sobrecoxa, Macarrão Alho e Olho, Farofa, Arroz",img:"https://source.unsplash.com/300x300/?healthy-meal"},
-{name:"Marmita Filé De Frango/Cubos",price:22,descricao:"Filé De Frango/Cubos Ao Molho, Batata Palha, Arroz, Feijão",img:"https://source.unsplash.com/300x300/?vegetarian-food"},
-{name:"Marmita Costela Cozida",price:22,descricao:"Costela Cozida, Batata Palha, Arroz, Feijão, Farofa",img:"https://source.unsplash.com/300x300/?bbq-ribs"}
-],   
-Bebidas:[
-{name:"Coca-Cola 2L",price:12,descricao:"Refrigerante 2L",img:"https://source.unsplash.com/300x300/?coca-cola"},
-{name:"Guaraná 2L",price:10,descricao:"Refrigerante 2L",img:"https://source.unsplash.com/300x300/?guarana-soda"},
-{name:"Suco Natural",price:7,descricao:"Suco natural 500ml",img:"https://source.unsplash.com/300x300/?orange-juice"},
-{name:"Água Mineral",price:3,descricao:"Água mineral 500ml",img:"https://source.unsplash.com/300x300/?water-bottle"},
-{name:"Fanta Laranja",price:9,descricao:"Refrigerante 2L",img:"https://source.unsplash.com/300x300/?orange-soda"},
-{name:"Refrigerante Lata",price:5,descricao:"Refrigerante 350ml",img:"https://source.unsplash.com/300x300/?soda-can"},
-{name:"Suco Detox",price:8,descricao:"Suco detox 500ml",img:"https://source.unsplash.com/300x300/?green-juice"}
-],
-Doces:[
-{name:"Pudim",price:6,descricao:"Pudim tradicional",img:"https://source.unsplash.com/300x300/?pudding"},
-{name:"Mousse Chocolate",price:6,descricao:"Mousse de chocolate",img:"https://source.unsplash.com/300x300/?chocolate-mousse"},
-{name:"Brigadeiro",price:3,descricao:"Brigadeiro tradicional",img:"https://source.unsplash.com/300x300/?brigadeiro"},
-{name:"Beijinho",price:3,descricao:"Beijinho tradicional",img:"https://source.unsplash.com/300x300/?coconut-candy"},
-{name:"Torta Limão",price:7,descricao:"Torta de limão",img:"https://source.unsplash.com/300x300/?lemon-pie"},
-{name:"Bolo Caseiro",price:5,descricao:"Bolo caseiro",img:"https://source.unsplash.com/300x300/?homemade-cake"},
-{name:"Geladinho Gourmet",price:4,descricao:"Geladinho sabor gourmet",img:"https://source.unsplash.com/300x300/?popsicle"}
-],
-Acompanhamentos:[
-{name:"Farofa",price:4,descricao:"Farofa crocante",img:"https://source.unsplash.com/300x300/?farofa"},
-{name:"Vinagrete",price:4,descricao:"Vinagrete caseiro",img:"https://source.unsplash.com/300x300/?vinaigrette"},
-{name:"Arroz Extra",price:5,descricao:"Arroz branco adicional",img:"https://source.unsplash.com/300x300/?white-rice"},
-{name:"Feijão Extra",price:5,descricao:"Feijão adicional",img:"https://source.unsplash.com/300x300/?beans"},
-{name:"Batata Frita",price:8,descricao:"Batata frita crocante",img:"https://source.unsplash.com/300x300/?french-fries"},
-{name:"Salada",price:6,descricao:"Salada fresca",img:"https://source.unsplash.com/300x300/?salad"},
-{name:"Torresmo",price:9,descricao:"Torresmo crocante",img:"https://source.unsplash.com/300x300/?pork-crackling"}
-]
-};
+const produtos={Marmitas:[{name:"Marmita Frango",price:15,img:"frango.jpg"}]};
 
 function renderHome(){
 let html="<h3>Categorias</h3>";
-for(let cat in produtos){
-html+=`<div class="card" onclick="navigate(()=>openCat('${cat}'))"><b>${cat}</b></div>`;
-}
+for(let cat in produtos){html+=`<div class="card" onclick="navigate(()=>openCat('${cat}'))">${cat}</div>`;}
 document.getElementById("app").innerHTML=html;
 }
 
 function openCat(cat){
-let html=`<button onclick="history.back()">⬅ Voltar</button><h3>${cat}</h3>`;
+let html=`<button onclick="history.back()">⬅</button>`;
 produtos[cat].forEach((p,i)=>{
-html+=`<div class="card">
-<div class="flex">
-<div class="flex">
-<div class="circle"><img src="${p.img}"></div>
-<div><b>${p.name}</b><br>${p.descricao}<br>R$ ${p.price.toFixed(2)}</div>
-</div>
-<button class="primary small" onclick="add('${cat}',${i})">Adicionar</button>
-</div></div>`;
+html+=`<div class="card flex">
+<div>${p.name} - R$ ${p.price}</div>
+<button onclick="add('${cat}',${i})">Add</button>
+</div>`;
 });
 document.getElementById("app").innerHTML=html;
 }
@@ -274,125 +113,94 @@ let item=produtos[cat][i];
 let f=cart.find(x=>x.name==item.name);
 if(f){f.qty++}else{cart.push({...item,qty:1})}
 updateCart();
-toast();
-}
-
-function removeFromCart(index){
-cart.splice(index,1);
-updateCart();
-renderCart();
 }
 
 function updateCart(){
 document.getElementById("cartCount").innerText=cart.reduce((s,i)=>s+i.qty,0);
 }
 
-function toast(){
-let t=document.getElementById("toast");
-t.style.display="block";
-setTimeout(()=>t.style.display="none",1500);
-}
-
 function goCart(){navigate(renderCart);}
 
 function renderCart(){
-let html="<button onclick='history.back()'>⬅ Voltar</button><h3>Carrinho</h3>";
-let subtotal=0;
-cart.forEach((i,index)=>{
-subtotal+=i.price*i.qty;
-html+=`<div class="card flex"><div>${i.qty}x ${i.name}</div><div>R$ ${(i.price*i.qty).toFixed(2)}</div><button onclick="removeFromCart(${index})">❌</button></div>`;
+let subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
+let html="<h3>Carrinho</h3>";
+cart.forEach(i=>{
+html+=`<div>${i.qty}x ${i.name}</div>`;
 });
-html+=`<h4>Subtotal: R$ ${subtotal.toFixed(2)}</h4><button class="primary" onclick="navigate(renderCheckout)">Continuar</button>`;
+html+=`<h4>Subtotal: R$ ${subtotal}</h4>`;
+html+=`<button onclick="navigate(renderCheckout)">Finalizar</button>`;
 document.getElementById("app").innerHTML=html;
 }
 
 function renderCheckout(){
-let html=`<button onclick="history.back()">⬅ Voltar</button><h3>Dados do Pedido</h3>
-<input id="nome" placeholder="Seu nome" required>
-<input id="fone" placeholder="Telefone" required>
-<label>Tipo:</label>
-<select id="tipo" onchange="toggleEndereco()">
-<option value="Entrega">Entrega (+7)</option>
-<option value="Retirada">Retirada</option>
-</select>
-<div id="enderecoBox"><input id="endereco" placeholder="Endereço de entrega"></div>
-<label>Quando?</label>
-<select id="quando" onchange="toggleData()">
-<option value="Agora">Agora</option>
-<option value="Agendar">Agendar</option>
-</select>
-<div id="dataBox" class="hidden"><input type="datetime-local" id="data"></div>
-<label>Pagamento:</label>
-<select id="pag" onchange="toggleTroco()">
+let html=`
+<h3>Checkout</h3>
+
+<input id="nome" placeholder="Nome">
+<input id="fone" placeholder="Telefone">
+<input id="endereco" placeholder="Seu endereço">
+
+<select id="pag">
 <option>Pix</option>
-<option>Dinheiro</option>
 <option>Cartão</option>
+<option>Voucher</option>
 </select>
-<div id="trocoBox" class="hidden"><input id="troco" placeholder="Troco para quanto?"></div>
-<button class="primary" onclick="revisao()">Revisar Pedido</button>`;
+
+<button onclick="calcularFrete()">Calcular Frete</button>
+<div id="freteBox"></div>
+
+<button onclick="finalizar()">Finalizar Pedido</button>
+`;
+
 document.getElementById("app").innerHTML=html;
 }
 
-function toggleData(){document.getElementById("dataBox").classList.toggle("hidden",document.getElementById("quando").value!="Agendar");}
-function toggleEndereco(){document.getElementById("enderecoBox").classList.toggle("hidden",document.getElementById("tipo").value!="Entrega");}
-function toggleTroco(){document.getElementById("trocoBox").classList.toggle("hidden",document.getElementById("pag").value!="Dinheiro");}
-
-function revisao(){
-dadosPedido={
-nome:document.getElementById("nome").value,
-fone:document.getElementById("fone").value,
-tipo:document.getElementById("tipo").value,
-endereco:document.getElementById("endereco").value,
-pag:document.getElementById("pag").value,
-troco:document.getElementById("troco").value,
-quando:document.getElementById("quando").value,
-data:document.getElementById("data").value
-};
-navigate(renderRevisao);
+async function getCoords(end){
+let url=`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(end)}`;
+let res=await fetch(url);
+let data=await res.json();
+return {lat:data[0].lat,lon:data[0].lon};
 }
 
-function renderRevisao(){
-let subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
-let total=dadosPedido.tipo=="Entrega"?subtotal+TAXA:subtotal;
-let html="<button onclick='history.back()'>⬅ Voltar</button><h3>Confirmar Pedido</h3>";
-html+=`<b>Cliente:</b> ${dadosPedido.nome}<br>`;
-html+=`<b>Telefone:</b> ${dadosPedido.fone}<br>`;
-html+=`<b>Tipo:</b> ${dadosPedido.tipo}<br>`;
-if(dadosPedido.tipo=="Entrega"){html+=`<b>Endereço:</b> ${dadosPedido.endereco}<br>`;}
-if(dadosPedido.quando=="Agendar"){html+=`<b>Agendado para:</b> ${dadosPedido.data}<br>`;}
-html+="<hr>";
-cart.forEach(i=>{html+=`<div>${i.qty}x ${i.name}</div>`;});
-html+=`<hr>Subtotal: R$ ${subtotal.toFixed(2)}<br>Total: R$ ${total.toFixed(2)}<br>Pagamento: ${dadosPedido.pag}<br><button class="primary" onclick="finalizar()">Confirmar e Enviar</button>`;
-document.getElementById("app").innerHTML=html;
+function distancia(lat1,lon1,lat2,lon2){
+let R=6371;
+let dLat=(lat2-lat1)*Math.PI/180;
+let dLon=(lon2-lon1)*Math.PI/180;
+let a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);
+let c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
+return R*c;
+}
+
+async function calcularFrete(){
+let cliente=document.getElementById("endereco").value;
+
+let c1=await getCoords(RESTAURANTE_END);
+let c2=await getCoords(cliente);
+
+let km=distancia(c1.lat,c1.lon,c2.lat,c2.lon);
+
+frete=(km*2.5)+3;
+
+document.getElementById("freteBox").innerHTML=`Frete: R$ ${frete.toFixed(2)}`;
 }
 
 function finalizar(){
 let subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
-let total=dadosPedido.tipo=="Entrega"?subtotal+TAXA:subtotal;
-let msg="*Pedido - Paulina Marmitex*%0A%0A";
-msg+=`👤 Nome: ${dadosPedido.nome}%0A`;
-msg+=`📞 Telefone: ${dadosPedido.fone}%0A`;
-msg+=`📦 Tipo: ${dadosPedido.tipo}%0A`;
-if(dadosPedido.tipo=="Entrega"){msg+=`🏠 Endereço: ${dadosPedido.endereco}%0A`;}
-if(dadosPedido.quando=="Agendar"){msg+=`⏰ Agendado para: ${dadosPedido.data}%0A`;}
-msg+="%0A🛒 Itens:%0A";
-cart.forEach(i=>{msg+=`${i.qty}x ${i.name}%0A`;});
-msg+=`%0A💰 Total: R$${total.toFixed(2)}%0A`;
-msg+=`💳 Pagamento: ${dadosPedido.pag}%0A`;
-if(dadosPedido.pag=="Dinheiro" && dadosPedido.troco){msg+=`💵 Troco para: ${dadosPedido.troco}%0A`;}
-window.open(`https://wa.me/5512988721307?text=${msg}`);
+let total=subtotal+frete;
+
+let pag=document.getElementById("pag").value;
+
+let msg=`Pedido%0A Total: R$ ${total}%0A Pagamento: ${pag}`;
+
+if(pag=="Voucher"){
+msg+="%0APagamento será realizado na entrega via maquininha";
+}
+
+alert(decodeURIComponent(msg));
 }
 
 navigate(renderHome);
+
 </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
