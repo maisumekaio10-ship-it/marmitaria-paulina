@@ -117,12 +117,32 @@ gap:10px;
 .grid-kits .card{
 margin:0;
 padding:10px;
+text-align:center;
 }
 
 .grid-kits img{
 width:100%;
 border-radius:12px;
 margin-bottom:8px;
+cursor:pointer;
+}
+
+/* MODAL */
+.modal{
+position:fixed;
+top:0;left:0;
+width:100%;
+height:100%;
+background:rgba(0,0,0,0.8);
+display:flex;
+align-items:center;
+justify-content:center;
+z-index:9999;
+}
+
+.modal img{
+width:90%;
+border-radius:12px;
 }
 
 /* CARRINHO */
@@ -248,11 +268,12 @@ if(cat==="Kit Marmitas Congeladas"){
 html+=`<div class="grid-kits">`;
 produtos[cat].forEach((p,i)=>{
 html+=`
-<div class="card" onclick="openKitDetail('${cat}',${i})">
-<img src="${p.img}">
+<div class="card">
+<img src="${p.img}" onclick="openModal('${p.img}','${p.descricao}')">
 <b>${p.name}</b><br>
 R$ <s>${p.oldPrice}</s><br>
-<span style="color:#FFD700;font-weight:700;">R$ ${p.price}</span>
+<span style="color:#FFD700;font-weight:700;">R$ ${p.price}</span><br><br>
+<button class="primary small" onclick="add('${cat}',${i})">+</button>
 </div>`;
 });
 html+=`</div>`;
@@ -263,6 +284,14 @@ html+=`<div class="card"><div class="flex"><div><b>${p.name}</b><br>R$ ${p.price
 }
 document.getElementById("app").innerHTML=html;
 updateCartButton();
+}
+
+function openModal(img,desc){
+let modal=document.createElement("div");
+modal.className="modal";
+modal.onclick=()=>modal.remove();
+modal.innerHTML=`<div><img src="${img}"><p style="text-align:center;margin-top:10px;">${desc}</p></div>`;
+document.body.appendChild(modal);
 }
 
 function openKitDetail(cat,i){
@@ -310,7 +339,7 @@ subtotal+=i.price*i.qty;
 html+=`<div class="card flex"><div>${i.qty}x ${i.name}</div><div>R$ ${(i.price*i.qty).toFixed(2)}</div></div>`;
 });
 html+=`<h4>Subtotal: R$ ${subtotal.toFixed(2)}</h4>`;
-html+=`<button class="primary" onclick="renderCheckout()">Avançar para Checkout</button>`;
+html+=`<button class="primary" onclick="navigate(renderCheckout)">Avançar para Checkout</button>`;
 document.getElementById("app").innerHTML=html;
 }
 
