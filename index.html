@@ -107,7 +107,7 @@ border-radius:30px;
 display:none;
 }
 
-/* 🔥 GRID SOMENTE PARA KITS */
+/* GRID KITS */
 .grid-kits{
 display:grid;
 grid-template-columns:1fr 1fr;
@@ -125,7 +125,7 @@ border-radius:12px;
 margin-bottom:8px;
 }
 
-/* 🔥 CARRINHO FLUTUANTE */
+/* CARRINHO */
 #cart-btn{
 position:fixed;
 bottom:20px;
@@ -168,7 +168,8 @@ ULTRACONGELADOS • PRATICIDADE • QUALIDADE
 <div class="container" id="app"></div>
 
 <div class="toast" id="toast">Item adicionado</div>
-<div id="cart-btn" onclick="renderCart()" class="hidden">
+
+<div id="cart-btn" onclick="navigate(renderCart)" class="hidden">
 Carrinho <span id="cart-count">0</span>
 </div>
 
@@ -214,30 +215,8 @@ let html="<h3>Categorias</h3>";
 for(let cat in produtos){
 html+=`<div class="card" onclick="navigate(()=>openCat('${cat}'))"><b>${cat}</b></div>`;
 }
-html+=`
-<div style="overflow-x:auto;display:flex;gap:10px;margin-top:20px">
-<img src="carrosel1.jpg" style="width:80%;border-radius:12px;">
-<img src="carrosel2.jpg" style="width:80%;border-radius:12px;">
-<img src="carrosel3.jpg" style="width:80%;border-radius:12px;">
-<img src="carrosel4.jpg" style="width:80%;border-radius:12px;">
-<img src="carrosel5.jpg" style="width:80%;border-radius:12px;">
-<img src="carrosel6.jpg" style="width:80%;border-radius:12px;">
-<img src="carrosel7.jpg" style="width:80%;border-radius:12px;">
-<img src="carrosel8.jpg" style="width:80%;border-radius:12px;">
-<img src="carrosel9.jpg" style="width:80%;border-radius:12px;">
-</div>
-`;
-html+=`
-<div style="margin-top:15px;font-size:13px;color:#ccc;text-align:center;line-height:1.4;">
-Os kits são previamente definidos e não podem ser alterados ou substituídos.
-</div>
-`;
-html+=`
-<div style="margin-top:30px;font-size:12px;text-align:center">
-Rua Evangelina 404 - Vila Carrão<br><br>
-Comida prática e congelada de qualidade.
-</div>`;
 document.getElementById("app").innerHTML=html;
+updateCartButton();
 }
 
 function openCat(cat){
@@ -246,10 +225,11 @@ if(cat==="Kit Marmitas Congeladas"){
 html+=`<div class="grid-kits">`;
 produtos[cat].forEach((p,i)=>{
 html+=`
-<div class="card" onclick="openKitDetail('${cat}',${i})">
+<div class="card" onclick="navigate(()=>openKitDetail('${cat}',${i}))">
 <img src="${p.img}">
 <b>${p.name}</b><br>
-R$ <s>${p.oldPrice}</s> <span style="color:#FFD700;">R$ ${p.price}</span>
+R$ <s>${p.oldPrice}</s><br>
+<span style="color:#FFD700;font-weight:700;">R$ ${p.price}</span>
 </div>`;
 });
 html+=`</div>`;
@@ -265,10 +245,14 @@ updateCartButton();
 function openKitDetail(cat,i){
 let kit=produtos[cat][i];
 let html=`<button onclick="history.back()">⬅ Voltar</button>`;
-html+=`<div class="card" style="text-align:center;"><img src="${kit.img}" style="width:90%;margin-bottom:10px;"><b>${kit.name}</b><br>`;
-html+=`<s>${kit.oldPrice}</s> <span style="color:#FFD700;">R$ ${kit.price}</span><br>`;
-html+=`<p>${kit.descricao}</p>`;
-html+=`<button class="primary" onclick="add('${cat}',${i})">Adicionar ao carrinho</button></div>`;
+html+=`<div class="card" style="text-align:center;">
+<img src="${kit.img}" style="width:95%;margin-bottom:10px;">
+<b>${kit.name}</b><br>
+<s>${kit.oldPrice}</s><br>
+<span style="color:#FFD700;font-size:20px;font-weight:700;">R$ ${kit.price}</span>
+<p>${kit.descricao}</p>
+<button class="primary" onclick="add('${cat}',${i})">Adicionar ao carrinho</button>
+</div>`;
 document.getElementById("app").innerHTML=html;
 updateCartButton();
 }
@@ -296,12 +280,17 @@ document.getElementById("cart-count").innerText=cart.reduce((s,i)=>s+i.qty,0);
 function renderCart(){
 let html="<button onclick='history.back()'>⬅ Voltar</button><h3>Carrinho</h3>";
 let subtotal=0;
+
 cart.forEach((i)=>{
 subtotal+=i.price*i.qty;
 html+=`<div class="card flex"><div>${i.qty}x ${i.name}</div><div>R$ ${(i.price*i.qty).toFixed(2)}</div></div>`;
 });
+
 html+=`<h4>Subtotal: R$ ${subtotal.toFixed(2)}</h4>`;
+html+=`<button class="primary" onclick="navigate(renderCheckout)">Avançar para Checkout</button>`;
+
 document.getElementById("app").innerHTML=html;
+updateCartButton();
 }
 
 function renderCheckout(){
