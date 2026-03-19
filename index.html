@@ -213,11 +213,16 @@ return;
 if(viewStack.length>1){viewStack.pop();let last=viewStack[viewStack.length-1];last();}
 });
 
+const marmitas = Array.from({length:31}, (_,i)=>({
+name:`Marmita ${i+1}`,
+price:15,
+oldPrice:18,
+descricao:`Descrição da Marmita ${i+1}`,
+img:`marmita congelada ${i+1}.jpg`
+}));
+
 const produtos={
-"Marmitas Congeladas":[
-{name:"Marmita Frango",price:15,descricao:"Frango grelhado",img:"frango.jpg", oldPrice:18},
-{name:"Marmita Carne",price:17,descricao:"Carne assada",img:"carne.jpg", oldPrice:20}
-],
+"Marmitas Congeladas": marmitas,
 "Kit Marmitas Congeladas":[
 {name:"Kit 1",price:50,oldPrice:60,descricao:"Conteúdo completo do Kit 1",img:"kit1.jpg"},
 {name:"Kit 2",price:50,oldPrice:60,descricao:"Conteúdo completo do Kit 2",img:"kit2.jpg"},
@@ -287,9 +292,22 @@ R$ <s>${p.oldPrice}</s><br>
 });
 html+=`</div>`;
 }else{
+html+=`<div class="grid-kits">`;
 produtos[cat].forEach((p,i)=>{
-html+=`<div class="card"><div class="flex"><div><b>${p.name}</b><br>R$ ${p.price}</div><button class="primary small" onclick="add('${cat}',${i})">Adicionar</button></div></div>`;
+html+=`
+<div class="card">
+<img src="${p.img}" onclick="openModal('${p.img}','${p.descricao}')">
+<b>${p.name}</b><br>
+<div class="flex">
+<div>
+R$ <s>${p.oldPrice}</s><br>
+<span style="color:#FFD700;font-weight:700;">R$ ${p.price}</span>
+</div>
+<button class="primary small" onclick="add('${cat}',${i})">+</button>
+</div>
+</div>`;
 });
+html+=`</div>`;
 }
 document.getElementById("app").innerHTML=html;
 updateCartButton();
@@ -310,21 +328,6 @@ function fecharModal(){
 let m=document.getElementById("modalView");
 if(m){m.remove();}
 modalAberto=false;
-}
-
-function openKitDetail(cat,i){
-let kit=produtos[cat][i];
-let html=`<button onclick="history.back()">⬅ Voltar</button>`;
-html+=`<div class="card" style="text-align:center;">
-<img src="${kit.img}" style="width:95%;margin-bottom:10px;">
-<b>${kit.name}</b><br>
-<s>R$ ${kit.oldPrice}</s><br>
-<span style="color:#FFD700;font-size:20px;font-weight:700;">R$ ${kit.price}</span>
-<p>${kit.descricao}</p>
-<button class="primary" onclick="add('${cat}',${i})">Adicionar ao carrinho</button>
-</div>`;
-document.getElementById("app").innerHTML=html;
-updateCartButton();
 }
 
 function add(cat,i){
