@@ -3,7 +3,6 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Laencasa Ultracongelados</title>
-
 <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 
 <style>
@@ -23,13 +22,14 @@ margin:0;
 font-family:'Poppins',sans-serif;
 background:var(--background);
 color:var(--white);
+background-image:url('https://www.transparenttextures.com/patterns/food.png');
 }
 
 .container{padding:20px 16px 100px;max-width:600px;margin:0 auto;}
 
 header{
 position:sticky;top:0;z-index:1000;
-background:linear-gradient(135deg,var(--primary),var(--secondary));
+background:var(--primary);
 padding:10px 12px;
 }
 
@@ -43,6 +43,8 @@ display:flex;align-items:center;justify-content:center;
 .logo-box img{width:100%;height:100%;object-fit:cover;}
 
 .header-title{font-size:16px;font-weight:700;}
+.header-sub{font-size:12px;}
+
 .card{background:#111;padding:16px;margin-bottom:14px;border-radius:16px;}
 .flex{display:flex;align-items:center;justify-content:space-between;gap:12px;}
 .circle{width:60px;height:60px;border-radius:12px;overflow:hidden;}
@@ -50,13 +52,15 @@ display:flex;align-items:center;justify-content:center;
 
 button{border:none;border-radius:12px;font-family:'Poppins';font-weight:600;cursor:pointer;}
 .primary{background:var(--primary);color:#fff;height:44px;width:100%;}
-.small{height:36px;padding:0 14px;}
+.small{width:auto;height:36px;padding:0 14px;}
 
 input,select{width:100%;padding:12px;margin:8px 0 14px;border-radius:12px;border:none;}
 .hidden{display:none;}
 
 #cartBtn{position:fixed;bottom:24px;right:20px;width:64px;height:64px;border-radius:50%;background:var(--secondary);display:flex;justify-content:center;align-items:center;font-size:22px;}
 #cartCount{position:absolute;top:-6px;right:-6px;background:red;color:white;width:24px;height:24px;border-radius:50%;display:flex;justify-content:center;align-items:center;font-size:12px;}
+
+.toast{position:fixed;bottom:110px;left:50%;transform:translateX(-50%);background:var(--secondary);color:black;padding:12px 22px;border-radius:30px;display:none;}
 
 .aviso{background:#222;padding:10px;border-radius:10px;margin-bottom:15px;font-size:12px;border-left:4px solid var(--primary);}
 </style>
@@ -69,8 +73,9 @@ input,select{width:100%;padding:12px;margin:8px 0 14px;border-radius:12px;border
 <div class="logo-box">
 <img src="logo.png">
 </div>
-<div>
+<div class="header-texts">
 <div class="header-title">Laencasa Ultracongelados</div>
+<div class="header-sub">Ultracongelados • Praticidade • Qualidade</div>
 </div>
 </div>
 </header>
@@ -78,81 +83,105 @@ input,select{width:100%;padding:12px;margin:8px 0 14px;border-radius:12px;border
 <div class="container" id="app"></div>
 
 <div id="cartBtn" onclick="goCart()">🛒<div id="cartCount">0</div></div>
+<div class="toast" id="toast">Item adicionado</div>
 
 <script>
 
+const TAXA=7;
 const RESTAURANTE_END="Rua Evangelina 404 , Vila Carrao Sao Paulo 03421000";
+
 let cart=[];
 let viewStack=[];
 let dadosPedido={};
 let frete=0;
 
+function avisoPix(){
+return `<div class="aviso">Pedidos via <b>Pix</b> precisam de comprovante.</div>`;
+}
+
 function navigate(fn){viewStack.push(fn);history.pushState({},"");fn();}
 
-const produtos={Marmitas:[{name:"Marmita Frango",price:15,img:"frango.jpg"}]};
+window.addEventListener("popstate",function(){
+if(viewStack.length>1){viewStack.pop();let last=viewStack[viewStack.length-1];last();}
+});
+
+const produtos=/* MANTIDO IGUAL */{
+Marmitas:[
+{name:"Marmita Frango",price:15,descricao:"Frango grelhado",img:"frango.jpg"},
+{name:"Marmita Carne",price:17,descricao:"Carne assada",img:"carne.jpg"}
+]};
 
 function renderHome(){
-let html="<h3>Categorias</h3>";
-for(let cat in produtos){html+=`<div class="card" onclick="navigate(()=>openCat('${cat}'))">${cat}</div>`;}
+let html=avisoPix()+"<h3>Categorias</h3>";
+for(let cat in produtos){html+=`<div class="card" onclick="navigate(()=>openCat('${cat}'))"><b>${cat}</b></div>`;}
 document.getElementById("app").innerHTML=html;
 }
 
 function openCat(cat){
-let html=`<button onclick="history.back()">⬅</button>`;
+let html=avisoPix()+`<button onclick="history.back()">⬅ Voltar</button><h3>${cat}</h3>`;
 produtos[cat].forEach((p,i)=>{
-html+=`<div class="card flex">
-<div>${p.name} - R$ ${p.price}</div>
-<button onclick="add('${cat}',${i})">Add</button>
-</div>`;
+html+=`<div class="card"><div class="flex"><div><b>${p.name}</b><br>R$ ${p.price}</div><button class="primary small" onclick="add('${cat}',${i})">Adicionar</button></div></div>`;
 });
 document.getElementById("app").innerHTML=html;
 }
 
-function add(cat,i){
-let item=produtos[cat][i];
-let f=cart.find(x=>x.name==item.name);
-if(f){f.qty++}else{cart.push({...item,qty:1})}
-updateCart();
-}
-
-function updateCart(){
-document.getElementById("cartCount").innerText=cart.reduce((s,i)=>s+i.qty,0);
-}
-
+function add(cat,i){let item=produtos[cat][i];let f=cart.find(x=>x.name==item.name);if(f){f.qty++}else{cart.push({...item,qty:1})}updateCart();toast();}
+function updateCart(){document.getElementById("cartCount").innerText=cart.reduce((s,i)=>s+i.qty,0);}
+function toast(){let t=document.getElementById("toast");t.style.display="block";setTimeout(()=>t.style.display="none",1500);}
 function goCart(){navigate(renderCart);}
 
 function renderCart(){
-let subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
-let html="<h3>Carrinho</h3>";
-cart.forEach(i=>{
-html+=`<div>${i.qty}x ${i.name}</div>`;
-});
-html+=`<h4>Subtotal: R$ ${subtotal}</h4>`;
-html+=`<button onclick="navigate(renderCheckout)">Finalizar</button>`;
+let html=avisoPix()+"<button onclick='history.back()'>⬅ Voltar</button><h3>Carrinho</h3>";
+let subtotal=0;
+cart.forEach((i)=>{subtotal+=i.price*i.qty;html+=`<div class="card flex"><div>${i.qty}x ${i.name}</div><div>R$ ${(i.price*i.qty).toFixed(2)}</div></div>`;});
+html+=`<h4>Subtotal: R$ ${subtotal.toFixed(2)}</h4><button class="primary" onclick="navigate(renderCheckout)">Continuar</button>`;
 document.getElementById("app").innerHTML=html;
 }
 
 function renderCheckout(){
-let html=`
-<h3>Checkout</h3>
+let html=avisoPix()+`<button onclick="history.back()">⬅ Voltar</button><h3>Dados do Pedido</h3>
 
-<input id="nome" placeholder="Nome">
+<input id="nome" placeholder="Seu nome">
 <input id="fone" placeholder="Telefone">
-<input id="endereco" placeholder="Seu endereço">
 
+<select id="tipo" onchange="toggleEndereco()">
+<option value="Entrega">Entrega</option>
+<option value="Retirada">Retirada</option>
+</select>
+
+<div id="enderecoBox">
+<input id="cep" placeholder="CEP" onblur="buscarCEP()">
+<input id="endereco" placeholder="Rua, número, bairro">
+</div>
+
+<label>Pagamento:</label>
 <select id="pag">
 <option>Pix</option>
 <option>Cartão</option>
 <option>Voucher</option>
 </select>
 
-<button onclick="calcularFrete()">Calcular Frete</button>
 <div id="freteBox"></div>
 
-<button onclick="finalizar()">Finalizar Pedido</button>
-`;
+<button class="primary" onclick="revisao()">Revisar Pedido</button>`;
 
 document.getElementById("app").innerHTML=html;
+}
+
+function toggleEndereco(){document.getElementById("enderecoBox").classList.toggle("hidden",document.getElementById("tipo").value!="Entrega");}
+
+async function buscarCEP(){
+let cep=document.getElementById("cep").value;
+if(cep.length<8) return;
+
+let res=await fetch(`https://viacep.com.br/ws/${cep}/json/`);
+let data=await res.json();
+
+if(!data.erro){
+document.getElementById("endereco").value =
+`${data.logradouro}, ${data.bairro}, ${data.localidade}`;
+calcularFrete();
+}
 }
 
 async function getCoords(end){
@@ -166,37 +195,93 @@ function distancia(lat1,lon1,lat2,lon2){
 let R=6371;
 let dLat=(lat2-lat1)*Math.PI/180;
 let dLon=(lon2-lon1)*Math.PI/180;
-let a=Math.sin(dLat/2)*Math.sin(dLat/2)+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)*Math.sin(dLon/2);
+let a=Math.sin(dLat/2)**2+Math.cos(lat1*Math.PI/180)*Math.cos(lat2*Math.PI/180)*Math.sin(dLon/2)**2;
 let c=2*Math.atan2(Math.sqrt(a),Math.sqrt(1-a));
 return R*c;
 }
 
 async function calcularFrete(){
 let cliente=document.getElementById("endereco").value;
+if(!cliente) return;
 
 let c1=await getCoords(RESTAURANTE_END);
 let c2=await getCoords(cliente);
 
 let km=distancia(c1.lat,c1.lon,c2.lat,c2.lon);
+frete=(km*2.5)+5;
 
-frete=(km*2.5)+3;
+document.getElementById("freteBox").innerHTML=`🚚 Frete: R$ ${frete.toFixed(2)}`;
+}
 
-document.getElementById("freteBox").innerHTML=`Frete: R$ ${frete.toFixed(2)}`;
+function revisao(){
+dadosPedido={
+nome:document.getElementById("nome").value,
+fone:document.getElementById("fone").value,
+tipo:document.getElementById("tipo").value,
+endereco:document.getElementById("endereco").value,
+pag:document.getElementById("pag").value
+};
+navigate(renderRevisao);
+}
+
+function renderRevisao(){
+let subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
+let total=dadosPedido.tipo=="Entrega"?subtotal+frete:subtotal;
+
+let html="<h3>Confirmar Pedido</h3>";
+
+html+=`Cliente: ${dadosPedido.nome}<br>`;
+html+=`Telefone: ${dadosPedido.fone}<br>`;
+if(dadosPedido.tipo=="Entrega"){
+html+=`Endereço: ${dadosPedido.endereco}<br>`;
+}
+
+cart.forEach(i=>{html+=`${i.qty}x ${i.name}<br>`;});
+
+html+=`<hr>Subtotal: R$ ${subtotal.toFixed(2)}<br>`;
+if(dadosPedido.tipo=="Entrega"){
+html+=`Frete: R$ ${frete.toFixed(2)}<br>`;
+}
+html+=`Total: R$ ${total.toFixed(2)}<br>`;
+html+=`Pagamento: ${dadosPedido.pag}<br>`;
+
+html+=`<button class="primary" onclick="finalizar()">Enviar Pedido</button>`;
+
+document.getElementById("app").innerHTML=html;
 }
 
 function finalizar(){
 let subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
-let total=subtotal+frete;
+let total=dadosPedido.tipo=="Entrega"?subtotal+frete:subtotal;
 
-let pag=document.getElementById("pag").value;
+let msg="*Pedido - Laencasa Ultracongelados*%0A%0A";
 
-let msg=`Pedido%0A Total: R$ ${total}%0A Pagamento: ${pag}`;
+msg+=`👤 Nome: ${dadosPedido.nome}%0A`;
+msg+=`📞 Telefone: ${dadosPedido.fone}%0A`;
 
-if(pag=="Voucher"){
-msg+="%0APagamento será realizado na entrega via maquininha";
+if(dadosPedido.tipo=="Entrega"){
+msg+=`🏠 Endereço: ${dadosPedido.endereco}%0A`;
 }
 
-alert(decodeURIComponent(msg));
+msg+="%0A🛒 Itens:%0A";
+cart.forEach(i=>{msg+=`${i.qty}x ${i.name}%0A`;});
+
+msg+=`%0A💰 Subtotal: R$ ${subtotal.toFixed(2)}%0A`;
+if(dadosPedido.tipo=="Entrega"){
+msg+=`🚚 Frete: R$ ${frete.toFixed(2)}%0A`;
+}
+msg+=`🧾 Total: R$ ${total.toFixed(2)}%0A`;
+
+msg+=`💳 Pagamento: ${dadosPedido.pag}%0A`;
+
+if(dadosPedido.pag=="Voucher"){
+msg+=`💳 Pagamento será realizado na entrega via maquininha%0A`;
+}
+if(dadosPedido.pag=="Pix"){
+msg+=`📌 Enviar comprovante do Pix%0A`;
+}
+
+window.open(`https://wa.me/5511952282056?text=${msg}`);
 }
 
 navigate(renderHome);
