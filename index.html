@@ -3,7 +3,8 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Laencasa Ultracongelados</title>
-<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
+
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
 
 <style>
 :root{
@@ -19,10 +20,9 @@
 
 body{
 margin:0;
-font-family:'Poppins',sans-serif;
+font-family:'Inter',sans-serif;
 background:var(--background);
 color:var(--white);
-background-image:url('https://www.transparenttextures.com/patterns/food.png');
 }
 
 .container{padding:20px 16px 100px;max-width:600px;margin:0 auto;}
@@ -41,55 +41,25 @@ display:flex;align-items:center;justify-content:center;
 
 .logo-box img{width:100%;height:100%;object-fit:cover;}
 
-.header-title{text-align:center;font-size:18px;font-weight:700;}
+.header-title{
+text-align:center;
+font-size:20px;
+font-weight:600;
+font-family:'Playfair Display',serif;
+letter-spacing:0.5px;
+}
+
 .header-sub{text-align:center;font-size:12px;}
 
 .card{background:#111;padding:16px;margin-bottom:14px;border-radius:16px;}
 .flex{display:flex;align-items:center;justify-content:space-between;gap:12px;}
 
-button{border:none;border-radius:12px;font-family:'Poppins';font-weight:600;cursor:pointer;}
+button{border:none;border-radius:12px;font-family:'Inter';font-weight:600;cursor:pointer;}
 .primary{background:var(--secondary);color:#000;height:44px;width:100%;}
 .small{width:auto;height:36px;padding:0 14px;}
 
 input,select{width:100%;padding:12px;margin:8px 0 14px;border-radius:12px;border:none;}
 .hidden{display:none;}
-
-#cartBtn{
-position:fixed;bottom:24px;right:20px;width:64px;height:64px;
-border-radius:50%;background:var(--secondary);
-display:flex;justify-content:center;align-items:center;font-size:24px;
-}
-
-#cartCount{
-position:absolute;top:-6px;right:-6px;background:red;color:white;
-width:24px;height:24px;border-radius:50%;
-display:flex;justify-content:center;align-items:center;font-size:12px;
-}
-
-#pixBtn{
-position:fixed;
-bottom:24px;
-left:20px;
-width:64px;
-height:64px;
-border-radius:50%;
-background:#25D366;
-display:flex;
-align-items:center;
-justify-content:center;
-font-size:24px;
-}
-
-.pix-popup{
-position:fixed;
-bottom:100px;
-left:20px;
-background:#fff;
-color:#000;
-padding:14px;
-border-radius:12px;
-width:220px;
-}
 
 .toast{
 position:fixed;bottom:110px;left:50%;
@@ -116,15 +86,6 @@ Ultracongelados • Praticidade • Qualidade
 
 <div class="container" id="app"></div>
 
-<div id="cartBtn" onclick="goCart()">🛍️<div id="cartCount">0</div></div>
-
-<div id="pixBtn" onclick="togglePix()">💰</div>
-<div id="pixBox" class="hidden pix-popup">
-Aceitamos Pix 💸<br><br>
-Também aceitamos VA/VR 💳<br><br>
-Envie o comprovante após o pagamento.
-</div>
-
 <div class="toast" id="toast">Item adicionado</div>
 
 <script>
@@ -142,10 +103,6 @@ function navigate(fn){viewStack.push(fn);history.pushState({},"");fn();}
 window.addEventListener("popstate",function(){
 if(viewStack.length>1){viewStack.pop();let last=viewStack[viewStack.length-1];last();}
 });
-
-function togglePix(){
-document.getElementById("pixBox").classList.toggle("hidden");
-}
 
 const produtos={
 "Marmitas Congeladas":[
@@ -172,20 +129,23 @@ html+=`
 <img src="carrosel2.jpg" style="width:80%;border-radius:12px;">
 <img src="carrosel3.jpg" style="width:80%;border-radius:12px;">
 <img src="carrosel4.jpg" style="width:80%;border-radius:12px;">
+<img src="carrosel5.jpg" style="width:80%;border-radius:12px;">
+<img src="carrosel6.jpg" style="width:80%;border-radius:12px;">
+<img src="carrosel7.jpg" style="width:80%;border-radius:12px;">
+<img src="carrosel8.jpg" style="width:80%;border-radius:12px;">
+<img src="carrosel9.jpg" style="width:80%;border-radius:12px;">
 </div>
 `;
 
 html+=`
-<button class="primary" style="position:fixed;bottom:100px;left:50%;transform:translateX(-50%);width:80%;max-width:300px;">
-Avançar ➡
-</button>
+<div style="margin-top:15px;font-size:13px;color:#ccc;text-align:center;line-height:1.4;">
+Os kits são previamente definidos e não podem ser alterados ou substituídos.
+</div>
 `;
 
 html+=`
 <div style="margin-top:30px;font-size:12px;text-align:center">
-💳 Visa • Master • Elo • VR • VA<br><br>
-📍 Rua Evangelina 404 - Vila Carrão<br><br>
-Quem somos:<br>
+Rua Evangelina 404 - Vila Carrão<br><br>
 Comida prática e congelada de qualidade.
 </div>
 `;
@@ -209,7 +169,7 @@ updateCart();toast();
 }
 
 function updateCart(){
-document.getElementById("cartCount").innerText=cart.reduce((s,i)=>s+i.qty,0);
+let total=cart.reduce((s,i)=>s+i.qty,0);
 }
 
 function toast(){
@@ -229,8 +189,7 @@ subtotal+=i.price*i.qty;
 html+=`<div class="card flex"><div>${i.qty}x ${i.name}</div><div>R$ ${(i.price*i.qty).toFixed(2)}</div></div>`;
 });
 
-html+=`<h4>Subtotal: R$ ${subtotal.toFixed(2)}</h4>
-<button class="primary" onclick="navigate(renderCheckout)">Continuar</button>`;
+html+=`<h4>Subtotal: R$ ${subtotal.toFixed(2)}</h4>`;
 
 document.getElementById("app").innerHTML=html;
 }
@@ -309,7 +268,7 @@ let c2=await getCoords(cliente);
 let km=distancia(c1.lat,c1.lon,c2.lat,c2.lon);
 frete=(km*2.5)+5;
 
-document.getElementById("freteBox").innerHTML=`🚚 Frete: R$ ${frete.toFixed(2)}`;
+document.getElementById("freteBox").innerHTML=`Frete: R$ ${frete.toFixed(2)}`;
 }
 
 function revisao(){
@@ -355,30 +314,23 @@ let total=dadosPedido.tipo=="Entrega"?subtotal+frete:subtotal;
 
 let msg="*Pedido - Laencasa Ultracongelados*%0A%0A";
 
-msg+=`👤 Nome: ${dadosPedido.nome}%0A`;
-msg+=`📞 Telefone: ${dadosPedido.fone}%0A`;
+msg+=`Nome: ${dadosPedido.nome}%0A`;
+msg+=`Telefone: ${dadosPedido.fone}%0A`;
 
 if(dadosPedido.tipo=="Entrega"){
-msg+=`🏠 Endereço: ${dadosPedido.endereco}%0A`;
+msg+=`Endereço: ${dadosPedido.endereco}%0A`;
 }
 
-msg+="%0A🛒 Itens:%0A";
+msg+="%0AItens:%0A";
 cart.forEach(i=>{msg+=`${i.qty}x ${i.name}%0A`;});
 
-msg+=`%0A💰 Subtotal: R$ ${subtotal.toFixed(2)}%0A`;
+msg+=`%0ASubtotal: R$ ${subtotal.toFixed(2)}%0A`;
 if(dadosPedido.tipo=="Entrega"){
-msg+=`🚚 Frete: R$ ${frete.toFixed(2)}%0A`;
+msg+=`Frete: R$ ${frete.toFixed(2)}%0A`;
 }
-msg+=`🧾 Total: R$ ${total.toFixed(2)}%0A`;
+msg+=`Total: R$ ${total.toFixed(2)}%0A`;
 
-msg+=`💳 Pagamento: ${dadosPedido.pag}%0A`;
-
-if(dadosPedido.pag=="Voucher"){
-msg+=`💳 Pagamento será realizado na entrega via maquininha%0A`;
-}
-if(dadosPedido.pag=="Pix"){
-msg+=`📌 Enviar comprovante do Pix%0A`;
-}
+msg+=`Pagamento: ${dadosPedido.pag}%0A`;
 
 window.open(`https://wa.me/5511952282056?text=${msg}`);
 }
