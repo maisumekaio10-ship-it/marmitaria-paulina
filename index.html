@@ -144,10 +144,10 @@
             display: none;
         }
 
-        /* GRID KITS */
+        /* GRID KITS - CORRIGIDO */
         .grid-kits {
             display: grid;
-            grid-template-columns: 1fr 1fr;
+            grid-template-columns: repeat(2, minmax(0, 1fr));
             gap: 10px;
             align-items: start;
         }
@@ -159,6 +159,13 @@
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
+            overflow: hidden;
+        }
+
+        .grid-kits .card p {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            font-size: 12px;
         }
 
         .grid-kits img {
