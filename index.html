@@ -144,7 +144,7 @@
             display: none;
         }
 
-        /* GRID KITS - IMAGENS NA HORIZONTAL */
+        /* GRID KITS - RESTAURADO E CORRIGIDO PARA IMAGENS INTEIRAS */
         .grid-kits {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -162,28 +162,28 @@
             overflow: hidden;
         }
 
+        /* CORREÇÃO CIRÚRGICA: Imagem inteira, sem cortes, proporção original */
         .grid-kits img {
             width: 100%;
-            height: 90px; /* Reduzido para dar aspecto horizontal 16:9 */
-            object-fit: cover;
+            height: auto; /* Altura automática para manter a proporção original deitada */
+            object-fit: contain; /* Garante que a imagem inteira caiba no espaço, sem cortes */
             border-radius: 12px;
             margin-bottom: 8px;
             cursor: pointer;
+            background: #000; /* Fundo preto caso a imagem não preencha o aspect ratio do card */
         }
 
         .grid-kits .card p {
             word-wrap: break-word;
             overflow-wrap: break-word;
-            font-size: 11px;
-            line-height: 1.2;
+            font-size: 12px; /* Restaurado tamanho original */
+            line-height: 1.4;
         }
 
-        /* BARRA DE PESQUISA */
-        .search-box {
-            background: #222;
+        /* BARRA DE PESQUISA - LIMPA, SEM RETÂNGULO PRETO */
+        .search-input {
             margin-bottom: 15px;
-            padding: 10px;
-            border-radius: 12px;
+            border: 2px solid var(--secondary); /* Adicionei uma borda dourada para destacar */
         }
 
         /* BOTÃO REMOVER CARRINHO */
@@ -772,11 +772,9 @@
         function openCat(cat) {
             let html = `<button onclick="history.back()">⬅ Voltar</button><h3>${cat}</h3>`;
             
-            // Adicionando barra de pesquisa
+            // Adicionando barra de pesquisa limpa, diretamente sobre o fundo
             html += `
-            <div class="search-box">
-                <input type="text" id="searchInput" placeholder="Pesquisar produto..." onkeyup="filterProducts('${cat}')">
-            </div>
+                <input type="text" id="searchInput" class="search-input" placeholder="Pesquisar produto..." onkeyup="filterProducts('${cat}')">
             <div class="grid-kits" id="productGrid">`;
             
             produtos[cat].forEach((p, i) => {
