@@ -143,8 +143,7 @@
             border-radius: 30px;
             display: none;
         }
-
-        /* GRID KITS - RESTAURADO E CORRIGIDO PARA IMAGENS INTEIRAS */
+ 
         .grid-kits {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -162,7 +161,6 @@
             overflow: hidden;
         }
 
-        /* CORREÇÃO CIRÚRGICA: Imagem inteira, sem cortes, proporção original */
         .grid-kits img {
             width: 100%;
             height: auto; /* Altura automática para manter a proporção original deitada */
@@ -180,13 +178,11 @@
             line-height: 1.4;
         }
 
-        /* BARRA DE PESQUISA - LIMPA, SEM RETÂNGULO PRETO */
         .search-input {
             margin-bottom: 15px;
             border: 2px solid var(--secondary); /* Adicionei uma borda dourada para destacar */
         }
 
-        /* BOTÃO REMOVER CARRINHO */
         .remove-btn {
             background: #ff4444;
             color: white;
@@ -195,7 +191,6 @@
             border-radius: 8px;
         }
 
-        /* MODAL */
         .modal {
             position: fixed;
             top: 0;
@@ -214,7 +209,6 @@
             border-radius: 12px;
         }
 
-        /* CARRINHO */
         #cart-btn {
             position: fixed;
             bottom: 20px;
@@ -775,7 +769,6 @@
         function openCat(cat) {
             let html = `<button onclick="history.back()">⬅ Voltar</button><h3>${cat}</h3>`;
             
-            // Adicionando barra de pesquisa limpa, diretamente sobre o fundo
             html += `
                 <input type="text" id="searchInput" class="search-input" placeholder="Pesquisar produto..." onkeyup="filterProducts('${cat}')">
             <div class="grid-kits" id="productGrid">`;
