@@ -144,7 +144,7 @@
             display: none;
         }
 
-        /* GRID KITS - CORRIGIDO */
+        /* GRID KITS - IMAGENS NA HORIZONTAL */
         .grid-kits {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -162,19 +162,37 @@
             overflow: hidden;
         }
 
-        .grid-kits .card p {
-            word-wrap: break-word;
-            overflow-wrap: break-word;
-            font-size: 12px;
-        }
-
         .grid-kits img {
             width: 100%;
-            height: 120px;
+            height: 90px; /* Reduzido para dar aspecto horizontal 16:9 */
             object-fit: cover;
             border-radius: 12px;
             margin-bottom: 8px;
             cursor: pointer;
+        }
+
+        .grid-kits .card p {
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            font-size: 11px;
+            line-height: 1.2;
+        }
+
+        /* BARRA DE PESQUISA */
+        .search-box {
+            background: #222;
+            margin-bottom: 15px;
+            padding: 10px;
+            border-radius: 12px;
+        }
+
+        /* BOTÃO REMOVER CARRINHO */
+        .remove-btn {
+            background: #ff4444;
+            color: white;
+            padding: 4px 10px;
+            font-size: 12px;
+            border-radius: 8px;
         }
 
         /* MODAL */
@@ -753,25 +771,45 @@
 
         function openCat(cat) {
             let html = `<button onclick="history.back()">⬅ Voltar</button><h3>${cat}</h3>`;
-            html += `<div class="grid-kits">`;
+            
+            // Adicionando barra de pesquisa
+            html += `
+            <div class="search-box">
+                <input type="text" id="searchInput" placeholder="Pesquisar produto..." onkeyup="filterProducts('${cat}')">
+            </div>
+            <div class="grid-kits" id="productGrid">`;
+            
             produtos[cat].forEach((p, i) => {
-                html += `
-                    <div class="card">
-                        <img src="${p.img}" onclick="openModal('${p.img}','${p.descricao}')">
-                        <b>${p.name}</b><br>
-                        <p style="font-size:13px;color:#ccc;margin:4px 0 6px;">${p.descricao}</p>
-                        <div class="flex">
-                            <div>
-                                R$ <s>${p.oldPrice}</s><br>
-                                <span style="color:#FFD700;font-weight:700;">R$ ${p.price}</span>
-                            </div>
-                            <button class="primary small" onclick="add('${cat}',${i})">+</button>
-                        </div>
-                    </div>`;
+                html += renderProductCard(p, cat, i);
             });
             html += `</div>`;
             document.getElementById("app").innerHTML = html;
             updateCartButton();
+        }
+
+        function renderProductCard(p, cat, i) {
+            return `
+                <div class="card product-item">
+                    <img src="${p.img}" onclick="openModal('${p.img}','${p.descricao}')">
+                    <b class="product-name">${p.name}</b><br>
+                    <p style="color:#ccc;margin:4px 0 6px;">${p.descricao}</p>
+                    <div class="flex">
+                        <div style="font-size:11px">
+                            <s>R$ ${p.oldPrice}</s><br>
+                            <span style="color:#FFD700;font-weight:700;font-size:14px">R$ ${p.price}</span>
+                        </div>
+                        <button class="primary small" onclick="add('${cat}',${i})">+</button>
+                    </div>
+                </div>`;
+        }
+
+        function filterProducts(cat) {
+            let val = document.getElementById("searchInput").value.toLowerCase();
+            let items = document.getElementsByClassName("product-item");
+            produtos[cat].forEach((p, i) => {
+                let match = p.name.toLowerCase().includes(val);
+                items[i].style.display = match ? "flex" : "none";
+            });
         }
 
         function openModal(img, desc) {
@@ -810,6 +848,12 @@
             updateCartButton();
         }
 
+        function removeFromCart(index) {
+            cart.splice(index, 1);
+            renderCart();
+            updateCartButton();
+        }
+
         function toast() {
             let t = document.getElementById("toast");
             t.style.display = "block";
@@ -820,6 +864,8 @@
             let btn = document.getElementById("cart-btn");
             if (cart.length > 0) {
                 btn.classList.remove("hidden");
+            } else {
+                btn.classList.add("hidden");
             }
             document.getElementById("cart-count").innerText = cart.reduce((s, i) => s + i.qty, 0);
         }
@@ -827,12 +873,20 @@
         function renderCart() {
             let html = "<button onclick='history.back()'>⬅ Voltar</button><h3>Carrinho</h3>";
             let subtotal = 0;
-            cart.forEach((i) => {
-                subtotal += i.price * i.qty;
-                html += `<div class="card flex"><div>${i.qty}x ${i.name}</div><div>R$ ${(i.price*i.qty).toFixed(2)}</div></div>`;
-            });
-            html += `<h4>Subtotal: R$ ${subtotal.toFixed(2)}</h4>`;
-            html += `<button class="primary" onclick="navigate(renderCheckout)">Avançar para Checkout</button>`;
+            if (cart.length === 0) {
+                html += "<p>Seu carrinho está vazio.</p>";
+            } else {
+                cart.forEach((i, index) => {
+                    subtotal += i.price * i.qty;
+                    html += `
+                    <div class="card flex">
+                        <div>${i.qty}x ${i.name}<br><small>R$ ${(i.price*i.qty).toFixed(2)}</small></div>
+                        <button class="remove-btn" onclick="removeFromCart(${index})">X</button>
+                    </div>`;
+                });
+                html += `<h4>Subtotal: R$ ${subtotal.toFixed(2)}</h4>`;
+                html += `<button class="primary" onclick="navigate(renderCheckout)">Avançar para Checkout</button>`;
+            }
             document.getElementById("app").innerHTML = html;
         }
 
@@ -847,7 +901,11 @@
                 </select>
                 <div id="enderecoBox">
                     <input id="cep" placeholder="CEP" onblur="buscarCEP()">
-                    <input id="endereco" placeholder="Rua, número, bairro">
+                    <input id="endereco" placeholder="Rua / Bairro">
+                    <div class="flex" style="gap:10px">
+                        <input id="num" placeholder="Nº" style="width:30%">
+                        <input id="comp" placeholder="Complemento" style="width:70%">
+                    </div>
                 </div>
                 <label>Pagamento:</label>
                 <select id="pag">
@@ -910,6 +968,8 @@
                 fone: document.getElementById("fone").value,
                 tipo: document.getElementById("tipo").value,
                 endereco: document.getElementById("endereco").value,
+                num: document.getElementById("num").value,
+                comp: document.getElementById("comp").value,
                 pag: document.getElementById("pag").value
             };
             navigate(renderRevisao);
@@ -922,7 +982,7 @@
             html += `Cliente: ${dadosPedido.nome}<br>`;
             html += `Telefone: ${dadosPedido.fone}<br>`;
             if (dadosPedido.tipo == "Entrega") {
-                html += `Endereço: ${dadosPedido.endereco}<br>`;
+                html += `Endereço: ${dadosPedido.endereco}, Nº ${dadosPedido.num} ${dadosPedido.comp ? '('+dadosPedido.comp+')' : ''}<br>`;
             }
             cart.forEach(i => {
                 html += `${i.qty}x ${i.name}<br>`;
@@ -945,7 +1005,8 @@
             msg += `Nome: ${dadosPedido.nome}%0A`;
             msg += `Telefone: ${dadosPedido.fone}%0A`;
             if (dadosPedido.tipo == "Entrega") {
-                msg += `Endereço: ${dadosPedido.endereco}%0A`;
+                msg += `Endereço: ${dadosPedido.endereco}, Nº ${dadosPedido.num}%0A`;
+                if(dadosPedido.comp) msg += `Comp: ${dadosPedido.comp}%0A`;
             }
             msg += "%0AItens:%0A";
             cart.forEach(i => {
