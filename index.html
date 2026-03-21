@@ -303,6 +303,12 @@
         let frete = 0;
         let modalAberto = false;
         let carouselTimer;
+        function toggleHeader(show) {
+    const header = document.querySelector("header");
+    if (header) {
+        header.style.display = show ? "block" : "none";
+    }
+}
 
         function navigate(fn) {
             viewStack.push(fn);
@@ -402,7 +408,8 @@
         };
 
         function renderHome() {
-            let html = "<h3>CATEGORIAS</h3>";
+            toggleHeader(true);
+let html = "<h3>CATEGORIAS</h3>";
             for (let cat in produtos) {
                 html += `<div class="card" onclick="navigate(()=>openCat('${cat}'))"><b>${cat}</b></div>`;
             }
@@ -440,7 +447,8 @@
         }
 
         function startCarousel() {
-            if (carouselTimer) clearInterval(carouselTimer);
+            toggleHeader(false);
+if (carouselTimer) clearInterval(carouselTimer);
             const container = document.getElementById('carousel-container');
             if (!container) return;
 
