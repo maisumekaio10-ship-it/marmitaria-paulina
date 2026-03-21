@@ -10,12 +10,13 @@
 
     <style>
         :root {
-            --primary: #000000;
-            --primary-dark: #111;
-            --secondary: #FFD700;
+            /* VOLTANDO PARA O VERMELHO ORIGINAL */
+            --primary: #8B0000;
+            --primary-dark: #660000;
+            --secondary: #FFD700; /* AMARELO VIBRANTE */
             --black: #000;
             --white: #fff;
-            --background: #000;
+            --background: #8B0000; /* FUNDO VERMELHO */
         }
 
         * { box-sizing: border-box; }
@@ -34,6 +35,7 @@
             margin: 0 auto;
         }
 
+        /* HEADER AJUSTADO PARA VERMELHO E AMARELO */
         header {
             position: sticky;
             top: 0;
@@ -68,8 +70,8 @@
             font-size: 42px;
             font-family: 'Bangers', cursive;
             letter-spacing: 2px;
-            color: var(--secondary);
-            text-shadow: 2px 2px 0px #333;
+            color: var(--secondary); /* NOME EM AMARELO */
+            text-shadow: 2px 2px 0px #000;
         }
 
         .header-sub {
@@ -77,10 +79,10 @@
             font-size: 16px;
             font-family: 'Bebas Neue', sans-serif;
             letter-spacing: 1.5px;
-            color: #ccc;
+            color: #eee;
         }
 
-        /* BANNER DE CHAMADA PROFISSIONAL */
+        /* BANNER DE CHAMADA PROFISSIONAL (MANTIDO EM AMARELO) */
         .cta-banner {
             background: var(--secondary);
             color: #000;
@@ -98,11 +100,11 @@
         }
 
         .card {
-            background: #111;
+            background: #111; /* CARD ESCURO PARA CONTRASTE */
             padding: 16px;
             margin-bottom: 14px;
             border-radius: 16px;
-            border: 1px solid #222;
+            border: 1px solid #333;
         }
 
         .card b { font-weight: 600; font-size: 16px; }
@@ -144,6 +146,7 @@
 
         .search-input { margin-bottom: 15px; border: 2px solid var(--secondary); }
 
+        /* BOTÃO DO CARRINHO (MANTIDO EM AMARELO) */
         #cart-btn {
             position: fixed;
             bottom: 20px;
@@ -293,9 +296,10 @@
         });
 
         function renderHome() {
-            let html = "<h3 style='color:var(--secondary)'>CATEGORIAS</h3>";
+            let html = "<h3 style='color:var(--white)'>CATEGORIAS</h3>";
             for (let cat in produtos) {
-                html += `<div class="card" style="border-left: 4px solid var(--secondary);" onclick="navigate(()=>openCat('${cat}'))"><b>${cat}</b></div>`;
+                // CATEGORIA COM VERMELHO E AMARELO
+                html += `<div class="card" style="border-left: 4px solid var(--secondary); background: #1a1a1a" onclick="navigate(()=>openCat('${cat}'))"><b>${cat}</b></div>`;
             }
             
             // CARROSSEL RÁPIDO (Ajustado para 2.5s)
@@ -307,7 +311,7 @@
                     <img src="carrosel10.jpg"> <img src="carrosel11.jpg"> <img src="carrosel12.jpg">
                 </div>
             `;
-            html += `<div style="margin-top:30px;font-size:12px;text-align:center;color:#888">
+            html += `<div style="margin-top:30px;font-size:12px;text-align:center;color:#eee">
                         Rua Evangelina 404 - Vila Carrão<br><br>
                         Comida prática e congelada de qualidade.
                     </div>`;
@@ -333,19 +337,19 @@
 
         function openCat(cat) {
             if (carouselTimer) clearInterval(carouselTimer);
-            let html = `<button onclick="history.back()" style="background:none; color:var(--secondary); padding: 10px 0">⬅ Voltar</button>
-                        <h3 style="color:var(--secondary)">${cat}</h3>`;
+            let html = `<button onclick="history.back()" style="background:none; color:var(--white); padding: 10px 0">⬅ Voltar</button>
+                        <h3 style="color:var(--white)">${cat}</h3>`;
             html += `<input type="text" id="searchInput" class="search-input" placeholder="Pesquisar produto..." onkeyup="filterProducts('${cat}')">
                      <div class="grid-kits" id="productGrid">`;
             
             produtos[cat].forEach((p, i) => {
                 html += `
-                <div class="card product-item">
+                <div class="card product-item" style="background: #1a1a1a">
                     <img src="${p.img}">
-                    <b style="font-size:14px">${p.name}</b><br>
-                    <p style="color:#888;font-size:11px;margin:5px 0">${p.descricao}</p>
+                    <b style="font-size:14px; color:var(--white)">${p.name}</b><br>
+                    <p style="color:#eee;font-size:11px;margin:5px 0">${p.descricao}</p>
                     <div class="flex">
-                        <div style="font-size:11px">
+                        <div style="font-size:11px; color:#ccc">
                             <s>R$ ${p.oldPrice}</s><br>
                             <span style="color:var(--secondary);font-weight:700;font-size:14px">R$ ${p.price}</span>
                         </div>
@@ -391,9 +395,9 @@
             } else {
                 cart.forEach((i, index) => {
                     subtotal += i.price * i.qty;
-                    html += `<div class="card flex">
+                    html += `<div class="card flex" style="background: #1a1a1a">
                         <div>${i.qty}x ${i.name}<br><small>R$ ${(i.price*i.qty).toFixed(2)}</small></div>
-                        <button style="color:red" onclick="removeFromCart(${index})">Remover</button>
+                        <button style="color:red; background:none; font-weight:700" onclick="removeFromCart(${index})">X</button>
                     </div>`;
                 });
                 html += `<h4>Subtotal: R$ ${subtotal.toFixed(2)}</h4>`;
