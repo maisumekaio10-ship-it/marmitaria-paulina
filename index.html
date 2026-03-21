@@ -6,17 +6,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laencasa Ultracongelados</title>
 
-    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Bebas+Neue&family=Inter:wght@500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Kaushan+Script&family=Inter:wght@400;600;700;800&family=Bebas+Neue&display=swap" rel="stylesheet">
 
     <style>
         :root {
-            /* VOLTANDO PARA O VERMELHO ORIGINAL */
-            --primary: #8B0000;
-            --primary-dark: #660000;
-            --secondary: #FFD700; /* AMARELO VIBRANTE */
-            --black: #000;
-            --white: #fff;
-            --background: #8B0000; /* FUNDO VERMELHO */
+            --primary: #A31D21; /* Vermelho do seu logo */
+            --secondary: #FFD700; /* Amarelo do seu logo */
+            --white: #ffffff;
+            --background: #A31D21;
+            --card-bg: #1a1a1a;
         }
 
         * { box-sizing: border-box; }
@@ -24,90 +22,94 @@
         body {
             margin: 0;
             font-family: 'Inter', sans-serif;
-            font-weight: 500;
             background: var(--background);
             color: var(--white);
+            overflow-x: hidden;
         }
 
-        .container {
-            padding: 20px 16px 100px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-
-        /* HEADER AJUSTADO PARA VERMELHO E AMARELO */
+        /* HEADER IDENTIDADE VISUAL */
         header {
             position: sticky;
             top: 0;
             z-index: 1000;
             background: var(--primary);
-            padding: 15px;
-            border-bottom: 2px solid var(--secondary);
+            padding: 20px 15px;
+            border-bottom: 3px solid var(--secondary);
             text-align: center;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
         }
 
-        .logo-box {
-            width: 80px;
-            height: 80px;
-            border-radius: 12px;
-            overflow: hidden;
-            background: #fff;
-            margin: 10px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            border: 2px solid var(--secondary);
-        }
-
-        .logo-box img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
+        .brand-container {
+            line-height: 0.9;
+            margin-bottom: 15px;
         }
 
         .header-title {
-            text-align: center;
-            font-size: 42px;
-            font-family: 'Bangers', cursive;
+            font-family: 'Kaushan Script', cursive;
+            font-size: 52px;
+            color: var(--white);
+            margin: 0;
+            display: block;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.3);
+        }
+
+        .header-tagline {
+            font-family: 'Inter', sans-serif;
+            font-weight: 800;
+            font-size: 16px;
+            text-transform: uppercase;
             letter-spacing: 2px;
-            color: var(--secondary); /* NOME EM AMARELO */
-            text-shadow: 2px 2px 0px #000;
+            color: var(--white);
+            display: block;
+            margin-top: 5px;
         }
 
         .header-sub {
-            text-align: center;
-            font-size: 16px;
             font-family: 'Bebas Neue', sans-serif;
+            font-size: 18px;
             letter-spacing: 1.5px;
-            color: #eee;
+            color: var(--secondary);
+            margin-top: 15px;
         }
 
-        /* BANNER DE CHAMADA PROFISSIONAL (MANTIDO EM AMARELO) */
+        .logo-box {
+            width: 90px;
+            height: 90px;
+            background: #fff;
+            margin: 10px auto;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 3px solid var(--secondary);
+            overflow: hidden;
+        }
+
+        .logo-box img { width: 85%; height: 85%; object-fit: contain; }
+
         .cta-banner {
             background: var(--secondary);
             color: #000;
             padding: 12px;
             text-align: center;
             font-weight: 800;
-            font-size: 14px;
+            font-size: 13px;
             text-transform: uppercase;
-            animation: pulse 2s infinite;
-        }
-        @keyframes pulse {
-            0% { opacity: 1; }
-            50% { opacity: 0.7; }
-            100% { opacity: 1; }
+            box-shadow: 0 2px 5px rgba(0,0,0,0.2);
         }
 
+        /* CONTEÚDO E CARDS */
+        .container { padding: 20px 16px 100px; max-width: 600px; margin: 0 auto; }
+
         .card {
-            background: #111; /* CARD ESCURO PARA CONTRASTE */
+            background: var(--card-bg);
             padding: 16px;
             margin-bottom: 14px;
             border-radius: 16px;
-            border: 1px solid #333;
+            border: 1px solid rgba(255,255,255,0.1);
         }
 
-        .card b { font-weight: 600; font-size: 16px; }
+        .card b { font-size: 16px; color: var(--secondary); }
 
         .flex { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 
@@ -115,41 +117,41 @@
             border: none;
             border-radius: 12px;
             font-family: 'Inter';
-            font-weight: 600;
+            font-weight: 700;
             cursor: pointer;
+            transition: 0.3s;
         }
 
-        .primary { background: var(--secondary); color: #000; height: 44px; width: 100%; }
-        .small { width: auto; height: 36px; padding: 0 14px; }
+        .primary { background: var(--secondary); color: #000; height: 48px; width: 100%; font-size: 16px; }
+        .primary:active { transform: scale(0.98); }
+        .small { width: auto; height: 38px; padding: 0 18px; }
 
         input, select {
             width: 100%;
-            padding: 12px;
+            padding: 14px;
             margin: 8px 0 14px;
             border-radius: 12px;
-            border: none;
+            border: 1px solid #444;
             background: #222;
             color: #fff;
-            font-family: 'Inter';
+            font-size: 15px;
         }
-
-        .hidden { display: none; }
 
         .grid-kits {
             display: grid;
             grid-template-columns: repeat(2, 1fr);
-            gap: 10px;
+            gap: 12px;
         }
 
-        .grid-kits .card { margin: 0; padding: 10px; text-align: center; }
-        .grid-kits img { width: 100%; border-radius: 12px; margin-bottom: 8px; }
+        .grid-kits .card { margin: 0; padding: 12px; text-align: center; }
+        .grid-kits img { width: 100%; border-radius: 10px; margin-bottom: 10px; aspect-ratio: 1/1; object-fit: cover; }
 
-        .search-input { margin-bottom: 15px; border: 2px solid var(--secondary); }
+        .search-input { margin-bottom: 20px; border: 2px solid var(--secondary); }
 
-        /* BOTÃO DO CARRINHO (MANTIDO EM AMARELO) */
+        /* CARRINHO FLUTUANTE */
         #cart-btn {
             position: fixed;
-            bottom: 20px;
+            bottom: 25px;
             right: 20px;
             background: var(--secondary);
             color: #000;
@@ -160,36 +162,42 @@
             display: flex;
             align-items: center;
             gap: 10px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.5);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.5);
         }
 
-        /* CARROSSEL AJUSTADO */
+        /* CARROSSEL */
         #carousel-container {
             overflow-x: auto;
             display: flex;
-            gap: 10px;
+            gap: 12px;
             margin-top: 20px;
             scroll-behavior: smooth;
-            cursor: pointer;
             scrollbar-width: none;
         }
         #carousel-container::-webkit-scrollbar { display: none; }
-        #carousel-container img { width: 85%; flex-shrink: 0; border-radius: 12px; border: 1px solid #333; }
+        #carousel-container img { width: 85%; flex-shrink: 0; border-radius: 15px; border: 2px solid rgba(255,255,255,0.1); }
+
+        .hidden { display: none; }
     </style>
 </head>
 
 <body>
 
     <header>
-        <div class="header-title">LAENCASA</div>
-        <div class="logo-box">
-            <img src="logo.png">
+        <div class="brand-container">
+            <span class="header-title">Laencasa</span>
+            <span class="header-tagline">Ultracongelados</span>
         </div>
-        <div class="header-sub">ULTRACONGELADOS • PRATICIDADE • QUALIDADE</div>
+        
+        <div class="logo-box">
+            <img src="logo.png" onerror="this.src='https://via.placeholder.com/100?text=Logo'">
+        </div>
+
+        <div class="header-sub">SABOR DE CASA COM PRATICIDADE</div>
     </header>
 
     <div class="cta-banner">
-        🔥 Faça seu pedido já! Comida caseira de verdade.
+        🚀 Peça agora e receba em casa!
     </div>
 
     <div class="container" id="app"></div>
@@ -208,7 +216,6 @@
         let frete = 0;
         let carouselTimer;
 
-        // --- TODAS AS SUAS MARMITAS ESTÃO AQUI ---
         const marmitas = [
             { name: "LASANHA BERINGELA 420g", price: 19, oldPrice: 22, descricao: "Lasanha de Beringela com Molho de Tomate e Muçarela", img: "marmita1.jpg" },
             { name: "CARNE LOUCA 420g", price: 19, oldPrice: 22, descricao: "Arroz, Feijão, Pure De Batata, Carne Louca", img: "marmita2.jpg" },
@@ -296,13 +303,13 @@
         });
 
         function renderHome() {
-            let html = "<h3 style='color:var(--white)'>CATEGORIAS</h3>";
+            let html = "<h3 style='color:var(--white)'>CARDÁPIO</h3>";
             for (let cat in produtos) {
-                // CATEGORIA COM VERMELHO E AMARELO
-                html += `<div class="card" style="border-left: 4px solid var(--secondary); background: #1a1a1a" onclick="navigate(()=>openCat('${cat}'))"><b>${cat}</b></div>`;
+                html += `<div class="card" style="border-left: 4px solid var(--secondary); cursor:pointer" onclick="navigate(()=>openCat('${cat}'))">
+                            <b style="color:#fff">${cat}</b>
+                         </div>`;
             }
             
-            // CARROSSEL RÁPIDO (Ajustado para 2.5s)
             html += `
                 <div id="carousel-container" onclick="navigate(()=>openCat('KIT MARMITAS CONGELADAS'))">
                     <img src="carrosel1.jpg"> <img src="carrosel2.jpg"> <img src="carrosel3.jpg">
@@ -311,9 +318,9 @@
                     <img src="carrosel10.jpg"> <img src="carrosel11.jpg"> <img src="carrosel12.jpg">
                 </div>
             `;
-            html += `<div style="margin-top:30px;font-size:12px;text-align:center;color:#eee">
-                        Rua Evangelina 404 - Vila Carrão<br><br>
-                        Comida prática e congelada de qualidade.
+            html += `<div style="margin-top:30px;font-size:13px;text-align:center;color:#ddd">
+                        Rua Evangelina 404 - Vila Carrão<br>
+                        São Paulo - SP
                     </div>`;
             document.getElementById("app").innerHTML = html;
             updateCartButton();
@@ -324,7 +331,6 @@
             if (carouselTimer) clearInterval(carouselTimer);
             const container = document.getElementById('carousel-container');
             if (!container) return;
-
             carouselTimer = setInterval(() => {
                 const scrollAmount = container.offsetWidth * 0.8;
                 if (container.scrollLeft + container.offsetWidth >= container.scrollWidth - 10) {
@@ -337,21 +343,21 @@
 
         function openCat(cat) {
             if (carouselTimer) clearInterval(carouselTimer);
-            let html = `<button onclick="history.back()" style="background:none; color:var(--white); padding: 10px 0">⬅ Voltar</button>
-                        <h3 style="color:var(--white)">${cat}</h3>`;
-            html += `<input type="text" id="searchInput" class="search-input" placeholder="Pesquisar produto..." onkeyup="filterProducts('${cat}')">
+            let html = `<button onclick="history.back()" style="background:none; color:var(--white); padding: 10px 0; font-size:16px">⬅ Voltar</button>
+                        <h3 style="color:var(--secondary)">${cat}</h3>`;
+            html += `<input type="text" id="searchInput" class="search-input" placeholder="Pesquisar..." onkeyup="filterProducts('${cat}')">
                      <div class="grid-kits" id="productGrid">`;
             
             produtos[cat].forEach((p, i) => {
                 html += `
-                <div class="card product-item" style="background: #1a1a1a">
-                    <img src="${p.img}">
-                    <b style="font-size:14px; color:var(--white)">${p.name}</b><br>
-                    <p style="color:#eee;font-size:11px;margin:5px 0">${p.descricao}</p>
+                <div class="card product-item">
+                    <img src="${p.img}" onerror="this.src='https://via.placeholder.com/150?text=Marmita'">
+                    <b style="font-size:14px; color:#fff">${p.name}</b><br>
+                    <p style="color:#ccc;font-size:11px;margin:8px 0">${p.descricao}</p>
                     <div class="flex">
-                        <div style="font-size:11px; color:#ccc">
-                            <s>R$ ${p.oldPrice}</s><br>
-                            <span style="color:var(--secondary);font-weight:700;font-size:14px">R$ ${p.price}</span>
+                        <div style="font-size:12px">
+                            <s style="color:#777">R$ ${p.oldPrice}</s><br>
+                            <span style="color:var(--secondary);font-weight:800;font-size:15px">R$ ${p.price}</span>
                         </div>
                         <button class="primary small" onclick="add('${cat}',${i})">+</button>
                     </div>
@@ -388,20 +394,20 @@
         }
 
         function renderCart() {
-            let html = "<button onclick='history.back()'>⬅ Voltar</button><h3>Carrinho</h3>";
+            let html = "<button onclick='history.back()'>⬅ Voltar</button><h3>Meu Carrinho</h3>";
             let subtotal = 0;
             if (cart.length === 0) {
-                html += "<p>Vazio.</p>";
+                html += "<p>Seu carrinho está vazio.</p>";
             } else {
                 cart.forEach((i, index) => {
                     subtotal += i.price * i.qty;
-                    html += `<div class="card flex" style="background: #1a1a1a">
-                        <div>${i.qty}x ${i.name}<br><small>R$ ${(i.price*i.qty).toFixed(2)}</small></div>
-                        <button style="color:red; background:none; font-weight:700" onclick="removeFromCart(${index})">X</button>
+                    html += `<div class="card flex">
+                        <div><b>${i.qty}x</b> ${i.name}<br><small>R$ ${(i.price*i.qty).toFixed(2)}</small></div>
+                        <button style="color:#ff4444; background:none; font-size:20px" onclick="removeFromCart(${index})">&times;</button>
                     </div>`;
                 });
-                html += `<h4>Subtotal: R$ ${subtotal.toFixed(2)}</h4>`;
-                html += `<button class="primary" onclick="navigate(renderCheckout)">Checkout</button>`;
+                html += `<div class="card"><h4>Subtotal: R$ ${subtotal.toFixed(2)}</h4></div>`;
+                html += `<button class="primary" onclick="navigate(renderCheckout)">FINALIZAR PEDIDO</button>`;
             }
             document.getElementById("app").innerHTML = html;
         }
@@ -415,20 +421,25 @@
         function renderCheckout() {
             let html = `
                 <button onclick="history.back()">⬅ Voltar</button><h3>Finalização</h3>
-                <input id="nome" placeholder="Seu nome">
-                <input id="fone" placeholder="WhatsApp">
+                <input id="nome" placeholder="Seu nome completo">
+                <input id="fone" placeholder="Seu WhatsApp">
                 <select id="tipo" onchange="toggleEndereco()">
-                    <option value="Entrega">Entrega</option>
-                    <option value="Retirada">Retirada</option>
+                    <option value="Entrega">Entrega em domicílio</option>
+                    <option value="Retirada">Retirada no local</option>
                 </select>
                 <div id="enderecoBox">
                     <input id="cep" placeholder="CEP" onblur="buscarCEP()">
-                    <input id="endereco" placeholder="Rua / Bairro">
-                    <input id="num" placeholder="Nº">
+                    <input id="endereco" placeholder="Endereço (Rua e Bairro)">
+                    <input id="num" placeholder="Número / Apto">
                 </div>
-                <select id="pag"><option>Pix</option><option>Cartão</option></select>
-                <div id="freteBox"></div>
-                <button class="primary" onclick="revisao()">Revisar Pedido</button>`;
+                <select id="pag">
+                    <option>Pix</option>
+                    <option>Cartão de Crédito</option>
+                    <option>Cartão de Débito</option>
+                    <option>Dinheiro</option>
+                </select>
+                <div id="freteBox" style="margin-bottom:15px; color:var(--secondary); font-weight:bold"></div>
+                <button class="primary" onclick="revisao()">REVISAR PEDIDO</button>`;
             document.getElementById("app").innerHTML = html;
         }
 
@@ -437,7 +448,7 @@
         }
 
         async function buscarCEP() {
-            let cep = document.getElementById("cep").value;
+            let cep = document.getElementById("cep").value.replace(/\D/g, '');
             if (cep.length < 8) return;
             try {
                 let res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
@@ -469,14 +480,14 @@
         async function calcularFrete() {
             let cliente = document.getElementById("endereco").value;
             if (!cliente) return;
-            document.getElementById("freteBox").innerHTML = "Calculando...";
+            document.getElementById("freteBox").innerHTML = "Calculando frete...";
             let c1 = await getCoords(RESTAURANTE_END);
             let c2 = await getCoords(cliente);
             if (c1 && c2) {
                 let km = distancia(c1.lat, c1.lon, c2.lat, c2.lon);
                 frete = Math.max(7, (km * 2.5) + 5);
             } else { frete = 10; }
-            document.getElementById("freteBox").innerHTML = `Frete: R$ ${frete.toFixed(2)}`;
+            document.getElementById("freteBox").innerHTML = `Frete estimado: R$ ${frete.toFixed(2)}`;
         }
 
         function revisao() {
@@ -488,25 +499,30 @@
                 num: document.getElementById("num").value,
                 pag: document.getElementById("pag").value
             };
+            if(!dadosPedido.nome || !dadosPedido.fone) { alert("Preencha nome e fone!"); return; }
             navigate(renderRevisao);
         }
 
         function renderRevisao() {
             let subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
             let total = dadosPedido.tipo == "Entrega" ? subtotal + frete : subtotal;
-            let html = "<h3>Confirmar</h3>";
+            let html = "<h3>Revisão Final</h3><div class='card'>";
             cart.forEach(i => { html += `${i.qty}x ${i.name}<br>`; });
-            html += `<hr>Total: R$ ${total.toFixed(2)}<br>`;
-            html += `<button class="primary" onclick="finalizar()">Enviar p/ WhatsApp</button>`;
+            html += `<hr>Subtotal: R$ ${subtotal.toFixed(2)}<br>`;
+            if(dadosPedido.tipo == "Entrega") html += `Frete: R$ ${frete.toFixed(2)}<br>`;
+            html += `<strong>Total: R$ ${total.toFixed(2)}</strong></div>`;
+            html += `<button class="primary" onclick="finalizar()">ENVIAR PARA WHATSAPP</button>`;
             document.getElementById("app").innerHTML = html;
         }
 
         function finalizar() {
             let subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
             let total = dadosPedido.tipo == "Entrega" ? subtotal + frete : subtotal;
-            let msg = `*Pedido - Laencasa*%0A%0ACliente: ${dadosPedido.nome}%0A`;
-            cart.forEach(i => { msg += `${i.qty}x ${i.name}%0A`; });
-            msg += `%0ATotal: R$ ${total.toFixed(2)}%0APagamento: ${dadosPedido.pag}`;
+            let msg = `*NOVO PEDIDO - LAENCASA*%0A%0A*Cliente:* ${dadosPedido.nome}%0A*WhatsApp:* ${dadosPedido.fone}%0A*Tipo:* ${dadosPedido.tipo}%0A`;
+            if(dadosPedido.tipo == "Entrega") msg += `*Endereço:* ${dadosPedido.endereco}, ${dadosPedido.num}%0A`;
+            msg += `%0A*ITENS:*%0A`;
+            cart.forEach(i => { msg += `- ${i.qty}x ${i.name}%0A`; });
+            msg += `%0A*Pagamento:* ${dadosPedido.pag}%0A*Total:* R$ ${total.toFixed(2)}`;
             window.open(`https://wa.me/5511952282056?text=${msg}`);
         }
 
