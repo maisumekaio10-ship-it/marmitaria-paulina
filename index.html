@@ -5,33 +5,48 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Laencasa Ultracongelados</title>
-
-    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Bebas+Neue&family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Bangers&family=Bebas+Neue&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 
     <style>
         :root {
             --primary: #8B0000;
-            --primary-dark: #8b1a1a;
+            --primary-dark: #6b0000;
             --secondary: #FFD700;
+            --secondary-dark: #e0bc00;
             --black: #000;
             --white: #fff;
-            --background: #8B0000;
+            --background: #770000;
+            --card: #111;
+            --card-2: #1b1b1b;
+            --muted: #d7d7d7;
+            --soft: rgba(255, 255, 255, 0.08);
+            --danger: #ff4d4f;
+            --success: #14ae5c;
+            --shadow: 0 10px 30px rgba(0, 0, 0, 0.28);
+            --radius: 18px;
         }
 
         * {
             box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html {
+            scroll-behavior: smooth;
         }
 
         body {
             margin: 0;
             font-family: 'Inter', sans-serif;
             font-weight: 500;
-            background: var(--background);
+            background:
+                radial-gradient(circle at top, rgba(255, 215, 0, 0.08), transparent 25%),
+                linear-gradient(180deg, #8B0000 0%, #720000 100%);
             color: var(--white);
         }
 
         .container {
-            padding: 20px 16px 100px;
+            padding: 18px 16px 110px;
             max-width: 600px;
             margin: 0 auto;
         }
@@ -40,20 +55,25 @@
             position: sticky;
             top: 0;
             z-index: 1000;
-            background: var(--primary);
-            padding: 10px;
+            background: linear-gradient(180deg, rgba(139, 0, 0, 0.98), rgba(139, 0, 0, 0.94));
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 215, 0, 0.14);
+            padding: 12px 14px 16px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.18);
         }
 
         .logo-box {
-            width: 70px;
-            height: 70px;
-            border-radius: 12px;
+            width: 76px;
+            height: 76px;
+            border-radius: 18px;
             overflow: hidden;
             background: #fff;
-            margin: 10px auto;
+            margin: 10px auto 8px;
             display: flex;
             align-items: center;
             justify-content: center;
+            box-shadow: var(--shadow);
+            border: 2px solid rgba(255, 215, 0, 0.35);
         }
 
         .logo-box img {
@@ -64,29 +84,155 @@
 
         .header-title {
             text-align: center;
-            font-size: 32px;
+            font-size: 34px;
             font-family: 'Bangers', cursive;
             letter-spacing: 2px;
+            line-height: 1;
+            margin-top: 4px;
         }
 
         .header-sub {
             text-align: center;
-            font-size: 18px;
+            font-size: 16px;
             font-family: 'Bebas Neue', sans-serif;
-            letter-spacing: 1.5px;
+            letter-spacing: 1.7px;
+            color: #ffe486;
+            margin-top: 4px;
+        }
+
+        .header-mini {
+            text-align: center;
+            font-size: 12px;
+            color: #f5dfdf;
+            margin-top: 6px;
+        }
+
+        h2,
+        h3,
+        h4 {
+            margin: 0 0 14px;
+        }
+
+        .section-title {
+            font-size: 15px;
+            font-weight: 800;
+            letter-spacing: 0.8px;
+            color: #ffe486;
+            margin: 0 0 14px;
+        }
+
+        .hero {
+            background: linear-gradient(145deg, rgba(0, 0, 0, 0.18), rgba(255, 215, 0, 0.08));
+            border: 1px solid rgba(255, 215, 0, 0.16);
+            padding: 16px;
+            border-radius: 22px;
+            margin-bottom: 18px;
+            box-shadow: var(--shadow);
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: rgba(255, 215, 0, 0.14);
+            color: #ffe486;
+            border: 1px solid rgba(255, 215, 0, 0.22);
+            padding: 7px 12px;
+            border-radius: 999px;
+            font-size: 12px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .hero h2 {
+            font-size: 24px;
+            line-height: 1.15;
+            margin-bottom: 8px;
+        }
+
+        .hero p {
+            margin: 0;
+            font-size: 14px;
+            line-height: 1.55;
+            color: var(--muted);
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-top: 14px;
+        }
+
+        .hero-item {
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 10px 8px;
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .hero-item b {
+            display: block;
+            color: #ffe486;
+            font-size: 14px;
+            margin-bottom: 2px;
         }
 
         .card {
-            background: #111;
+            background: linear-gradient(180deg, #111 0%, #171717 100%);
             padding: 16px;
             margin-bottom: 14px;
-            border-radius: 16px;
+            border-radius: var(--radius);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            box-shadow: var(--shadow);
         }
 
         .card b {
-            font-weight: 600;
+            font-weight: 700;
             font-size: 16px;
-            letter-spacing: 0.3px;
+            letter-spacing: 0.2px;
+        }
+
+        .category-card {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            gap: 14px;
+            cursor: pointer;
+            transition: transform 0.18s ease;
+        }
+
+        .category-card:active {
+            transform: scale(0.99);
+        }
+
+        .category-icon {
+            width: 46px;
+            height: 46px;
+            border-radius: 14px;
+            background: rgba(255, 215, 0, 0.12);
+            color: #ffe486;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            flex-shrink: 0;
+        }
+
+        .category-meta small {
+            display: block;
+            margin-top: 4px;
+            color: #cfcfcf;
+            font-size: 12px;
+            line-height: 1.4;
+        }
+
+        .category-arrow {
+            font-size: 20px;
+            color: #ffe486;
         }
 
         .flex {
@@ -98,63 +244,114 @@
 
         button {
             border: none;
-            border-radius: 12px;
-            font-family: 'Inter';
-            font-weight: 600;
+            border-radius: 14px;
+            font-family: 'Inter', sans-serif;
+            font-weight: 700;
             cursor: pointer;
+            transition: 0.18s ease;
+        }
+
+        button:active {
+            transform: scale(0.98);
         }
 
         .primary {
-            background: var(--secondary);
+            background: linear-gradient(180deg, var(--secondary) 0%, var(--secondary-dark) 100%);
             color: #000;
-            height: 44px;
+            height: 46px;
             width: 100%;
+            box-shadow: 0 8px 22px rgba(255, 215, 0, 0.18);
+        }
+
+        .ghost {
+            background: rgba(255, 255, 255, 0.07);
+            color: #fff;
+            height: 42px;
+            padding: 0 16px;
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .small {
             width: auto;
-            height: 36px;
-            padding: 0 14px;
+            min-width: 102px;
+            height: 38px;
+            padding: 0 12px;
+            font-size: 13px;
+        }
+
+        .qty-btn {
+            background: rgba(255, 255, 255, 0.08);
+            color: #fff;
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            font-size: 18px;
+            line-height: 1;
         }
 
         input,
-        select {
+        select,
+        textarea {
             width: 100%;
-            padding: 12px;
+            padding: 13px 14px;
             margin: 8px 0 14px;
-            border-radius: 12px;
-            border: none;
-            font-family: 'Inter';
+            border-radius: 14px;
+            border: 1px solid transparent;
+            font-family: 'Inter', sans-serif;
             font-weight: 500;
+            outline: none;
+            background: #fff;
+            color: #111;
+            font-size: 14px;
+        }
+
+        input:focus,
+        select:focus,
+        textarea:focus {
+            border-color: var(--secondary);
+            box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.14);
+        }
+
+        .input-label {
+            font-size: 13px;
+            font-weight: 700;
+            color: #ffe486;
+            margin-top: 4px;
+            display: block;
         }
 
         .hidden {
-            display: none;
+            display: none !important;
         }
 
         .toast {
             position: fixed;
-            bottom: 110px;
+            bottom: 100px;
             left: 50%;
             transform: translateX(-50%);
-            background: var(--secondary);
+            background: linear-gradient(180deg, var(--secondary) 0%, var(--secondary-dark) 100%);
             color: black;
-            padding: 12px 22px;
-            border-radius: 30px;
+            padding: 12px 18px;
+            border-radius: 999px;
             display: none;
+            font-weight: 700;
+            z-index: 99999;
+            box-shadow: var(--shadow);
+            text-align: center;
+            min-width: 180px;
         }
 
         .grid-kits {
             display: grid;
             grid-template-columns: repeat(2, minmax(0, 1fr));
-            gap: 10px;
+            gap: 12px;
             align-items: start;
         }
 
         .grid-kits .card {
             margin: 0;
             padding: 10px;
-            text-align: center;
+            text-align: left;
             display: flex;
             flex-direction: column;
             justify-content: flex-start;
@@ -163,65 +360,121 @@
 
         .grid-kits img {
             width: 100%;
-            height: auto;
-            object-fit: contain;
-            border-radius: 12px;
-            margin-bottom: 8px;
+            height: 145px;
+            object-fit: cover;
+            border-radius: 14px;
+            margin-bottom: 10px;
             background: #000;
+            border: 1px solid rgba(255, 255, 255, 0.05);
         }
 
         .img-clickable {
             cursor: pointer;
         }
 
+        .product-name {
+            min-height: 40px;
+            display: block;
+            margin-bottom: 6px;
+        }
+
         .grid-kits .card p {
             word-wrap: break-word;
             overflow-wrap: break-word;
             font-size: 12px;
-            line-height: 1.4;
+            line-height: 1.45;
+            color: #cfcfcf;
+            margin: 0 0 10px;
+            min-height: 52px;
+        }
+
+        .price-wrap {
+            display: flex;
+            flex-direction: column;
+            gap: 3px;
+        }
+
+        .old-price {
+            font-size: 11px;
+            color: #aaa;
+        }
+
+        .new-price {
+            color: #FFD700;
+            font-weight: 800;
+            font-size: 16px;
         }
 
         .search-input {
             margin-bottom: 15px;
-            border: 2px solid var(--secondary);
+            border: 2px solid rgba(255, 215, 0, 0.35);
         }
 
         .remove-btn {
-            background: #ff4444;
-            color: white;
-            padding: 4px 10px;
-            font-size: 12px;
-            border-radius: 8px;
+            background: rgba(255, 77, 79, 0.14);
+            color: #fff;
+            width: 34px;
+            height: 34px;
+            border-radius: 10px;
+            border: 1px solid rgba(255, 77, 79, 0.3);
+            font-size: 16px;
+        }
+
+        .cart-item {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .cart-thumb {
+            width: 62px;
+            height: 62px;
+            border-radius: 14px;
+            object-fit: cover;
+            background: #000;
+            flex-shrink: 0;
+        }
+
+        .cart-actions {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 6px;
+        }
+
+        .summary-box {
+            background: linear-gradient(180deg, rgba(255, 215, 0, 0.12), rgba(255, 215, 0, 0.06));
+            border: 1px solid rgba(255, 215, 0, 0.18);
         }
 
         .modal {
             position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.85);
+            inset: 0;
+            background: rgba(0, 0, 0, 0.88);
             display: flex;
             align-items: center;
             justify-content: center;
             z-index: 9999;
+            padding: 16px;
         }
 
         .modal-content {
             background: #111;
-            width: 85%;
-            max-width: 350px;
-            border-radius: 20px;
+            width: 100%;
+            max-width: 360px;
+            border-radius: 22px;
             padding: 15px;
             position: relative;
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-            border: 1px solid #333;
+            box-shadow: var(--shadow);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .modal img {
             width: 100%;
-            border-radius: 15px;
+            border-radius: 16px;
             display: block;
+            max-height: 380px;
+            object-fit: cover;
         }
 
         .close-modal {
@@ -230,91 +483,166 @@
             right: -10px;
             background: var(--secondary);
             color: black;
-            width: 30px;
-            height: 30px;
+            width: 34px;
+            height: 34px;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-weight: bold;
+            font-weight: 800;
             cursor: pointer;
             border: 2px solid #000;
         }
 
         #cart-btn {
             position: fixed;
-            bottom: 20px;
-            right: 20px;
-            background: var(--secondary);
+            bottom: 18px;
+            right: 16px;
+            background: linear-gradient(180deg, var(--secondary) 0%, var(--secondary-dark) 100%);
             color: #000;
-            border-radius: 50px;
-            padding: 12px 20px;
-            font-weight: 700;
+            border-radius: 999px;
+            padding: 13px 18px;
+            font-weight: 800;
             cursor: pointer;
             z-index: 9999;
             display: flex;
             align-items: center;
             gap: 8px;
+            box-shadow: var(--shadow);
         }
 
         #cart-btn span {
             background: #000;
             color: #fff;
-            padding: 2px 6px;
-            border-radius: 50%;
+            padding: 2px 7px;
+            border-radius: 999px;
+            font-size: 13px;
+            min-width: 22px;
+            text-align: center;
+        }
+
+        .mini-info {
+            margin-top: 18px;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+
+        .mini-card {
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 12px 10px;
+            text-align: center;
+            font-size: 12px;
+            line-height: 1.45;
+        }
+
+        .mini-card b {
+            display: block;
+            color: #ffe486;
+            font-size: 13px;
+            margin-bottom: 2px;
+        }
+
+        .frete-info {
+            margin: 8px 0 16px;
             font-size: 14px;
+            line-height: 1.6;
+            background: rgba(255, 255, 255, 0.06);
+            border-radius: 16px;
+            padding: 12px;
+            border: 1px solid rgba(255, 255, 255, 0.06);
+        }
+
+        .frete-erro {
+            color: #FFD700;
+            font-weight: 800;
+        }
+
+        .muted {
+            color: #d5d5d5;
+            font-size: 12px;
+        }
+
+        .divider {
+            height: 1px;
+            background: rgba(255, 255, 255, 0.08);
+            margin: 14px 0;
+        }
+
+        .pill {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 7px 11px;
+            border-radius: 999px;
+            background: rgba(255, 215, 0, 0.12);
+            color: #ffe486;
+            border: 1px solid rgba(255, 215, 0, 0.16);
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .revisao-line {
+            line-height: 1.6;
+            color: #f0f0f0;
+            font-size: 14px;
+        }
+
+        .revisao-line b {
+            color: #ffe486;
         }
 
         #carousel-container::-webkit-scrollbar {
             display: none;
         }
 
-        .frete-info {
-            margin: 10px 0 14px;
-            font-size: 15px;
-            line-height: 1.5;
-        }
+        @media (max-width: 420px) {
+            .hero-grid,
+            .mini-info {
+                grid-template-columns: 1fr;
+            }
 
-        .frete-erro {
-            color: #FFD700;
-            font-weight: 700;
-        }
+            .grid-kits img {
+                height: 132px;
+            }
 
-        .muted {
-            color: #ddd;
-            font-size: 12px;
+            .header-title {
+                font-size: 30px;
+            }
+
+            .hero h2 {
+                font-size: 22px;
+            }
         }
     </style>
 </head>
 
 <body>
-
     <header>
         <div class="header-title">LAENCASA</div>
         <div class="logo-box">
-            <img src="logo.png">
+            <img src="logo.png" alt="Laencasa Ultracongelados">
         </div>
-        <div class="header-sub">
-            ULTRACONGELADOS • PRATICIDADE • QUALIDADE
-        </div>
+        <div class="header-sub">ULTRACONGELADOS • PRATICIDADE • QUALIDADE</div>
+        <div class="header-mini">Marmitas práticas, sabor caseiro e pedido direto pelo WhatsApp</div>
     </header>
 
     <div class="container" id="app"></div>
 
-    <div class="toast" id="toast">Item adicionado</div>
+    <div class="toast" id="toast">Item adicionado ao pedido</div>
 
     <div id="cart-btn" onclick="renderCart()" class="hidden">
-        🛒 <span id="cart-count">0</span>
+        🛒 Ver pedido <span id="cart-count">0</span>
     </div>
 
     <script>
         const RESTAURANTE_END = "Rua Evangelina, 440, Vila Carrão, São Paulo, SP, 03421-000, Brasil";
         const CIDADE_BASE = "São Paulo";
         const ESTADO_BASE = "SP";
-        const FRETE_MINIMO_MOTO = 8.90;
-        const FRETE_MAXIMO_AUTOMATICO = 80;
-        const DISTANCIA_MAXIMA_KM = 30;
+        const DISTANCIA_MAXIMA_KM = 35;
         const ORS_API_KEY = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6Ijk1YWRlZjgxOGJkZjRmZmVhNzI0MTU3ZjMxMWI1MDc1IiwiaCI6Im11cm11cjY0In0=";
+        const TELEFONE_PEDIDO = "5511952282056";
 
         let cart = [];
         let viewStack = [];
@@ -344,112 +672,88 @@
         });
 
         const marmitas = [
-            { name: "LASANHA BERINGELA 420g", price: 19, oldPrice: 22, descricao: "Lasanha de Beringela com Molho de Tomate e Muçarela", img: "marmita1.jpg" },
-            { name: "CARNE LOUCA 420g", price: 19, oldPrice: 22, descricao: "Arroz, Feijão, Pure De Batata, Carne Louca", img: "marmita2.jpg" },
-            { name: "CARNE LOUCA 340g", price: 17, oldPrice: 20, descricao: "Arroz, Feijão, Pure De Batata, Carne Louca", img: "marmita2.jpg" },
-            { name: "FRANGO DESFIADO 420g", price: 17, oldPrice: 19, descricao: "Frango Desfiado, Arroz, Feijão", img: "marmita3.jpg" },
-            { name: "FRANGO DESFIADO 340g", price: 14, oldPrice: 16, descricao: "Frango Desfiado, Arroz, Feijão", img: "marmita3.jpg" },
-            { name: "LASANHA 3 QUEIJOS 420g", price: 21, oldPrice: 23, descricao: "Lasanha de Mussarela, Provolone, Requeijão Cremoso", img: "marmita4.jpg" },
-            { name: "FRANGO DESFIADO 2 420g", price: 17, oldPrice: 19, descricao: "Frango Desfiado, Arroz, Mix Legumes", img: "marmita5.jpg" },
-            { name: "FRANGO DESFIADO 2 340g", price: 14, oldPrice: 16, descricao: "Frango Desfiado, Arroz, Mix Legumes", img: "marmita5.jpg" },
-            { name: "FRANGO ENSOPADO 420g", price: 18, oldPrice: 20, descricao: "Frango Ensopado, Arroz, Pure de Batata", img: "marmita6.jpg" },
-            { name: "FRANGO ENSOPADO 340g", price: 15, oldPrice: 17, descricao: "Frango Ensopado, Arroz, Pure de Batata", img: "marmita6.jpg" },
-            { name: "CARNE MOÍDA 420g", price: 20, oldPrice: 22, descricao: "Arroz, Carne Moída, Creme de Milho", img: "marmita7.jpg" },
-            { name: "CARNE MOÍDA 340g", price: 17, oldPrice: 19, descricao: "Arroz, Carne Moída, Creme de Milho", img: "marmita7.jpg" },
-            { name: "RONDOLE 420g", price: 22, oldPrice: 24, descricao: "Rondele De Presunto e Queijo", img: "marmita8.jpg" },
-            { name: "FRANGO S/COXA ASSADO 420g", price: 21, oldPrice: 23, descricao: "SobreCoxa Assada, Arroz, Feijão, Farofa", img: "marmita9.jpg" },
-            { name: "STROGONOFF DE FRANGO 420g", price: 18, oldPrice: 20, descricao: "Arroz, Strogonoff Frango, Batata Saute", img: "marmita10.jpg" },
-            { name: "STROGONOFF DE FRANGO 340g", price: 16, oldPrice: 18, descricao: "Arroz, Strogonoff Frango, Batata Saute", img: "marmita10.jpg" },
-            { name: "ESCONDIDINHO CALABRESA 420g", price: 23, oldPrice: 25, descricao: "Calabresa Moída, Pure Batata, Muçarela", img: "marmita11.jpg" },
-            { name: "CARNE MOÍDA FIT 420g", price: 19, oldPrice: 21, descricao: "Arroz Integral, Carne Moída Refogada, Mix Legumes", img: "marmita12.jpg" },
-            { name: "CARNE MOÍDA FIT 340g", price: 17, oldPrice: 19, descricao: "Arroz Integral, Carne Moída Refogada, Mix Legumes", img: "marmita12.jpg" },
-            { name: "BERINGELA A PARMEGIANA 420g", price: 21, oldPrice: 23, descricao: "Beringela a Parmegiana, Arroz, Brócolis", img: "marmita13.jpg" },
-            { name: "KIBE ASSADO 420g", price: 19, oldPrice: 21, descricao: "Kib Assado, Arroz, Pure Batata", img: "marmita14.jpg" },
-            { name: "KIBE ASSADO 340g", price: 16, oldPrice: 18, descricao: "Kib Assado, Arroz, Pure Batata", img: "marmita14.jpg" },
-            { name: "ESCONDIDINHO CARNE MOÍDA 420g", price: 15, oldPrice: 18, descricao: "Carne Moída, Pure De Batata, Queijo Muçarela", img: "marmita15.jpg" },
-            { name: "FRANGO EM CUBOS 420g", price: 23, oldPrice: 25, descricao: "Arroz, Pure Batata, Frango em Cubos", img: "marmita16.jpg" },
-            { name: "FRANGO A PARMEGIANA 420g", price: 21, oldPrice: 23, descricao: "Arroz, Feijão, Brócolis, Frango a Parmegiana", img: "marmita17.jpg" },
-            { name: "MACARRÃO A PARISIENSE 420g", price: 17, oldPrice: 19, descricao: "Mollho Branco, Ervilhas, Macarrão Penne, Presunto Ralado", img: "marmita18.jpg" },
-            { name: "MACARRÃO A BOLONHESA 420g", price: 21, oldPrice: 23, descricao: "Macarrão Parafuso a Bolonhesa", img: "marmita19.jpg" },
-            { name: "MACARRÃO A BOLONHESA 340g", price: 18, oldPrice: 20, descricao: "Macarrão Parafuso a Bolonhesa", img: "marmita19.jpg" },
-            { name: "TILÁPIA ASSADA 420g", price: 27, oldPrice: 29, descricao: "Tilápia Assada, Arroz, Brócolis", img: "marmita20.jpg" },
-            { name: "PICADINHO 420g", price: 19, oldPrice: 21, descricao: "Arroz, Feijão, Carne, Batata, Cenoura", img: "marmita21.jpg" },
-            { name: "PICADINHO 340g", price: 17, oldPrice: 19, descricao: "Arroz, Feijão, Carne, Batata, Cenoura", img: "marmita21.jpg" },
-            { name: "NHOQUE A BOLONHESA 420g", price: 21, oldPrice: 23, descricao: "Nhoque, Molho de Tomate, Carne Moída", img: "marmita22.jpg" },
-            { name: "NHOQUE A BOLONHESA 340g", price: 19, oldPrice: 21, descricao: "Nhoque, Molho de Tomate, Carne Moída", img: "marmita22.jpg" },
-            { name: "FRANGO CREMOSO 420g", price: 18, oldPrice: 20, descricao: "Frango Desfiado Cremoso, Batata Doce", img: "marmita23.jpg" },
-            { name: "FRANGO CREMOSO 340g", price: 16, oldPrice: 18, descricao: "Frango Desfiado Cremoso, Batata Doce", img: "marmita23.jpg" },
-            { name: "SALMÃO 420g", price: 30, oldPrice: 32, descricao: "Salmão, Pure de Mandioquinha, Cenoura, Abobrinha", img: "marmita24.jpg" },
-            { name: "FEIJOADA LIGTH 420g", price: 20, oldPrice: 22, descricao: "Arroz, Feijão Preto, Carne Seca, Linguiça Calabresa, Couve, Farofa", img: "marmita25.jpg" },
-            { name: "FEIJOADA LIGTH 340g", price: 17, oldPrice: 19, descricao: "Arroz, Feijão Preto, Carne Seca, Linguiça Calabresa, Couve, Farofa", img: "marmita25.jpg" },
-            { name: "ALCATRA 420g", price: 23, oldPrice: 25, descricao: "Alcatra, Arroz, Feijão, Farofa", img: "marmita26.jpg" },
-            { name: "ALCATRA 4340g", price: 20, oldPrice: 22, descricao: "Alcatra, Arroz, Feijão, Farofa", img: "marmita26.jpg" },
-            { name: "CHARUTO DE REPOLHO 420g", price: 19, oldPrice: 21, descricao: "Repolho Com Recheio De Carne Moída, Arroz, Molho Tomate", img: "marmita27.jpg" },
-            { name: "CHARUTO DE REPOLHO 340g", price: 16, oldPrice: 18, descricao: "Repolho Com Recheio De Carne Moída, Arroz, Molho Tomate", img: "marmita27.jpg" },
-            { name: "FILÉ FRANGO FIT 420g", price: 18, oldPrice: 20, descricao: "Filé Frango Grelhado, Batata Doce", img: "marmita28.jpg" },
-            { name: "FILÉ FRANGO FIT 340g", price: 16, oldPrice: 18, descricao: "Filé Frango Grelhado, Batata Doce", img: "marmita28.jpg" },
-            { name: "PANQUECA CARNE 420g", price: 21, oldPrice: 23, descricao: "Panqueca Carne Moída, Molho de Tomate", img: "marmita29.jpg" },
-            { name: "PANQUECA CARNE 340g", price: 18, oldPrice: 20, descricao: "Panqueca Carne Moída, Molho de Tomate", img: "marmita29.jpg" },
-            { name: "PORPETONE 420g", price: 19, oldPrice: 21, descricao: "Arroz, Feijão Carioca, Porpetone", img: "marmita30.jpg" },
-            { name: "PORPETONE 340g", price: 17, oldPrice: 19, descricao: "Arroz, Feijão Carioca, Porpetone", img: "marmita30.jpg" },
-            { name: "STROGONOFF CARNE 420g", price: 21, oldPrice: 23, descricao: "Arroz, Strogonoff Carne, Batata Dorê", img: "marmita31.jpg" },
-            { name: "STROGONOFF CARNE 340g", price: 19, oldPrice: 21, descricao: "Arroz, Strogonoff Carne, Batata Dorê", img: "marmita31.jpg" }
+            { name: "LASANHA BERINGELA 420g", price: 19, oldPrice: 22, descricao: "Lasanha de beringela com molho de tomate e muçarela.", img: "marmita1.jpg" },
+            { name: "CARNE LOUCA 420g", price: 19, oldPrice: 22, descricao: "Arroz, feijão, purê de batata e carne louca.", img: "marmita2.jpg" },
+            { name: "CARNE LOUCA 340g", price: 17, oldPrice: 20, descricao: "Arroz, feijão, purê de batata e carne louca.", img: "marmita2.jpg" },
+            { name: "FRANGO DESFIADO 420g", price: 17, oldPrice: 19, descricao: "Frango desfiado, arroz e feijão.", img: "marmita3.jpg" },
+            { name: "FRANGO DESFIADO 340g", price: 14, oldPrice: 16, descricao: "Frango desfiado, arroz e feijão.", img: "marmita3.jpg" },
+            { name: "LASANHA 3 QUEIJOS 420g", price: 21, oldPrice: 23, descricao: "Lasanha de muçarela, provolone e requeijão cremoso.", img: "marmita4.jpg" },
+            { name: "FRANGO DESFIADO 2 420g", price: 17, oldPrice: 19, descricao: "Frango desfiado, arroz e mix de legumes.", img: "marmita5.jpg" },
+            { name: "FRANGO DESFIADO 2 340g", price: 14, oldPrice: 16, descricao: "Frango desfiado, arroz e mix de legumes.", img: "marmita5.jpg" },
+            { name: "FRANGO ENSOPADO 420g", price: 18, oldPrice: 20, descricao: "Frango ensopado, arroz e purê de batata.", img: "marmita6.jpg" },
+            { name: "FRANGO ENSOPADO 340g", price: 15, oldPrice: 17, descricao: "Frango ensopado, arroz e purê de batata.", img: "marmita6.jpg" },
+            { name: "CARNE MOÍDA 420g", price: 20, oldPrice: 22, descricao: "Arroz, carne moída e creme de milho.", img: "marmita7.jpg" },
+            { name: "CARNE MOÍDA 340g", price: 17, oldPrice: 19, descricao: "Arroz, carne moída e creme de milho.", img: "marmita7.jpg" },
+            { name: "RONDOLE 420g", price: 22, oldPrice: 24, descricao: "Rondole de presunto e queijo.", img: "marmita8.jpg" },
+            { name: "FRANGO S/COXA ASSADO 420g", price: 21, oldPrice: 23, descricao: "Sobrecoxa assada, arroz, feijão e farofa.", img: "marmita9.jpg" },
+            { name: "STROGONOFF DE FRANGO 420g", price: 18, oldPrice: 20, descricao: "Arroz, strogonoff de frango e batata sauté.", img: "marmita10.jpg" },
+            { name: "STROGONOFF DE FRANGO 340g", price: 16, oldPrice: 18, descricao: "Arroz, strogonoff de frango e batata sauté.", img: "marmita10.jpg" },
+            { name: "ESCONDIDINHO CALABRESA 420g", price: 23, oldPrice: 25, descricao: "Calabresa moída, purê de batata e muçarela.", img: "marmita11.jpg" },
+            { name: "CARNE MOÍDA FIT 420g", price: 19, oldPrice: 21, descricao: "Arroz integral, carne moída refogada e mix de legumes.", img: "marmita12.jpg" },
+            { name: "CARNE MOÍDA FIT 340g", price: 17, oldPrice: 19, descricao: "Arroz integral, carne moída refogada e mix de legumes.", img: "marmita12.jpg" },
+            { name: "BERINGELA A PARMEGIANA 420g", price: 21, oldPrice: 23, descricao: "Beringela à parmegiana, arroz e brócolis.", img: "marmita13.jpg" },
+            { name: "KIBE ASSADO 420g", price: 19, oldPrice: 21, descricao: "Kibe assado, arroz e purê de batata.", img: "marmita14.jpg" },
+            { name: "KIBE ASSADO 340g", price: 16, oldPrice: 18, descricao: "Kibe assado, arroz e purê de batata.", img: "marmita14.jpg" },
+            { name: "ESCONDIDINHO CARNE MOÍDA 420g", price: 15, oldPrice: 18, descricao: "Carne moída, purê de batata e queijo muçarela.", img: "marmita15.jpg" },
+            { name: "FRANGO EM CUBOS 420g", price: 23, oldPrice: 25, descricao: "Arroz, purê de batata e frango em cubos.", img: "marmita16.jpg" },
+            { name: "FRANGO A PARMEGIANA 420g", price: 21, oldPrice: 23, descricao: "Arroz, feijão, brócolis e frango à parmegiana.", img: "marmita17.jpg" },
+            { name: "MACARRÃO A PARISIENSE 420g", price: 17, oldPrice: 19, descricao: "Molho branco, ervilhas, macarrão penne e presunto ralado.", img: "marmita18.jpg" },
+            { name: "MACARRÃO A BOLONHESA 420g", price: 21, oldPrice: 23, descricao: "Macarrão parafuso à bolonhesa.", img: "marmita19.jpg" },
+            { name: "MACARRÃO A BOLONHESA 340g", price: 18, oldPrice: 20, descricao: "Macarrão parafuso à bolonhesa.", img: "marmita19.jpg" },
+            { name: "TILÁPIA ASSADA 420g", price: 27, oldPrice: 29, descricao: "Tilápia assada, arroz e brócolis.", img: "marmita20.jpg" },
+            { name: "PICADINHO 420g", price: 19, oldPrice: 21, descricao: "Arroz, feijão, carne, batata e cenoura.", img: "marmita21.jpg" },
+            { name: "PICADINHO 340g", price: 17, oldPrice: 19, descricao: "Arroz, feijão, carne, batata e cenoura.", img: "marmita21.jpg" },
+            { name: "NHOQUE A BOLONHESA 420g", price: 21, oldPrice: 23, descricao: "Nhoque, molho de tomate e carne moída.", img: "marmita22.jpg" },
+            { name: "NHOQUE A BOLONHESA 340g", price: 19, oldPrice: 21, descricao: "Nhoque, molho de tomate e carne moída.", img: "marmita22.jpg" },
+            { name: "FRANGO CREMOSO 420g", price: 18, oldPrice: 20, descricao: "Frango desfiado cremoso com batata doce.", img: "marmita23.jpg" },
+            { name: "FRANGO CREMOSO 340g", price: 16, oldPrice: 18, descricao: "Frango desfiado cremoso com batata doce.", img: "marmita23.jpg" },
+            { name: "SALMÃO 420g", price: 30, oldPrice: 32, descricao: "Salmão, purê de mandioquinha, cenoura e abobrinha.", img: "marmita24.jpg" },
+            { name: "FEIJOADA LIGTH 420g", price: 20, oldPrice: 22, descricao: "Arroz, feijão preto, carne seca, linguiça calabresa, couve e farofa.", img: "marmita25.jpg" },
+            { name: "FEIJOADA LIGTH 340g", price: 17, oldPrice: 19, descricao: "Arroz, feijão preto, carne seca, linguiça calabresa, couve e farofa.", img: "marmita25.jpg" },
+            { name: "ALCATRA 420g", price: 23, oldPrice: 25, descricao: "Alcatra, arroz, feijão e farofa.", img: "marmita26.jpg" },
+            { name: "ALCATRA 340g", price: 20, oldPrice: 22, descricao: "Alcatra, arroz, feijão e farofa.", img: "marmita26.jpg" },
+            { name: "CHARUTO DE REPOLHO 420g", price: 19, oldPrice: 21, descricao: "Repolho com recheio de carne moída, arroz e molho de tomate.", img: "marmita27.jpg" },
+            { name: "CHARUTO DE REPOLHO 340g", price: 16, oldPrice: 18, descricao: "Repolho com recheio de carne moída, arroz e molho de tomate.", img: "marmita27.jpg" },
+            { name: "FILÉ FRANGO FIT 420g", price: 18, oldPrice: 20, descricao: "Filé de frango grelhado com batata doce.", img: "marmita28.jpg" },
+            { name: "FILÉ FRANGO FIT 340g", price: 16, oldPrice: 18, descricao: "Filé de frango grelhado com batata doce.", img: "marmita28.jpg" },
+            { name: "PANQUECA CARNE 420g", price: 21, oldPrice: 23, descricao: "Panqueca de carne moída com molho de tomate.", img: "marmita29.jpg" },
+            { name: "PANQUECA CARNE 340g", price: 18, oldPrice: 20, descricao: "Panqueca de carne moída com molho de tomate.", img: "marmita29.jpg" },
+            { name: "PORPETONE 420g", price: 19, oldPrice: 21, descricao: "Arroz, feijão carioca e porpetone.", img: "marmita30.jpg" },
+            { name: "PORPETONE 340g", price: 17, oldPrice: 19, descricao: "Arroz, feijão carioca e porpetone.", img: "marmita30.jpg" },
+            { name: "STROGONOFF CARNE 420g", price: 21, oldPrice: 23, descricao: "Arroz, strogonoff de carne e batata dorê.", img: "marmita31.jpg" },
+            { name: "STROGONOFF CARNE 340g", price: 19, oldPrice: 21, descricao: "Arroz, strogonoff de carne e batata dorê.", img: "marmita31.jpg" }
         ];
 
         const produtos = {
             "MARMITAS CONGELADAS": marmitas,
             "KIT MARMITAS CONGELADAS": [
-                { name: "Kit 1", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 1", img: "kit1.jpg" },
-                { name: "Kit 2", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 2", img: "kit2.jpg" },
-                { name: "Kit 3", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 3", img: "kit3.jpg" },
-                { name: "Kit 4", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 4", img: "kit4.jpg" },
-                { name: "Kit 5", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 5", img: "kit5.jpg" },
-                { name: "Kit 6", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 6", img: "kit6.jpg" },
-                { name: "Kit 7", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 7", img: "kit7.jpg" },
-                { name: "Kit 8", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 8", img: "kit8.jpg" },
-                { name: "Kit 9", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 9", img: "kit9.jpg" },
-                { name: "Kit 10", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 10", img: "kit10.jpg" },
-                { name: "Kit 11", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 11", img: "kit11.jpg" },
-                { name: "Kit 12", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 12", img: "kit12.jpg" },
-                { name: "Kit 13", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 13", img: "kit13.jpg" }
+                { name: "Kit 1", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 1.", img: "kit1.jpg" },
+                { name: "Kit 2", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 2.", img: "kit2.jpg" },
+                { name: "Kit 3", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 3.", img: "kit3.jpg" },
+                { name: "Kit 4", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 4.", img: "kit4.jpg" },
+                { name: "Kit 5", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 5.", img: "kit5.jpg" },
+                { name: "Kit 6", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 6.", img: "kit6.jpg" },
+                { name: "Kit 7", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 7.", img: "kit7.jpg" },
+                { name: "Kit 8", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 8.", img: "kit8.jpg" },
+                { name: "Kit 9", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 9.", img: "kit9.jpg" },
+                { name: "Kit 10", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 10.", img: "kit10.jpg" },
+                { name: "Kit 11", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 11.", img: "kit11.jpg" },
+                { name: "Kit 12", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 12.", img: "kit12.jpg" },
+                { name: "Kit 13", price: 50, oldPrice: 60, descricao: "Conteúdo completo do Kit 13.", img: "kit13.jpg" }
             ]
         };
 
-        function renderHome() {
-            let html = "<h3>CATEGORIAS</h3>";
-            for (let cat in produtos) {
-                html += `<div class="card" onclick="navigate(()=>openCat('${cat}'))"><b>${cat}</b></div>`;
-            }
+        function getCategoryIcon(cat) {
+            if (cat.includes("KIT")) return "📦";
+            if (cat.includes("MARMITAS")) return "🍱";
+            return "🍴";
+        }
 
-            html += `
-                <div id="carousel-container" onclick="navigate(()=>openCat('KIT MARMITAS CONGELADAS'))" style="overflow-x:auto;display:flex;gap:10px;margin-top:20px;scroll-behavior:smooth;cursor:pointer;">
-                    <img src="carrosel1.jpg" style="width:80%; flex-shrink:0; border-radius:12px;">
-                    <img src="carrosel2.jpg" style="width:80%; flex-shrink:0; border-radius:12px;">
-                    <img src="carrosel3.jpg" style="width:80%; flex-shrink:0; border-radius:12px;">
-                    <img src="carrosel4.jpg" style="width:80%; flex-shrink:0; border-radius:12px;">
-                    <img src="carrosel5.jpg" style="width:80%; flex-shrink:0; border-radius:12px;">
-                    <img src="carrosel6.jpg" style="width:80%; flex-shrink:0; border-radius:12px;">
-                    <img src="carrosel7.jpg" style="width:80%; flex-shrink:0; border-radius:12px;">
-                    <img src="carrosel8.jpg" style="width:80%; flex-shrink:0; border-radius:12px;">
-                    <img src="carrosel9.jpg" style="width:80%; flex-shrink:0; border-radius:12px;">
-                    <img src="carrosel10.jpg" style="width:80%; flex-shrink:0; border-radius:12px;">
-                    <img src="carrosel11.jpg" style="width:80%; flex-shrink:0; border-radius:12px;">
-                    <img src="carrosel12.jpg" style="width:80%; flex-shrink:0; border-radius:12px;">
-                </div>
-            `;
-            html += `
-                <div style="margin-top:15px;font-size:13px;color:#ccc;text-align:center;line-height:1.4;">
-                    Os kits são previamente definidos e não podem ser alterados ou substituídos.
-                </div>
-            `;
-            html += `
-                <div style="margin-top:30px;font-size:12px;text-align:center">
-                    Rua Evangelina 440 - Vila Carrão<br><br>
-                    Comida prática e congelada de qualidade.
-                </div>`;
-            document.getElementById("app").innerHTML = html;
-            updateCartButton();
-            startCarousel();
+        function toast(msg = "Item adicionado ao pedido") {
+            const t = document.getElementById("toast");
+            t.innerText = msg;
+            t.style.display = "block";
+            setTimeout(() => t.style.display = "none", 1600);
         }
 
         function startCarousel() {
@@ -458,26 +762,96 @@
             if (!container) return;
 
             carouselTimer = setInterval(() => {
-                const scrollAmount = container.offsetWidth * 0.8;
-                if (container.scrollLeft + container.offsetWidth >= container.scrollWidth) {
+                const scrollAmount = container.offsetWidth * 0.82;
+                if (container.scrollLeft + container.offsetWidth >= container.scrollWidth - 5) {
                     container.scrollTo({ left: 0, behavior: 'smooth' });
                 } else {
                     container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
                 }
-            }, 4000);
+            }, 3600);
+        }
+
+        function renderHome() {
+            let html = `
+                <div class="hero">
+                    <div class="hero-badge">🔥 Pedido rápido • direto no WhatsApp</div>
+                    <h2>Marmitas ultracongeladas com sabor caseiro e praticidade de verdade</h2>
+                    <p>Monte seu pedido em poucos minutos, escolha a forma de entrega e receba tudo com mais praticidade no dia a dia.</p>
+
+                    <div class="hero-grid">
+                        <div class="hero-item"><b>🚚 Entrega</b>Em boa parte de São Paulo</div>
+                        <div class="hero-item"><b>💳 Pagamento</b>Pix, cartão e voucher</div>
+                        <div class="hero-item"><b>📲 Pedido</b>Finalização no WhatsApp</div>
+                    </div>
+                </div>
+
+                <div class="section-title">CATEGORIAS</div>
+            `;
+
+            for (let cat in produtos) {
+                html += `
+                    <div class="card category-card" onclick="navigate(()=>openCat('${cat}'))">
+                        <div class="flex" style="justify-content:flex-start;align-items:center;gap:12px;flex:1;">
+                            <div class="category-icon">${getCategoryIcon(cat)}</div>
+                            <div class="category-meta">
+                                <b>${cat}</b>
+                                <small>${cat.includes("KIT") ? "Combinações prontas para facilitar o pedido." : "Marmitas práticas, saborosas e prontas para o seu dia."}</small>
+                            </div>
+                        </div>
+                        <div class="category-arrow">›</div>
+                    </div>
+                `;
+            }
+
+            html += `
+                <div class="section-title" style="margin-top:20px;">🔥 DESTAQUES DA SEMANA</div>
+                <div id="carousel-container" onclick="navigate(()=>openCat('KIT MARMITAS CONGELADAS'))" style="overflow-x:auto;display:flex;gap:10px;scroll-behavior:smooth;cursor:pointer;">
+                    <img src="carrosel1.jpg" style="width:82%;flex-shrink:0;border-radius:16px;box-shadow:var(--shadow);">
+                    <img src="carrosel2.jpg" style="width:82%;flex-shrink:0;border-radius:16px;box-shadow:var(--shadow);">
+                    <img src="carrosel3.jpg" style="width:82%;flex-shrink:0;border-radius:16px;box-shadow:var(--shadow);">
+                    <img src="carrosel4.jpg" style="width:82%;flex-shrink:0;border-radius:16px;box-shadow:var(--shadow);">
+                    <img src="carrosel5.jpg" style="width:82%;flex-shrink:0;border-radius:16px;box-shadow:var(--shadow);">
+                    <img src="carrosel6.jpg" style="width:82%;flex-shrink:0;border-radius:16px;box-shadow:var(--shadow);">
+                    <img src="carrosel7.jpg" style="width:82%;flex-shrink:0;border-radius:16px;box-shadow:var(--shadow);">
+                    <img src="carrosel8.jpg" style="width:82%;flex-shrink:0;border-radius:16px;box-shadow:var(--shadow);">
+                    <img src="carrosel9.jpg" style="width:82%;flex-shrink:0;border-radius:16px;box-shadow:var(--shadow);">
+                    <img src="carrosel10.jpg" style="width:82%;flex-shrink:0;border-radius:16px;box-shadow:var(--shadow);">
+                    <img src="carrosel11.jpg" style="width:82%;flex-shrink:0;border-radius:16px;box-shadow:var(--shadow);">
+                    <img src="carrosel12.jpg" style="width:82%;flex-shrink:0;border-radius:16px;box-shadow:var(--shadow);">
+                </div>
+
+                <div style="margin-top:14px;font-size:13px;color:#ddd;text-align:center;line-height:1.5;">
+                    Os kits são previamente definidos e não podem ser alterados ou substituídos.
+                </div>
+
+                <div class="mini-info">
+                    <div class="mini-card"><b>⭐ Qualidade</b>Comida prática com padrão de cuidado e sabor.</div>
+                    <div class="mini-card"><b>📦 Organização</b>Kits e marmitas para facilitar sua rotina.</div>
+                    <div class="mini-card"><b>🏠 Endereço</b>Rua Evangelina, 440 • Vila Carrão</div>
+                </div>
+            `;
+
+            document.getElementById("app").innerHTML = html;
+            updateCartButton();
+            startCarousel();
         }
 
         function openCat(cat) {
             if (carouselTimer) clearInterval(carouselTimer);
-            let html = `<button onclick="history.back()">⬅ Voltar</button><h3>${cat}</h3>`;
+            let html = `
+                <div class="flex" style="margin-bottom:14px;">
+                    <button class="ghost" onclick="history.back()">⬅ Voltar</button>
+                    <div class="pill">${getCategoryIcon(cat)} ${cat}</div>
+                </div>
 
-            html += `
                 <input type="text" id="searchInput" class="search-input" placeholder="Pesquisar produto..." onkeyup="filterProducts('${cat}')">
-                <div class="grid-kits" id="productGrid">`;
+                <div class="grid-kits" id="productGrid">
+            `;
 
             produtos[cat].forEach((p, i) => {
                 html += renderProductCard(p, cat, i);
             });
+
             html += `</div>`;
             document.getElementById("app").innerHTML = html;
             updateCartButton();
@@ -490,24 +864,25 @@
 
             return `
                 <div class="card product-item">
-                    <img src="${p.img}" class="${cursorClass}" ${clickAction}>
-                    <b class="product-name">${p.name}</b><br>
-                    <p style="color:#ccc;margin:4px 0 6px;">${p.descricao}</p>
-                    <div class="flex">
-                        <div style="font-size:11px">
-                            <s>R$ ${p.oldPrice}</s><br>
-                            <span style="color:#FFD700;font-weight:700;font-size:14px">R$ ${p.price}</span>
+                    <img src="${p.img}" class="${cursorClass}" ${clickAction} alt="${p.name}">
+                    <b class="product-name">${p.name}</b>
+                    <p>${p.descricao}</p>
+                    <div class="flex" style="margin-top:auto;">
+                        <div class="price-wrap">
+                            <span class="old-price"><s>R$ ${p.oldPrice.toFixed(2)}</s></span>
+                            <span class="new-price">R$ ${p.price.toFixed(2)}</span>
                         </div>
-                        <button class="primary small" onclick="add('${cat}',${i})">+</button>
+                        <button class="primary small" onclick="add('${cat}',${i})">Adicionar</button>
                     </div>
-                </div>`;
+                </div>
+            `;
         }
 
         function filterProducts(cat) {
             let val = document.getElementById("searchInput").value.toLowerCase();
             let items = document.getElementsByClassName("product-item");
             produtos[cat].forEach((p, i) => {
-                let match = p.name.toLowerCase().includes(val);
+                let match = p.name.toLowerCase().includes(val) || p.descricao.toLowerCase().includes(val);
                 items[i].style.display = match ? "flex" : "none";
             });
         }
@@ -516,34 +891,51 @@
             modalAberto = true;
             history.pushState({ modal: true }, "");
 
-            let modal = document.createElement("div");
+            const modal = document.createElement("div");
             modal.className = "modal";
             modal.id = "modalView";
             modal.innerHTML = `
                 <div class="modal-content" onclick="event.stopPropagation()">
-                    <div class="close-modal" onclick="fecharModal()">X</div>
-                    <img src="${img}">
-                    <p style="text-align:center; margin-top:15px; font-weight:600; font-size:14px; color:#fff;">${desc}</p>
-                </div>`;
+                    <div class="close-modal" onclick="fecharModal()">×</div>
+                    <img src="${img}" alt="Imagem do produto">
+                    <p style="text-align:center;margin:14px 6px 4px;font-weight:600;font-size:14px;color:#fff;line-height:1.55;">${desc}</p>
+                </div>
+            `;
             modal.onclick = fecharModal;
             document.body.appendChild(modal);
         }
 
         function fecharModal() {
-            let m = document.getElementById("modalView");
+            const m = document.getElementById("modalView");
             if (m) m.remove();
             modalAberto = false;
         }
 
         function add(cat, i) {
-            let item = produtos[cat][i];
-            let f = cart.find(x => x.name == item.name);
+            const item = produtos[cat][i];
+            const f = cart.find(x => x.name === item.name);
             if (f) {
                 f.qty++;
             } else {
                 cart.push({ ...item, qty: 1 });
             }
-            toast();
+            toast("Item adicionado ao pedido");
+            updateCartButton();
+        }
+
+        function increaseQty(index) {
+            cart[index].qty++;
+            renderCart();
+            updateCartButton();
+        }
+
+        function decreaseQty(index) {
+            if (cart[index].qty > 1) {
+                cart[index].qty--;
+            } else {
+                cart.splice(index, 1);
+            }
+            renderCart();
             updateCartButton();
         }
 
@@ -551,76 +943,136 @@
             cart.splice(index, 1);
             renderCart();
             updateCartButton();
-        }
-
-        function toast() {
-            let t = document.getElementById("toast");
-            t.style.display = "block";
-            setTimeout(() => t.style.display = "none", 1500);
+            toast("Item removido");
         }
 
         function updateCartButton() {
-            let btn = document.getElementById("cart-btn");
+            const btn = document.getElementById("cart-btn");
+            const totalItems = cart.reduce((s, i) => s + i.qty, 0);
+
             if (cart.length > 0) {
                 btn.classList.remove("hidden");
             } else {
                 btn.classList.add("hidden");
             }
-            document.getElementById("cart-count").innerText = cart.reduce((s, i) => s + i.qty, 0);
+
+            document.getElementById("cart-count").innerText = totalItems;
         }
 
         function renderCart() {
-            let html = "<button onclick='history.back()'>⬅ Voltar</button><h3>Carrinho</h3>";
             let subtotal = 0;
+            let html = `
+                <div class="flex" style="margin-bottom:14px;">
+                    <button class="ghost" onclick="history.back()">⬅ Voltar</button>
+                    <div class="pill">🛒 Seu pedido</div>
+                </div>
+            `;
+
             if (cart.length === 0) {
-                html += "<p>Seu carrinho está vazio.</p>";
+                html += `<div class="card"><p style="margin:0;color:#ddd;">Seu carrinho está vazio.</p></div>`;
             } else {
-                cart.forEach((i, index) => {
-                    subtotal += i.price * i.qty;
+                cart.forEach((item, index) => {
+                    subtotal += item.price * item.qty;
                     html += `
-                    <div class="card flex">
-                        <div>${i.qty}x ${i.name}<br><small>R$ ${(i.price * i.qty).toFixed(2)}</small></div>
-                        <button class="remove-btn" onclick="removeFromCart(${index})">X</button>
-                    </div>`;
+                        <div class="card">
+                            <div class="cart-item">
+                                <img src="${item.img}" class="cart-thumb" alt="${item.name}">
+                                <div style="flex:1;">
+                                    <b style="display:block;margin-bottom:4px;">${item.name}</b>
+                                    <small style="color:#ccc;">R$ ${item.price.toFixed(2)} cada</small>
+                                    <div class="cart-actions">
+                                        <button class="qty-btn" onclick="decreaseQty(${index})">−</button>
+                                        <span style="min-width:20px;text-align:center;font-weight:800;">${item.qty}</span>
+                                        <button class="qty-btn" onclick="increaseQty(${index})">+</button>
+                                        <button class="remove-btn" onclick="removeFromCart(${index})">×</button>
+                                    </div>
+                                </div>
+                                <div style="font-weight:800;color:#ffe486;">R$ ${(item.price * item.qty).toFixed(2)}</div>
+                            </div>
+                        </div>
+                    `;
                 });
-                html += `<h4>Subtotal: R$ ${subtotal.toFixed(2)}</h4>`;
-                html += `<button class="primary" onclick="navigate(renderCheckout)">Avançar para Checkout</button>`;
+
+                html += `
+                    <div class="card summary-box">
+                        <div class="flex">
+                            <b>Subtotal</b>
+                            <b>R$ ${subtotal.toFixed(2)}</b>
+                        </div>
+                        <div class="divider"></div>
+                        <button class="primary" onclick="navigate(renderCheckout)">Avançar para checkout</button>
+                    </div>
+                `;
             }
+
             document.getElementById("app").innerHTML = html;
+            updateCartButton();
         }
 
         function renderCheckout() {
             let html = `
-                <button onclick="history.back()">⬅ Voltar</button><h3>Dados do Pedido</h3>
-                <input id="nome" placeholder="Seu nome">
-                <input id="fone" placeholder="Telefone">
-                <select id="tipo" onchange="toggleEndereco()">
-                    <option value="Entrega">Entrega</option>
-                    <option value="Retirada">Retirada</option>
-                </select>
-                <div id="enderecoBox">
-                    <input id="cep" placeholder="CEP" onblur="buscarCEP()" oninput="formatarCEP(this)">
-                    <input id="endereco" placeholder="Rua / Bairro" onblur="calcularFrete()">
-                    <div class="flex" style="gap:10px">
-                        <input id="num" placeholder="Nº" style="width:30%" onblur="calcularFrete()">
-                        <input id="comp" placeholder="Complemento" style="width:70%" onblur="calcularFrete()">
-                    </div>
+                <div class="flex" style="margin-bottom:14px;">
+                    <button class="ghost" onclick="history.back()">⬅ Voltar</button>
+                    <div class="pill">📋 Finalizar pedido</div>
                 </div>
-                <label>Pagamento:</label>
-                <select id="pag">
-                    <option>Pix</option>
-                    <option>Cartão</option>
-                    <option>Voucher</option>
-                </select>
-                <div id="freteBox" class="frete-info"></div>
-                <button class="primary" onclick="revisao()">Revisar Pedido</button>`;
+
+                <div class="card">
+                    <span class="input-label">Nome</span>
+                    <input id="nome" placeholder="Digite seu nome">
+
+                    <span class="input-label">Telefone</span>
+                    <input id="fone" placeholder="(11) 99999-9999" oninput="formatarTelefone(this)">
+
+                    <span class="input-label">Tipo do pedido</span>
+                    <select id="tipo" onchange="toggleEndereco()">
+                        <option value="Entrega">Entrega</option>
+                        <option value="Retirada">Retirada</option>
+                    </select>
+
+                    <div id="enderecoBox">
+                        <span class="input-label">CEP</span>
+                        <input id="cep" placeholder="Digite o CEP" onblur="buscarCEP()" oninput="formatarCEP(this)">
+
+                        <span class="input-label">Endereço</span>
+                        <input id="endereco" placeholder="Rua, bairro, cidade" onblur="calcularFrete()">
+
+                        <div class="flex" style="gap:10px;">
+                            <div style="width:32%;">
+                                <span class="input-label">Número</span>
+                                <input id="num" placeholder="Nº" onblur="calcularFrete()">
+                            </div>
+                            <div style="width:68%;">
+                                <span class="input-label">Complemento</span>
+                                <input id="comp" placeholder="Apto, bloco, referência" onblur="calcularFrete()">
+                            </div>
+                        </div>
+                    </div>
+
+                    <span class="input-label">Pagamento</span>
+                    <select id="pag">
+                        <option>Pix</option>
+                        <option>Cartão</option>
+                        <option>Voucher</option>
+                    </select>
+
+                    <div id="freteBox" class="frete-info">
+                        <span class="muted">Preencha os dados para calcular o frete.</span>
+                    </div>
+
+                    <button class="primary" onclick="revisao()">Revisar pedido</button>
+                </div>
+            `;
+
             document.getElementById("app").innerHTML = html;
         }
 
         function toggleEndereco() {
             const isEntrega = document.getElementById("tipo").value === "Entrega";
             document.getElementById("enderecoBox").classList.toggle("hidden", !isEntrega);
-            document.getElementById("freteBox").innerHTML = isEntrega ? "" : "<b>Retirada no local</b>";
+            document.getElementById("freteBox").innerHTML = isEntrega
+                ? `<span class="muted">Preencha os dados para calcular o frete.</span>`
+                : `<b>Retirada no local</b><br><span class="muted">Sem cobrança de frete.</span>`;
+
             if (!isEntrega) {
                 frete = 0;
                 distanciaFreteKm = 0;
@@ -629,6 +1081,20 @@
 
         function formatarCEP(input) {
             input.value = input.value.replace(/\D/g, "").slice(0, 8);
+        }
+
+        function formatarTelefone(input) {
+            let valor = input.value.replace(/\D/g, "").slice(0, 11);
+            if (valor.length > 10) {
+                valor = valor.replace(/^(\d{2})(\d{5})(\d{4}).*/, '($1) $2-$3');
+            } else if (valor.length > 6) {
+                valor = valor.replace(/^(\d{2})(\d{4,5})(\d{0,4}).*/, '($1) $2-$3');
+            } else if (valor.length > 2) {
+                valor = valor.replace(/^(\d{2})(\d{0,5})/, '($1) $2');
+            } else if (valor.length > 0) {
+                valor = valor.replace(/^(\d{0,2})/, '($1');
+            }
+            input.value = valor;
         }
 
         function normalizarTexto(txt) {
@@ -644,15 +1110,11 @@
             if (!endereco) return "";
 
             let partes = [endereco];
-
             if (numero) partes.push(numero);
             if (comp) partes.push(comp);
-
             if (cep) partes.push(cep);
-
             if (!endereco.toLowerCase().includes("são paulo")) partes.push(CIDADE_BASE);
             if (!endereco.toLowerCase().includes("sp")) partes.push(ESTADO_BASE);
-
             partes.push("Brasil");
 
             return partes.filter(Boolean).join(", ");
@@ -682,13 +1144,13 @@
 
         async function getCoordsNominatim(end) {
             try {
-                let url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=br&q=${encodeURIComponent(end)}`;
-                let res = await fetch(url, {
+                const url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=br&q=${encodeURIComponent(end)}`;
+                const res = await fetch(url, {
                     headers: {
                         "Accept-Language": "pt-BR,pt;q=0.9"
                     }
                 });
-                let data = await res.json();
+                const data = await res.json();
                 if (data && data[0]) {
                     return { lat: Number(data[0].lat), lon: Number(data[0].lon) };
                 }
@@ -718,11 +1180,15 @@
         }
 
         function distanciaReta(lat1, lon1, lat2, lon2) {
-            let R = 6371;
-            let dLat = (lat2 - lat1) * Math.PI / 180;
-            let dLon = (lon2 - lon1) * Math.PI / 180;
-            let a = Math.sin(dLat / 2) ** 2 + Math.cos(lat1 * Math.PI / 180) * Math.cos(lat2 * Math.PI / 180) * Math.sin(dLon / 2) ** 2;
-            let c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
+            const R = 6371;
+            const dLat = (lat2 - lat1) * Math.PI / 180;
+            const dLon = (lon2 - lon1) * Math.PI / 180;
+            const a =
+                Math.sin(dLat / 2) ** 2 +
+                Math.cos(lat1 * Math.PI / 180) *
+                Math.cos(lat2 * Math.PI / 180) *
+                Math.sin(dLon / 2) ** 2;
+            const c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1 - a));
             return R * c;
         }
 
@@ -747,31 +1213,21 @@
 
             const data = await res.json();
             const metros = data.routes?.[0]?.summary?.distance;
-
-            if (!metros) {
-                throw new Error("Distância da rota não encontrada");
-            }
+            if (!metros) throw new Error("Distância da rota não encontrada");
 
             return metros / 1000;
         }
 
         function calcularFreteMotoboy(km) {
-            let valor = 0;
-
-            if (km <= 3) {
-                valor = 10.90;
-            } else if (km <= 5) {
-                valor = 12.90 + ((km - 3) * 2.20);
-            } else if (km <= 8) {
-                valor = 17.30 + ((km - 5) * 2.60);
-            } else if (km <= 12) {
-                valor = 25.10 + ((km - 8) * 2.90);
-            } else {
-                valor = 36.70 + ((km - 12) * 3.20);
-            }
-
-            if (valor < FRETE_MINIMO_MOTO) valor = FRETE_MINIMO_MOTO;
-            return Number(valor.toFixed(2));
+            if (km <= 5) return 12;
+            if (km <= 8) return 15;
+            if (km <= 12) return 18;
+            if (km <= 15) return 22;
+            if (km <= 20) return 28;
+            if (km <= 25) return 35;
+            if (km <= 30) return 45;
+            if (km <= 35) return 55;
+            return 0;
         }
 
         function enderecoMinimoPreenchido() {
@@ -793,7 +1249,7 @@
             if (tipo !== "Entrega") {
                 frete = 0;
                 distanciaFreteKm = 0;
-                freteBox.innerHTML = "<b>Retirada no local</b>";
+                freteBox.innerHTML = `<b>Retirada no local</b><br><span class="muted">Sem cobrança de frete.</span>`;
                 return;
             }
 
@@ -806,7 +1262,7 @@
 
             if (calculandoFrete) return;
             calculandoFrete = true;
-            freteBox.innerHTML = "Calculando frete...";
+            freteBox.innerHTML = `Calculando frete...`;
 
             const clienteCompleto = montarEnderecoClienteCompleto();
 
@@ -828,7 +1284,7 @@
                 if (kmReta > DISTANCIA_MAXIMA_KM) {
                     frete = 0;
                     distanciaFreteKm = 0;
-                    freteBox.innerHTML = `<span class="frete-erro">Endereço fora da área de entrega.</span><br><span class="muted">Distância estimada acima do limite permitido.</span>`;
+                    freteBox.innerHTML = `<span class="frete-erro">Endereço fora da área de entrega.</span><br><span class="muted">Consulte a loja para essa região.</span>`;
                     calculandoFrete = false;
                     return;
                 }
@@ -838,23 +1294,23 @@
                 try {
                     km = await getRouteDistanceKm(origem, destino);
                 } catch (e) {
-                    km = kmReta * 1.35;
+                    km = kmReta * 1.3;
                 }
 
                 if (!isFinite(km) || km <= 0 || km > DISTANCIA_MAXIMA_KM) {
                     frete = 0;
                     distanciaFreteKm = 0;
-                    freteBox.innerHTML = `<span class="frete-erro">Não foi possível calcular o frete com segurança.</span>`;
+                    freteBox.innerHTML = `<span class="frete-erro">Não foi possível calcular o frete com segurança.</span><br><span class="muted">Confira o endereço informado.</span>`;
                     calculandoFrete = false;
                     return;
                 }
 
                 const valorFrete = calcularFreteMotoboy(km);
 
-                if (valorFrete > FRETE_MAXIMO_AUTOMATICO) {
+                if (valorFrete <= 0) {
                     frete = 0;
                     distanciaFreteKm = 0;
-                    freteBox.innerHTML = `<span class="frete-erro">Endereço fora da política de frete automático.</span>`;
+                    freteBox.innerHTML = `<span class="frete-erro">Essa região precisa de confirmação manual.</span><br><span class="muted">Consulte a loja para calcular o frete.</span>`;
                     calculandoFrete = false;
                     return;
                 }
@@ -863,14 +1319,13 @@
                 distanciaFreteKm = km;
 
                 freteBox.innerHTML = `
-                    <b>Frete: R$ ${frete.toFixed(2)}</b>
-                    <small>(${km.toFixed(1)} km por rota estimada)</small><br>
-                    <span class="muted">Cálculo para entrega por motoboy.</span>
+                    <b>Frete: R$ ${frete.toFixed(2)}</b><br>
+                    <span class="muted">${km.toFixed(1)} km por rota estimada • entrega por motoboy</span>
                 `;
             } catch (e) {
                 frete = 0;
                 distanciaFreteKm = 0;
-                freteBox.innerHTML = `<span class="frete-erro">Erro ao calcular frete. Confira o endereço.</span>`;
+                freteBox.innerHTML = `<span class="frete-erro">Erro ao calcular frete.</span><br><span class="muted">Confira o endereço e tente novamente.</span>`;
             } finally {
                 calculandoFrete = false;
             }
@@ -905,9 +1360,9 @@
             }
 
             dadosPedido = {
-                nome: nome,
-                fone: fone,
-                tipo: tipo,
+                nome,
+                fone,
+                tipo,
                 cep: document.getElementById("cep") ? document.getElementById("cep").value : "",
                 endereco: document.getElementById("endereco") ? document.getElementById("endereco").value : "",
                 num: document.getElementById("num") ? document.getElementById("num").value : "",
@@ -919,63 +1374,86 @@
         }
 
         function renderRevisao() {
-            let subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
-            let total = dadosPedido.tipo == "Entrega" ? subtotal + frete : subtotal;
-            let html = "<h3>Confirmar Pedido</h3>";
-            html += `Cliente: ${dadosPedido.nome}<br>`;
-            html += `Telefone: ${dadosPedido.fone}<br>`;
+            const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+            const total = dadosPedido.tipo === "Entrega" ? subtotal + frete : subtotal;
 
-            if (dadosPedido.tipo == "Entrega") {
-                html += `Endereço: ${dadosPedido.endereco}, Nº ${dadosPedido.num}${dadosPedido.comp ? ' (' + dadosPedido.comp + ')' : ''}<br>`;
-                html += `CEP: ${dadosPedido.cep}<br>`;
-                html += `Frete calculado por motoboy: ${distanciaFreteKm ? distanciaFreteKm.toFixed(1) + " km" : "-"}<br>`;
+            let html = `
+                <div class="flex" style="margin-bottom:14px;">
+                    <button class="ghost" onclick="history.back()">⬅ Voltar</button>
+                    <div class="pill">✅ Confirmar pedido</div>
+                </div>
+
+                <div class="card">
+                    <div class="revisao-line"><b>Cliente:</b> ${dadosPedido.nome}</div>
+                    <div class="revisao-line"><b>Telefone:</b> ${dadosPedido.fone}</div>
+                    <div class="revisao-line"><b>Tipo:</b> ${dadosPedido.tipo}</div>
+                    <div class="revisao-line"><b>Pagamento:</b> ${dadosPedido.pag}</div>
+            `;
+
+            if (dadosPedido.tipo === "Entrega") {
+                html += `
+                    <div class="revisao-line"><b>CEP:</b> ${dadosPedido.cep}</div>
+                    <div class="revisao-line"><b>Endereço:</b> ${dadosPedido.endereco}, Nº ${dadosPedido.num}${dadosPedido.comp ? ` (${dadosPedido.comp})` : ""}</div>
+                    <div class="revisao-line"><b>Distância estimada:</b> ${distanciaFreteKm ? distanciaFreteKm.toFixed(1) + " km" : "-"}</div>
+                `;
             }
 
-            html += "<br><b>Itens:</b><br>";
+            html += `<div class="divider"></div><div class="revisao-line"><b>Itens do pedido:</b></div>`;
+
             cart.forEach(i => {
-                html += `${i.qty}x ${i.name}<br>`;
+                html += `<div class="revisao-line">${i.qty}x ${i.name}</div>`;
             });
 
-            html += `<hr>Subtotal: R$ ${subtotal.toFixed(2)}<br>`;
-            if (dadosPedido.tipo == "Entrega") {
-                html += `Frete: R$ ${frete.toFixed(2)}<br>`;
+            html += `
+                    <div class="divider"></div>
+                    <div class="flex"><span>Subtotal</span><b>R$ ${subtotal.toFixed(2)}</b></div>
+            `;
+
+            if (dadosPedido.tipo === "Entrega") {
+                html += `<div class="flex" style="margin-top:8px;"><span>Frete</span><b>R$ ${frete.toFixed(2)}</b></div>`;
             }
-            html += `Total: R$ ${total.toFixed(2)}<br>`;
-            html += `Pagamento: ${dadosPedido.pag}<br>`;
-            html += `<br><button class="primary" onclick="finalizar()">Enviar Pedido</button>`;
+
+            html += `
+                    <div class="flex" style="margin-top:10px;font-size:18px;">
+                        <span><b>Total</b></span>
+                        <b style="color:#ffe486;">R$ ${total.toFixed(2)}</b>
+                    </div>
+                    <div class="divider"></div>
+                    <button class="primary" onclick="finalizar()">Enviar pedido</button>
+                </div>
+            `;
+
             document.getElementById("app").innerHTML = html;
             updateCartButton();
         }
 
         function finalizar() {
-            let subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
-            let total = dadosPedido.tipo == "Entrega" ? subtotal + frete : subtotal;
+            const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+            const total = dadosPedido.tipo === "Entrega" ? subtotal + frete : subtotal;
 
             let msg = "*Pedido - Laencasa Ultracongelados*%0A%0A";
             msg += `Nome: ${dadosPedido.nome}%0A`;
             msg += `Telefone: ${dadosPedido.fone}%0A`;
             msg += `Tipo: ${dadosPedido.tipo}%0A`;
 
-            if (dadosPedido.tipo == "Entrega") {
+            if (dadosPedido.tipo === "Entrega") {
                 msg += `CEP: ${dadosPedido.cep}%0A`;
                 msg += `Endereço: ${dadosPedido.endereco}, Nº ${dadosPedido.num}%0A`;
                 if (dadosPedido.comp) msg += `Comp: ${dadosPedido.comp}%0A`;
                 if (distanciaFreteKm) msg += `Distância estimada: ${distanciaFreteKm.toFixed(1)} km%0A`;
+                msg += `Frete: R$ ${frete.toFixed(2)}%0A`;
             }
 
             msg += `%0AItens:%0A`;
             cart.forEach(i => {
-                msg += `${i.qty}x ${i.name}%0A`;
+                msg += `${i.qty}x ${i.name} - R$ ${(i.price * i.qty).toFixed(2)}%0A`;
             });
 
             msg += `%0ASubtotal: R$ ${subtotal.toFixed(2)}%0A`;
-            if (dadosPedido.tipo == "Entrega") {
-                msg += `Frete: R$ ${frete.toFixed(2)}%0A`;
-            }
             msg += `Total: R$ ${total.toFixed(2)}%0A`;
             msg += `Pagamento: ${dadosPedido.pag}%0A`;
 
-            window.open(`https://wa.me/5511952282056?text=${msg}`);
+            window.open(`https://wa.me/${11939103186}?text=${msg}`, "_blank");
         }
 
         navigate(renderHome);
