@@ -268,6 +268,22 @@
         #carousel-container::-webkit-scrollbar {
             display: none;
         }
+
+        .frete-info {
+            margin: 10px 0 14px;
+            font-size: 15px;
+            line-height: 1.5;
+        }
+
+        .frete-erro {
+            color: #FFD700;
+            font-weight: 700;
+        }
+
+        .muted {
+            color: #ddd;
+            font-size: 12px;
+        }
     </style>
 </head>
 
@@ -292,16 +308,22 @@
     </div>
 
     <script>
-        const TAXA = 7;
-        const RESTAURANTE_END = "Rua Evangelina 404 , Vila Carrao Sao Paulo 03421000";
+        const RESTAURANTE_END = "Rua Evangelina, 440, Vila Carrão, São Paulo, SP, 03421-000, Brasil";
+        const CIDADE_BASE = "São Paulo";
+        const ESTADO_BASE = "SP";
+        const FRETE_MINIMO_MOTO = 8.90;
+        const FRETE_MAXIMO_AUTOMATICO = 80;
+        const DISTANCIA_MAXIMA_KM = 30;
         const ORS_API_KEY = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6Ijk1YWRlZjgxOGJkZjRmZmVhNzI0MTU3ZjMxMWI1MDc1IiwiaCI6Im11cm11cjY0In0=";
 
         let cart = [];
         let viewStack = [];
         let dadosPedido = {};
         let frete = 0;
+        let distanciaFreteKm = 0;
         let modalAberto = false;
         let carouselTimer;
+        let calculandoFrete = false;
 
         function navigate(fn) {
             viewStack.push(fn);
@@ -309,7 +331,7 @@
             fn();
         }
 
-        window.addEventListener("popstate", function() {
+        window.addEventListener("popstate", function () {
             if (modalAberto) {
                 fecharModal();
                 return;
@@ -422,7 +444,7 @@
             `;
             html += `
                 <div style="margin-top:30px;font-size:12px;text-align:center">
-                    Rua Evangelina 404 - Vila Carrão<br><br>
+                    Rua Evangelina 440 - Vila Carrão<br><br>
                     Comida prática e congelada de qualidade.
                 </div>`;
             document.getElementById("app").innerHTML = html;
@@ -509,9 +531,7 @@
 
         function fecharModal() {
             let m = document.getElementById("modalView");
-            if (m) {
-                m.remove();
-            }
+            if (m) m.remove();
             modalAberto = false;
         }
 
@@ -519,12 +539,9 @@
             let item = produtos[cat][i];
             let f = cart.find(x => x.name == item.name);
             if (f) {
-                f.qty++
+                f.qty++;
             } else {
-                cart.push({
-                    ...item,
-                    qty: 1
-                })
+                cart.push({ ...item, qty: 1 });
             }
             toast();
             updateCartButton();
@@ -562,7 +579,7 @@
                     subtotal += i.price * i.qty;
                     html += `
                     <div class="card flex">
-                        <div>${i.qty}x ${i.name}<br><small>R$ ${(i.price*i.qty).toFixed(2)}</small></div>
+                        <div>${i.qty}x ${i.name}<br><small>R$ ${(i.price * i.qty).toFixed(2)}</small></div>
                         <button class="remove-btn" onclick="removeFromCart(${index})">X</button>
                     </div>`;
                 });
@@ -582,11 +599,11 @@
                     <option value="Retirada">Retirada</option>
                 </select>
                 <div id="enderecoBox">
-                    <input id="cep" placeholder="CEP" onblur="buscarCEP()">
-                    <input id="endereco" placeholder="Rua / Bairro">
+                    <input id="cep" placeholder="CEP" onblur="buscarCEP()" oninput="formatarCEP(this)">
+                    <input id="endereco" placeholder="Rua / Bairro" onblur="calcularFrete()">
                     <div class="flex" style="gap:10px">
-                        <input id="num" placeholder="Nº" style="width:30%">
-                        <input id="comp" placeholder="Complemento" style="width:70%">
+                        <input id="num" placeholder="Nº" style="width:30%" onblur="calcularFrete()">
+                        <input id="comp" placeholder="Complemento" style="width:70%" onblur="calcularFrete()">
                     </div>
                 </div>
                 <label>Pagamento:</label>
@@ -595,31 +612,77 @@
                     <option>Cartão</option>
                     <option>Voucher</option>
                 </select>
-                <div id="freteBox"></div>
+                <div id="freteBox" class="frete-info"></div>
                 <button class="primary" onclick="revisao()">Revisar Pedido</button>`;
             document.getElementById("app").innerHTML = html;
         }
 
         function toggleEndereco() {
-            document.getElementById("enderecoBox").classList.toggle("hidden", document.getElementById("tipo").value != "Entrega");
+            const isEntrega = document.getElementById("tipo").value === "Entrega";
+            document.getElementById("enderecoBox").classList.toggle("hidden", !isEntrega);
+            document.getElementById("freteBox").innerHTML = isEntrega ? "" : "<b>Retirada no local</b>";
+            if (!isEntrega) {
+                frete = 0;
+                distanciaFreteKm = 0;
+            }
+        }
+
+        function formatarCEP(input) {
+            input.value = input.value.replace(/\D/g, "").slice(0, 8);
+        }
+
+        function normalizarTexto(txt) {
+            return (txt || "").replace(/\s+/g, " ").trim();
+        }
+
+        function montarEnderecoClienteCompleto() {
+            const cep = normalizarTexto(document.getElementById("cep")?.value || "");
+            const endereco = normalizarTexto(document.getElementById("endereco")?.value || "");
+            const numero = normalizarTexto(document.getElementById("num")?.value || "");
+            const comp = normalizarTexto(document.getElementById("comp")?.value || "");
+
+            if (!endereco) return "";
+
+            let partes = [endereco];
+
+            if (numero) partes.push(numero);
+            if (comp) partes.push(comp);
+
+            if (cep) partes.push(cep);
+
+            if (!endereco.toLowerCase().includes("são paulo")) partes.push(CIDADE_BASE);
+            if (!endereco.toLowerCase().includes("sp")) partes.push(ESTADO_BASE);
+
+            partes.push("Brasil");
+
+            return partes.filter(Boolean).join(", ");
         }
 
         async function buscarCEP() {
-            let cep = document.getElementById("cep").value;
-            if (cep.length < 8) return;
+            let cep = (document.getElementById("cep").value || "").replace(/\D/g, "");
+            if (cep.length !== 8) return;
+
             try {
                 let res = await fetch(`https://viacep.com.br/ws/${cep}/json/`);
                 let data = await res.json();
+
                 if (!data.erro) {
-                    document.getElementById("endereco").value = `${data.logradouro}, ${data.bairro}, ${data.localidade}`;
-                    calcularFrete();
+                    const enderecoMontado = [data.logradouro, data.bairro, data.localidade, data.uf]
+                        .filter(Boolean)
+                        .join(", ");
+                    document.getElementById("endereco").value = enderecoMontado;
+                    await calcularFrete();
+                } else {
+                    document.getElementById("freteBox").innerHTML = `<span class="frete-erro">CEP não encontrado.</span>`;
                 }
-            } catch (e) { console.log("Erro CEP"); }
+            } catch (e) {
+                document.getElementById("freteBox").innerHTML = `<span class="frete-erro">Erro ao consultar o CEP.</span>`;
+            }
         }
 
         async function getCoordsNominatim(end) {
             try {
-                let url = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(end)}`;
+                let url = `https://nominatim.openstreetmap.org/search?format=json&limit=1&countrycodes=br&q=${encodeURIComponent(end)}`;
                 let res = await fetch(url, {
                     headers: {
                         "Accept-Language": "pt-BR,pt;q=0.9"
@@ -636,9 +699,7 @@
         }
 
         async function geocodeORS(end) {
-            if (!ORS_API_KEY || ORS_API_KEY === "COLE_SUA_CHAVE_OPENROUTESERVICE_AQUI") {
-                return null;
-            }
+            if (!ORS_API_KEY) return null;
 
             try {
                 const url = `https://api.openrouteservice.org/geocode/search?api_key=${ORS_API_KEY}&text=${encodeURIComponent(end)}&size=1&boundary.country=BR`;
@@ -656,7 +717,7 @@
             }
         }
 
-        function distancia(lat1, lon1, lat2, lon2) {
+        function distanciaReta(lat1, lon1, lat2, lon2) {
             let R = 6371;
             let dLat = (lat2 - lat1) * Math.PI / 180;
             let dLon = (lon2 - lon1) * Math.PI / 180;
@@ -694,73 +755,166 @@
             return metros / 1000;
         }
 
-        function calcularFretePorKm(km) {
-            let valor = (km * 2.5) + 5;
-            if (valor < TAXA) valor = TAXA;
-            return valor;
+        function calcularFreteMotoboy(km) {
+            let valor = 0;
+
+            if (km <= 3) {
+                valor = 10.90;
+            } else if (km <= 5) {
+                valor = 12.90 + ((km - 3) * 2.20);
+            } else if (km <= 8) {
+                valor = 17.30 + ((km - 5) * 2.60);
+            } else if (km <= 12) {
+                valor = 25.10 + ((km - 8) * 2.90);
+            } else {
+                valor = 36.70 + ((km - 12) * 3.20);
+            }
+
+            if (valor < FRETE_MINIMO_MOTO) valor = FRETE_MINIMO_MOTO;
+            return Number(valor.toFixed(2));
+        }
+
+        function enderecoMinimoPreenchido() {
+            const tipo = document.getElementById("tipo")?.value;
+            if (tipo !== "Entrega") return false;
+
+            const cep = normalizarTexto(document.getElementById("cep")?.value || "");
+            const endereco = normalizarTexto(document.getElementById("endereco")?.value || "");
+            const numero = normalizarTexto(document.getElementById("num")?.value || "");
+
+            return cep.length === 8 && !!endereco && !!numero;
         }
 
         async function calcularFrete() {
-            let cliente = document.getElementById("endereco").value;
-            if (!cliente) return;
+            const freteBox = document.getElementById("freteBox");
+            if (!freteBox) return;
 
-            document.getElementById("freteBox").innerHTML = "Calculando frete...";
+            const tipo = document.getElementById("tipo")?.value;
+            if (tipo !== "Entrega") {
+                frete = 0;
+                distanciaFreteKm = 0;
+                freteBox.innerHTML = "<b>Retirada no local</b>";
+                return;
+            }
+
+            if (!enderecoMinimoPreenchido()) {
+                frete = 0;
+                distanciaFreteKm = 0;
+                freteBox.innerHTML = `<span class="muted">Preencha CEP, endereço e número para calcular o frete.</span>`;
+                return;
+            }
+
+            if (calculandoFrete) return;
+            calculandoFrete = true;
+            freteBox.innerHTML = "Calculando frete...";
+
+            const clienteCompleto = montarEnderecoClienteCompleto();
 
             try {
-                if (ORS_API_KEY && ORS_API_KEY !== "COLE_SUA_CHAVE_OPENROUTESERVICE_AQUI") {
-                    const origem = await geocodeORS(RESTAURANTE_END);
-                    const destino = await geocodeORS(cliente);
+                let origem = await geocodeORS(RESTAURANTE_END);
+                let destino = await geocodeORS(clienteCompleto);
 
-                    if (!origem || !destino) {
-                        throw new Error("Falha ao geocodificar endereços na ORS");
-                    }
+                if (!origem || !destino) {
+                    origem = await getCoordsNominatim(RESTAURANTE_END);
+                    destino = await getCoordsNominatim(clienteCompleto);
+                }
 
-                    const km = await getRouteDistanceKm(origem, destino);
-                    frete = calcularFretePorKm(km);
-                    document.getElementById("freteBox").innerHTML = `Frete: R$ ${frete.toFixed(2)} <small>(${km.toFixed(1)} km por rota real)</small>`;
+                if (!origem || !destino) {
+                    throw new Error("Não foi possível localizar os endereços");
+                }
+
+                const kmReta = distanciaReta(origem.lat, origem.lon, destino.lat, destino.lon);
+
+                if (kmReta > DISTANCIA_MAXIMA_KM) {
+                    frete = 0;
+                    distanciaFreteKm = 0;
+                    freteBox.innerHTML = `<span class="frete-erro">Endereço fora da área de entrega.</span><br><span class="muted">Distância estimada acima do limite permitido.</span>`;
+                    calculandoFrete = false;
                     return;
                 }
 
-                const origemFallback = await getCoordsNominatim(RESTAURANTE_END);
-                const destinoFallback = await getCoordsNominatim(cliente);
+                let km = 0;
 
-                if (origemFallback && destinoFallback) {
-                    const kmFallback = distancia(origemFallback.lat, origemFallback.lon, destinoFallback.lat, destinoFallback.lon);
-                    frete = calcularFretePorKm(kmFallback);
-                    document.getElementById("freteBox").innerHTML = `Frete: R$ ${frete.toFixed(2)} <small>(modo fallback)</small>`;
-                } else {
-                    frete = 10;
-                    document.getElementById("freteBox").innerHTML = `Frete: R$ ${frete.toFixed(2)} <small>(valor padrão)</small>`;
+                try {
+                    km = await getRouteDistanceKm(origem, destino);
+                } catch (e) {
+                    km = kmReta * 1.35;
                 }
+
+                if (!isFinite(km) || km <= 0 || km > DISTANCIA_MAXIMA_KM) {
+                    frete = 0;
+                    distanciaFreteKm = 0;
+                    freteBox.innerHTML = `<span class="frete-erro">Não foi possível calcular o frete com segurança.</span>`;
+                    calculandoFrete = false;
+                    return;
+                }
+
+                const valorFrete = calcularFreteMotoboy(km);
+
+                if (valorFrete > FRETE_MAXIMO_AUTOMATICO) {
+                    frete = 0;
+                    distanciaFreteKm = 0;
+                    freteBox.innerHTML = `<span class="frete-erro">Endereço fora da política de frete automático.</span>`;
+                    calculandoFrete = false;
+                    return;
+                }
+
+                frete = valorFrete;
+                distanciaFreteKm = km;
+
+                freteBox.innerHTML = `
+                    <b>Frete: R$ ${frete.toFixed(2)}</b>
+                    <small>(${km.toFixed(1)} km por rota estimada)</small><br>
+                    <span class="muted">Cálculo para entrega por motoboy.</span>
+                `;
             } catch (e) {
-                const origemFallback = await getCoordsNominatim(RESTAURANTE_END);
-                const destinoFallback = await getCoordsNominatim(cliente);
-
-                if (origemFallback && destinoFallback) {
-                    const kmFallback = distancia(origemFallback.lat, origemFallback.lon, destinoFallback.lat, destinoFallback.lon);
-                    frete = calcularFretePorKm(kmFallback);
-                    document.getElementById("freteBox").innerHTML = `Frete: R$ ${frete.toFixed(2)} <small>(fallback ativado)</small>`;
-                } else {
-                    frete = 10;
-                    document.getElementById("freteBox").innerHTML = `Frete: R$ ${frete.toFixed(2)} <small>(valor padrão)</small>`;
-                }
+                frete = 0;
+                distanciaFreteKm = 0;
+                freteBox.innerHTML = `<span class="frete-erro">Erro ao calcular frete. Confira o endereço.</span>`;
+            } finally {
+                calculandoFrete = false;
             }
         }
 
-        function revisao() {
-            const nome = document.getElementById("nome").value;
-            const fone = document.getElementById("fone").value;
-            if(!nome || !fone) { alert("Preencha nome e telefone"); return; }
+        async function revisao() {
+            const nome = document.getElementById("nome").value.trim();
+            const fone = document.getElementById("fone").value.trim();
+            const tipo = document.getElementById("tipo").value;
+
+            if (!nome || !fone) {
+                alert("Preencha nome e telefone");
+                return;
+            }
+
+            if (tipo === "Entrega") {
+                const cep = normalizarTexto(document.getElementById("cep").value || "");
+                const endereco = normalizarTexto(document.getElementById("endereco").value || "");
+                const num = normalizarTexto(document.getElementById("num").value || "");
+
+                if (cep.length !== 8 || !endereco || !num) {
+                    alert("Preencha CEP, endereço e número para entrega");
+                    return;
+                }
+
+                await calcularFrete();
+
+                if (!frete || frete <= 0) {
+                    alert("Não foi possível calcular o frete corretamente. Confira o endereço.");
+                    return;
+                }
+            }
 
             dadosPedido = {
                 nome: nome,
                 fone: fone,
-                tipo: document.getElementById("tipo").value,
-                endereco: document.getElementById("endereco").value,
-                num: document.getElementById("num").value,
-                comp: document.getElementById("comp").value,
+                tipo: tipo,
+                cep: document.getElementById("cep") ? document.getElementById("cep").value : "",
+                endereco: document.getElementById("endereco") ? document.getElementById("endereco").value : "",
+                num: document.getElementById("num") ? document.getElementById("num").value : "",
+                comp: document.getElementById("comp") ? document.getElementById("comp").value : "",
                 pag: document.getElementById("pag").value
             };
+
             navigate(renderRevisao);
         }
 
@@ -770,19 +924,25 @@
             let html = "<h3>Confirmar Pedido</h3>";
             html += `Cliente: ${dadosPedido.nome}<br>`;
             html += `Telefone: ${dadosPedido.fone}<br>`;
+
             if (dadosPedido.tipo == "Entrega") {
-                html += `Endereço: ${dadosPedido.endereco}, Nº ${dadosPedido.num} ${dadosPedido.comp ? '('+dadosPedido.comp+')' : ''}<br>`;
+                html += `Endereço: ${dadosPedido.endereco}, Nº ${dadosPedido.num}${dadosPedido.comp ? ' (' + dadosPedido.comp + ')' : ''}<br>`;
+                html += `CEP: ${dadosPedido.cep}<br>`;
+                html += `Frete calculado por motoboy: ${distanciaFreteKm ? distanciaFreteKm.toFixed(1) + " km" : "-"}<br>`;
             }
+
+            html += "<br><b>Itens:</b><br>";
             cart.forEach(i => {
                 html += `${i.qty}x ${i.name}<br>`;
             });
+
             html += `<hr>Subtotal: R$ ${subtotal.toFixed(2)}<br>`;
             if (dadosPedido.tipo == "Entrega") {
                 html += `Frete: R$ ${frete.toFixed(2)}<br>`;
             }
             html += `Total: R$ ${total.toFixed(2)}<br>`;
             html += `Pagamento: ${dadosPedido.pag}<br>`;
-            html += `<button class="primary" onclick="finalizar()">Enviar Pedido</button>`;
+            html += `<br><button class="primary" onclick="finalizar()">Enviar Pedido</button>`;
             document.getElementById("app").innerHTML = html;
             updateCartButton();
         }
@@ -790,23 +950,31 @@
         function finalizar() {
             let subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
             let total = dadosPedido.tipo == "Entrega" ? subtotal + frete : subtotal;
+
             let msg = "*Pedido - Laencasa Ultracongelados*%0A%0A";
             msg += `Nome: ${dadosPedido.nome}%0A`;
             msg += `Telefone: ${dadosPedido.fone}%0A`;
+            msg += `Tipo: ${dadosPedido.tipo}%0A`;
+
             if (dadosPedido.tipo == "Entrega") {
+                msg += `CEP: ${dadosPedido.cep}%0A`;
                 msg += `Endereço: ${dadosPedido.endereco}, Nº ${dadosPedido.num}%0A`;
-                if(dadosPedido.comp) msg += `Comp: ${dadosPedido.comp}%0A`;
+                if (dadosPedido.comp) msg += `Comp: ${dadosPedido.comp}%0A`;
+                if (distanciaFreteKm) msg += `Distância estimada: ${distanciaFreteKm.toFixed(1)} km%0A`;
             }
-            msg += "%0AItens:%0A";
+
+            msg += `%0AItens:%0A`;
             cart.forEach(i => {
                 msg += `${i.qty}x ${i.name}%0A`;
             });
+
             msg += `%0ASubtotal: R$ ${subtotal.toFixed(2)}%0A`;
             if (dadosPedido.tipo == "Entrega") {
                 msg += `Frete: R$ ${frete.toFixed(2)}%0A`;
             }
             msg += `Total: R$ ${total.toFixed(2)}%0A`;
             msg += `Pagamento: ${dadosPedido.pag}%0A`;
+
             window.open(`https://wa.me/5511952282056?text=${msg}`);
         }
 
