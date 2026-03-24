@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="pt-br">
-
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -12,10 +11,9 @@
 :root {
 --primary:#8B0000;
 --secondary:#FFD700;
---bg:#f5f5f5;
---card:#ffffff;
---text:#1a1a1a;
---muted:#888;
+--black:#000;
+--white:#fff;
+--background:#8B0000;
 }
 
 *{box-sizing:border-box;}
@@ -23,7 +21,7 @@
 body{
 margin:0;
 font-family:'Inter',sans-serif;
-background:var(--primary);
+background:var(--background);
 color:#fff;
 }
 
@@ -33,7 +31,7 @@ max-width:600px;
 margin:0 auto;
 }
 
-/* HEADER NORMAL */
+/* HEADER */
 header{
 position:sticky;
 top:0;
@@ -43,7 +41,7 @@ z-index:1000;
 }
 
 .logo-box{
-width:70px;height:70px;border-radius:12px;overflow:hidden;background:#fff;margin:10px auto;
+width:70px;height:70px;border-radius:12px;background:#fff;margin:10px auto;
 display:flex;align-items:center;justify-content:center;
 }
 
@@ -52,12 +50,34 @@ display:flex;align-items:center;justify-content:center;
 .header-title{text-align:center;font-size:32px;font-family:'Bangers';}
 .header-sub{text-align:center;font-size:18px;font-family:'Bebas Neue';}
 
-/* ===== NOVO PADRÃO CHECKOUT ===== */
+/* CARDS */
+.card{background:#111;padding:16px;margin-bottom:14px;border-radius:16px;}
+.flex{display:flex;justify-content:space-between;align-items:center;}
+.primary{background:var(--secondary);color:#000;height:44px;width:100%;}
+.small{height:36px;padding:0 14px;}
+input,select{width:100%;padding:12px;margin:8px 0 14px;border-radius:12px;border:none;}
+.hidden{display:none;}
+
+/* BOTAO CARRINHO */
+#cart-btn{
+position:fixed;
+bottom:20px;
+right:20px;
+background:var(--secondary);
+padding:12px 20px;
+border-radius:50px;
+font-weight:700;
+display:flex;
+gap:8px;
+z-index:999;
+}
+
+/* ===== NOVO VISUAL CHECKOUT ===== */
 .screen{
-background:var(--bg);
+background:#f5f5f5;
 min-height:100vh;
 padding:20px;
-color:var(--text);
+color:#1a1a1a;
 }
 
 .topo{
@@ -78,7 +98,7 @@ border-radius:16px;
 box-shadow:0 4px 20px rgba(0,0,0,0.05);
 }
 
-.input{
+.input-clean{
 width:100%;
 padding:14px;
 border:none;
@@ -87,12 +107,12 @@ border-radius:10px;
 margin-bottom:12px;
 }
 
-.input:focus{
+.input-clean:focus{
 outline:2px solid var(--primary);
 background:#fff;
 }
 
-.botao{
+.botao-clean{
 width:100%;
 padding:16px;
 background:var(--primary);
@@ -101,26 +121,6 @@ border:none;
 border-radius:30px;
 font-weight:600;
 margin-top:15px;
-}
-
-/* RESTO NORMAL */
-.card{background:#111;padding:16px;margin-bottom:14px;border-radius:16px;}
-.flex{display:flex;justify-content:space-between;align-items:center;}
-.primary{background:var(--secondary);color:#000;height:44px;width:100%;}
-.small{height:36px;padding:0 14px;}
-input,select{width:100%;padding:12px;margin:8px 0 14px;border-radius:12px;border:none;}
-.hidden{display:none;}
-
-#cart-btn{
-position:fixed;
-bottom:20px;
-right:20px;
-background:var(--secondary);
-padding:12px 20px;
-border-radius:50px;
-font-weight:700;
-display:flex;
-gap:8px;
 }
 </style>
 </head>
@@ -140,20 +140,54 @@ gap:8px;
 </div>
 
 <script>
-let cart=[],viewStack=[],dadosPedido={},frete=0;
 
-function navigate(fn){viewStack.push(fn);fn();}
+let cart=[];
+let viewStack=[];
+let dadosPedido={};
+let frete=0;
+
+function navigate(fn){
+viewStack.push(fn);
+fn();
+}
+
+/* ================= PRODUTOS ================= */
+const produtos = [
+{name:"Lasanha",price:19},
+{name:"Frango",price:17},
+{name:"Carne",price:20}
+];
 
 /* ================= HOME ================= */
 function renderHome(){
-let html="<h3>CATEGORIAS</h3>";
-html+=`<div class="card" onclick="navigate(openCat)">MARMITAS</div>`;
+let html="<h3>Produtos</h3>";
+
+produtos.forEach((p,i)=>{
+html+=`
+<div class="card flex">
+<div>${p.name}<br>R$ ${p.price}</div>
+<button class="primary small" onclick="add(${i})">+</button>
+</div>`;
+});
+
 document.getElementById("app").innerHTML=html;
+updateCartButton();
+}
+
+/* ================= ADD ================= */
+function add(i){
+let item=produtos[i];
+let f=cart.find(x=>x.name==item.name);
+
+if(f){f.qty++}
+else{cart.push({...item,qty:1})}
+
 updateCartButton();
 }
 
 /* ================= CARRINHO ================= */
 function renderCart(){
+
 let html=`
 <div class="screen">
 <div class="topo"><img src="logo.png"></div>
@@ -169,6 +203,7 @@ html+="Seu carrinho está vazio";
 }else{
 cart.forEach((i,index)=>{
 subtotal+=i.price*i.qty;
+
 html+=`
 <div class="flex">
 <div>${i.qty}x ${i.name}</div>
@@ -177,15 +212,24 @@ html+=`
 });
 
 html+=`<h4>Total: R$ ${subtotal.toFixed(2)}</h4>`;
-html+=`<button class="botao" onclick="navigate(renderCheckout)">Continuar</button>`;
+html+=`<button class="botao-clean" onclick="navigate(renderCheckout)">Continuar</button>`;
 }
 
 html+=`</div></div>`;
+
 document.getElementById("app").innerHTML=html;
+}
+
+/* ================= REMOVE ================= */
+function removeFromCart(i){
+cart.splice(i,1);
+renderCart();
+updateCartButton();
 }
 
 /* ================= CHECKOUT ================= */
 function renderCheckout(){
+
 let html=`
 <div class="screen">
 <div class="topo"><img src="logo.png"></div>
@@ -193,20 +237,18 @@ let html=`
 <div class="card-white">
 <h3>Seu endereço</h3>
 
-<input class="input" id="nome" placeholder="Seu nome">
-<input class="input" id="fone" placeholder="Telefone">
+<input class="input-clean" id="nome" placeholder="Seu nome">
+<input class="input-clean" id="fone" placeholder="Telefone">
 
-<input class="input" id="cep" placeholder="CEP">
-<input class="input" id="endereco" placeholder="Rua">
-<input class="input" id="num" placeholder="Número">
-<input class="input" id="comp" placeholder="Complemento">
+<input class="input-clean" id="endereco" placeholder="Rua">
+<input class="input-clean" id="num" placeholder="Número">
 
-<select class="input" id="pag">
+<select class="input-clean" id="pag">
 <option>Pix</option>
 <option>Cartão</option>
 </select>
 
-<button class="botao" onclick="revisao()">Continuar</button>
+<button class="botao-clean" onclick="revisao()">Continuar</button>
 
 </div></div>`;
 
@@ -215,15 +257,20 @@ document.getElementById("app").innerHTML=html;
 
 /* ================= REVISAO ================= */
 function revisao(){
+
 dadosPedido={
 nome:document.getElementById("nome").value,
-fone:document.getElementById("fone").value
+fone:document.getElementById("fone").value,
+endereco:document.getElementById("endereco").value,
+num:document.getElementById("num").value,
+pag:document.getElementById("pag").value
 };
 
 navigate(renderRevisao);
 }
 
 function renderRevisao(){
+
 let subtotal=cart.reduce((s,i)=>s+i.price*i.qty,0);
 
 let html=`
@@ -234,27 +281,32 @@ let html=`
 <h3>Confirmar Pedido</h3>
 
 <p>${dadosPedido.nome}</p>
+<p>${dadosPedido.endereco}, ${dadosPedido.num}</p>
 
 <h4>Total: R$ ${subtotal.toFixed(2)}</h4>
 
-<button class="botao" onclick="finalizar()">Finalizar</button>
+<button class="botao-clean" onclick="finalizar()">Finalizar</button>
 
 </div></div>`;
 
 document.getElementById("app").innerHTML=html;
 }
 
-/* ================= OUTROS ================= */
-function add(){cart.push({name:"Produto",price:10,qty:1});updateCartButton();}
-function removeFromCart(i){cart.splice(i,1);renderCart();}
+/* ================= FINALIZAR ================= */
+function finalizar(){
+alert("Pedido enviado pro WhatsApp aqui 🔥");
+}
+
+/* ================= CART BTN ================= */
 function updateCartButton(){
 let btn=document.getElementById("cart-btn");
 btn.classList.toggle("hidden",cart.length==0);
-document.getElementById("cart-count").innerText=cart.length;
+document.getElementById("cart-count").innerText=
+cart.reduce((s,i)=>s+i.qty,0);
 }
-function finalizar(){alert("Pedido enviado");}
 
 navigate(renderHome);
+
 </script>
 
 </body>
