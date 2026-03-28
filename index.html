@@ -548,7 +548,7 @@
         const RESTAURANTE_END = "Rua Evangelina, 440, Vila Carrão, São Paulo, SP, 03421-000, Brasil";
         const CIDADE_BASE = "São Paulo";
         const ESTADO_BASE = "SP";
-        const DISTANCIA_MAXIMA_KM = 35;
+        const DISTANCIA_MAXIMA_KM = 30;
         const ORS_API_KEY = "eyJvcmciOiI1YjNjZTM1OTc4NTExMTAwMDFjZjYyNDgiLCJpZCI6Ijk1YWRlZjgxOGJkZjRmZmVhNzI0MTU3ZjMxMWI1MDc1IiwiaCI6Im11cm11cjY0In0=";
         const TELEFONE_PEDIDO = "5511939103186";
 
@@ -653,7 +653,7 @@
                 { name: "KIT MIX C/10 MARMITAS 420g", price: 213, oldPrice: 225, descricao: "", img: "kit10.jpg" },
                 { name: "KIT MIX C/10 MARMITAS 420g", price: 197, oldPrice: 205, descricao: "", img: "kit11.jpg" },
                 { name: "KIT MIX C/10 MARMITAS 420g", price: 185, oldPrice: 205, descricao: "", img: "kit12.jpg" },
-                { name: "KIT MIX C/10 MARMITAS 340g", price: 155, oldPrice: 180, descricao: "", img: "kit12.jpg" },
+                { name: "KIT MIX C/10 MARMITAS 340g", price: 155, oldPrice: 180, descricao: "", img: "kit12.jpg" }
             ]
         };
 
@@ -930,12 +930,12 @@
                         <input id="cep" placeholder="Digite o CEP" onblur="buscarCEP()" oninput="formatarCEP(this)">
 
                         <span class="input-label">Endereço</span>
-                        <input id="endereco" placeholder="Rua, bairro, cidade" onblur="calcularFrete()">
+                        <input id="endereco" placeholder="Rua, bairro, cidade" oninput="calcularFrete()">
 
                         <div class="flex" style="gap:10px;">
                             <div style="width:32%;">
                                 <span class="input-label">Número</span>
-                                <input id="num" placeholder="Nº" onblur="calcularFrete()">
+                                <input id="num" placeholder="Nº" oninput="calcularFrete()">
                             </div>
                             <div style="width:68%;">
                                 <span class="input-label">Complemento</span>
@@ -1005,8 +1005,10 @@
 
             if (!endereco) return "";
 
-            let partes = [endereco];
-            if (numero) partes.push(numero);
+            let enderecoComNumero = endereco;
+            if (numero) enderecoComNumero += `, ${numero}`;
+
+            let partes = [enderecoComNumero];
             if (comp) partes.push(comp);
             if (cep) partes.push(cep);
             if (!endereco.toLowerCase().includes("são paulo")) partes.push(CIDADE_BASE);
@@ -1115,6 +1117,7 @@
         }
 
         function calcularFreteMotoboy(km) {
+            if (!isFinite(km) || km <= 0) return 0;
             if (km <= 5) return 12;
             if (km <= 8) return 15;
             if (km <= 12) return 18;
@@ -1122,7 +1125,6 @@
             if (km <= 20) return 28;
             if (km <= 25) return 35;
             if (km <= 30) return 45;
-            if (km <= 35) return 55;
             return 0;
         }
 
@@ -1177,11 +1179,10 @@
 
                 const kmReta = distanciaReta(origem.lat, origem.lon, destino.lat, destino.lon);
 
-                if (kmReta > DISTANCIA_MAXIMA_KM) {
+                if (kmReta > DISTANCIA_MAXIMA_KM * 1.2) {
                     frete = 0;
                     distanciaFreteKm = 0;
                     freteBox.innerHTML = `<span class="frete-erro">Endereço fora da área de entrega.</span><br><span class="muted">Consulte a loja para essa região.</span>`;
-                    calculandoFrete = false;
                     return;
                 }
 
@@ -1190,14 +1191,20 @@
                 try {
                     km = await getRouteDistanceKm(origem, destino);
                 } catch (e) {
-                    km = kmReta * 1.3;
+                    km = Math.max(kmReta * 1.3, 1);
                 }
 
-                if (!isFinite(km) || km <= 0 || km > DISTANCIA_MAXIMA_KM) {
+                if (!isFinite(km) || km <= 0) {
                     frete = 0;
                     distanciaFreteKm = 0;
                     freteBox.innerHTML = `<span class="frete-erro">Não foi possível calcular o frete com segurança.</span><br><span class="muted">Confira o endereço informado.</span>`;
-                    calculandoFrete = false;
+                    return;
+                }
+
+                if (km > DISTANCIA_MAXIMA_KM) {
+                    frete = 0;
+                    distanciaFreteKm = 0;
+                    freteBox.innerHTML = `<span class="frete-erro">Endereço fora da área de entrega.</span><br><span class="muted">Consulte a loja para essa região.</span>`;
                     return;
                 }
 
@@ -1207,7 +1214,6 @@
                     frete = 0;
                     distanciaFreteKm = 0;
                     freteBox.innerHTML = `<span class="frete-erro">Essa região precisa de confirmação manual.</span><br><span class="muted">Consulte a loja para calcular o frete.</span>`;
-                    calculandoFrete = false;
                     return;
                 }
 
@@ -1249,8 +1255,8 @@
 
                 await calcularFrete();
 
-                if (!frete || frete <= 0) {
-                    alert("Não foi possível calcular o frete corretamente. Confira o endereço.");
+                if (frete <= 0) {
+                    alert("Não foi possível calcular o frete automaticamente. Consulte a loja pelo WhatsApp.");
                     return;
                 }
             }
