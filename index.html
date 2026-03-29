@@ -1343,7 +1343,6 @@
     msg += "________________________________\n\n";
 
     msg += "*NOVO PEDIDO RECEBIDO*\n";
-    msg += "· Data/Hora: " + dataHora + "\n";
     msg += "· Cliente: " + dadosPedido.nome + "\n";
     msg += "· Telefone: " + dadosPedido.fone + "\n";
     msg += "· Tipo do pedido: " + dadosPedido.tipo + "\n";
@@ -1355,8 +1354,6 @@
         msg += "· Endereço: " + dadosPedido.endereco + "\n";
         msg += "· Número: " + dadosPedido.num + "\n";
         if (dadosPedido.comp) msg += "· Complemento: " + dadosPedido.comp + "\n";
-        if (distanciaFreteKm) msg += "· Distância estimada: " + distanciaFreteKm.toFixed(1) + " km\n";
-        msg += "· Frete: R$ " + frete.toFixed(2) + "\n";
     } else {
         msg += "\n*RETIRADA NO LOCAL*\n";
         msg += "· Cliente irá retirar o pedido na loja\n";
@@ -1367,15 +1364,11 @@
         msg += "· " + i.qty + "x " + i.name + " · R$ " + (i.price * i.qty).toFixed(2) + "\n";
     });
 
-    msg += "\n*RESUMO FINANCEIRO*\n";
     msg += "· Subtotal: R$ " + subtotal.toFixed(2) + "\n";
     if (dadosPedido.tipo === "Entrega") {
         msg += "· Frete: R$ " + frete.toFixed(2) + "\n";
     }
     msg += "· Total geral: R$ " + total.toFixed(2) + "\n";
-
-    msg += "\n________________________________\n";
-    msg += "Pedido enviado automaticamente pelo sistema.";
 
     const url = `https://wa.me/${TELEFONE_PEDIDO}?text=${encodeURIComponent(msg)}`;
     window.open(url, "_blank");
