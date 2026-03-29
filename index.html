@@ -1332,34 +1332,53 @@
         }
 
         function finalizar() {
-            const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
-            const total = dadosPedido.tipo === "Entrega" ? subtotal + frete : subtotal;
+    const subtotal = cart.reduce((s, i) => s + i.price * i.qty, 0);
+    const total = dadosPedido.tipo === "Entrega" ? subtotal + frete : subtotal;
 
-            let msg = "*Pedido - Laencasa Ultracongelados*%0A%0A";
-            msg += `Nome: ${dadosPedido.nome}%0A`;
-            msg += `Telefone: ${dadosPedido.fone}%0A`;
-            msg += `Tipo: ${dadosPedido.tipo}%0A`;
+    const agora = new Date();
+    const dataHora = agora.toLocaleString("pt-BR");
 
-            if (dadosPedido.tipo === "Entrega") {
-                msg += `CEP: ${dadosPedido.cep}%0A`;
-                msg += `Endereço: ${dadosPedido.endereco}, Nº ${dadosPedido.num}%0A`;
-                if (dadosPedido.comp) msg += `Comp: ${dadosPedido.comp}%0A`;
-                if (distanciaFreteKm) msg += `Distância estimada: ${distanciaFreteKm.toFixed(1)} km%0A`;
-                msg += `Frete: R$ ${frete.toFixed(2)}%0A`;
-            }
+    let msg = "";
+    msg += "*LAENCASA ULTRACONGELADOS*%0A";
+    msg += "________________________________%0A%0A";
 
-            msg += `%0AItens:%0A`;
-            cart.forEach(i => {
-                msg += `${i.qty}x ${i.name} - R$ ${(i.price * i.qty).toFixed(2)}%0A`;
-            });
+    msg += "*NOVO PEDIDO RECEBIDO*%0A";
+    msg += "· Data/Hora: " + dataHora + "%0A";
+    msg += "· Cliente: " + dadosPedido.nome + "%0A";
+    msg += "· Telefone: " + dadosPedido.fone + "%0A";
+    msg += "· Tipo do pedido: " + dadosPedido.tipo + "%0A";
+    msg += "· Pagamento: " + dadosPedido.pag + "%0A";
 
-            msg += `%0ASubtotal: R$ ${subtotal.toFixed(2)}%0A`;
-            msg += `Total: R$ ${total.toFixed(2)}%0A`;
-            msg += `Pagamento: ${dadosPedido.pag}%0A`;
+    if (dadosPedido.tipo === "Entrega") {
+        msg += "%0A*DADOS DE ENTREGA*%0A";
+        msg += "· CEP: " + dadosPedido.cep + "%0A";
+        msg += "· Endereço: " + dadosPedido.endereco + "%0A";
+        msg += "· Número: " + dadosPedido.num + "%0A";
+        if (dadosPedido.comp) msg += "· Complemento: " + dadosPedido.comp + "%0A";
+        if (distanciaFreteKm) msg += "· Distância estimada: " + distanciaFreteKm.toFixed(1) + " km%0A";
+        msg += "· Frete: R$ " + frete.toFixed(2) + "%0A";
+    } else {
+        msg += "%0A*RETIRADA NO LOCAL*%0A";
+        msg += "· Cliente irá retirar o pedido na loja%0A";
+    }
 
-            window.open(`https://wa.me/${No}?text=${msg}`, "_blank");
-        }
+    msg += "%0A*ITENS DO PEDIDO*%0A";
+    cart.forEach(i => {
+        msg += "· " + i.qty + "x " + i.name + " · R$ " + (i.price * i.qty).toFixed(2) + "%0A";
+    });
 
+    msg += "%0A*RESUMO FINANCEIRO*%0A";
+    msg += "· Subtotal: R$ " + subtotal.toFixed(2) + "%0A";
+    if (dadosPedido.tipo === "Entrega") {
+        msg += "· Frete: R$ " + frete.toFixed(2) + "%0A";
+    }
+    msg += "· Total geral: R$ " + total.toFixed(2) + "%0A";
+
+    msg += "%0A________________________________%0A";
+    msg += "Pedido enviado automaticamente pelo sistema.";
+
+    window.open(`https://wa.me/${CONFIG.TELEFONE_PEDIDO}?text=${msg}`, "_blank");
+}
         navigate(renderHome);
     </script>
 </body>
